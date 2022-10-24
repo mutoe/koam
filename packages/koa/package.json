@@ -42,6 +42,9 @@
       "^.+\\.(t|j)sx?$": [
         "@swc/jest"
       ]
+    },
+    "moduleNameMapper": {
+      "src/(.*)": "<rootDir>/src/$1"
     }
   }
 }
