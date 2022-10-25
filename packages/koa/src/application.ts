@@ -1,48 +1,56 @@
 import http from 'node:http'
+import { ListenOptions } from 'node:net'
 import { Context } from './context'
+import { bodyParser } from './middlewares/body-parser'
+import { fallbackResponse } from './middlewares/fallback-response'
+import { Koa } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
-export type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
 
 export default class Application {
-  private httpServer: HttpServer
+  private readonly httpServer: HttpServer
   private ctx!: Context
-  private middlewares: Middleware[] = []
+  private middlewares: Koa.Middleware[] = []
 
   constructor () {
-    this.middlewares.push(this.defaultResponseMiddleware)
+    this.middlewares.push(bodyParser(), fallbackResponse())
     this.httpServer = http.createServer(this.onRequestReceive())
   }
 
-  use (middleware: Middleware): this {
+  use (middleware: Koa.Middleware): this {
     this.middlewares.push(middleware)
     return this
   }
 
-  listen (...arguments_: Parameters<http.Server['listen']>): HttpServer {
-    return this.httpServer.listen(...arguments_)
+  listen (port?: number, hostname?: string, backlog?: number, listeningListener?: () => void): HttpServer
+  listen (port?: number, hostname?: string, listeningListener?: () => void): HttpServer
+  listen (port?: number, backlog?: number, listeningListener?: () => void): HttpServer
+  listen (port?: number, listeningListener?: () => void): HttpServer
+  listen (path: string, backlog?: number, listeningListener?: () => void): HttpServer
+  listen (path: string, listeningListener?: () => void): HttpServer
+  listen (options: ListenOptions, listeningListener?: () => void): HttpServer
+  listen (handle: any, backlog?: number, listeningListener?: () => void): HttpServer
+  listen (handle: any, listeningListener?: () => void): HttpServer
+  listen (...args: any[]): HttpServer {
+    return this.httpServer.listen(...args)
   }
 
-  close (...arguments_: Parameters<http.Server['close']>): HttpServer {
-    return this.httpServer.close(...arguments_)
+  close (callback?: (err?: Error) => void): HttpServer {
+    this.ctx = null!
+    this.middlewares = null!
+    return this.httpServer.close(callback)
   }
 
-  private onRequestReceive = (): http.RequestListener => {
+  private onRequestReceive (): http.RequestListener {
     const firstMiddleware = this.composeMiddleware()
-    return (req, res) => {
+    return async (req, res) => {
       this.ctx = new Context(req, res)
-      firstMiddleware()
+      await firstMiddleware()
     }
   }
 
-  private defaultResponseMiddleware: Middleware = async (ctx, next) => {
-    await next()
-    ctx.res.end()
-  }
-
-  private composeMiddleware = (): () => Middleware => {
+  private composeMiddleware (): Koa.MiddlewareGenerator {
     return () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dispatch = (n: number): any => {
         const fn = this.middlewares[n]
         if (!fn) return Promise.resolve()
