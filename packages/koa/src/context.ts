@@ -18,4 +18,15 @@ export class Context {
   get url (): string | undefined {
     return this.req.url
   }
+
+  get query (): Record<string, string | number | boolean | undefined> {
+    const queryString = this.req.url?.split('?')?.[1] || ''
+    const entries = [...new URLSearchParams(queryString).entries()]
+    return Object.fromEntries(entries.map(([k, v]) => {
+      try {
+        v = JSON.parse(v)
+      } catch {}
+      return [k, v]
+    }))
+  }
 }
