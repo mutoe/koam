@@ -26,16 +26,20 @@ describe('# middleware', () => {
     })
   })
 
-  it('should implement onion model (order for executing middleware)', async () => {
-    app.use(async (ctx, next) => { cb(1); await next(); cb(2) })
-      .use(async (ctx, next) => { cb(3); await next(); cb(4) })
-      .use(async (ctx, next) => { cb(5); await next(); cb(6) })
-    testAddress = app.listen(0).address()
+  describe('onion model', () => {
+    it('should executing middleware in the correct order', async () => {
+      app.use(async (ctx, next) => { cb(1); await next(); cb(2) })
+        .use(async (ctx, next) => { cb(3); await next() })
+        .use(async (ctx, next) => { await next(); cb(4) })
+        .use(async (ctx, next) => { cb(5); await next(); cb(6) })
+        .use(async () => { cb(7) })
+        .use(async () => { cb(8) })
+      testAddress = app.listen(0).address()
 
-    await fetch(`${baseUrl()}/path?foo=1&bar=true#hash`, { method: 'GET' })
+      await fetch(baseUrl())
 
-    expect(cb).toBeCalledTimes(6)
-    expect(cb.mock.calls.map(it => it[0])).toEqual([1, 3, 5, 6, 4, 2])
+      expect(cb.mock.calls.map(it => it[0])).toEqual([1, 3, 5, 7, 6, 4, 2])
+    })
   })
 
   describe('parse request body', () => {
