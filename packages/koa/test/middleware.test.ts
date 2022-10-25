@@ -33,12 +33,14 @@ describe('# middleware', () => {
     const verify = jest.fn()
     app.use(verify).listen(33_000)
 
-    const path = '/path?foo=1&bar=true&baz=baz'
-    await fetch(`http://localhost:${TEST_PORT}${path}#hash`, { method: 'GET' })
+    const path = '/path'
+    const query = '?foo=1&bar=true&baz=baz'
+    await fetch(`http://localhost:${TEST_PORT}${path}${query}`, { method: 'GET' })
 
     const ctx = verify.mock.calls[0][0]
     expect(ctx.method).toEqual('GET')
-    expect(ctx.url).toEqual(path)
+    expect(ctx.url).toEqual(path + query)
+    expect(ctx.path).toEqual('/path')
     expect(ctx.query).toEqual({ foo: 1, bar: true, baz: 'baz' })
   })
 })

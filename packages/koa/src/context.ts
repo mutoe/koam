@@ -19,8 +19,12 @@ export class Context {
     return this.req.url
   }
 
+  get path (): string {
+    return this.req.url?.split('?').at(0) ?? ''
+  }
+
   get query (): Record<string, string | number | boolean | undefined> {
-    const queryString = this.req.url?.split('?')?.[1] || ''
+    const queryString = this.req.url?.split('?').at(1) || ''
     const entries = [...new URLSearchParams(queryString).entries()]
     return Object.fromEntries(entries.map(([k, v]) => {
       try {
