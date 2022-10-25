@@ -15,12 +15,16 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest --coverage",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "rm -rf ./build && tsc -p tsconfig.build.json",
+    "start": "node -r @swc-node/register src/index.ts"
   },
+  "dependencies": {},
   "devDependencies": {
     "@mutoe/eslint-config-preset-ts": "^2.0.0-alpha.0",
+    "@swc-node/core": "^1.9.1",
+    "@swc-node/jest": "^1.5.5",
+    "@swc-node/register": "^1.5.4",
     "@swc/core": "^1.3.10",
-    "@swc/jest": "^0.2.23",
     "@types/jest": "^29.2.0",
     "@types/node": "^14",
     "eslint": "^8.26.0",
@@ -40,9 +44,15 @@
   "jest": {
     "transform": {
       "^.+\\.(t|j)sx?$": [
-        "@swc/jest"
+        "@swc-node/jest",
+        {
+          "swc": {
+            "sourceMaps": "inline"
+          }
+        }
       ]
     },
+    "clearMocks": true,
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1"
     }
