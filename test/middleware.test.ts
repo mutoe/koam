@@ -39,5 +39,6 @@ describe('# middleware', () => {
     const ctx = verify.mock.calls[0][0]
     expect(ctx.method).toEqual('GET')
     expect(ctx.url).toEqual(path)
+    expect(ctx.query).toEqual({ foo: 1, bar: true, baz: 'baz' })
   })
 })
