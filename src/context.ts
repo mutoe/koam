@@ -7,11 +7,13 @@ export class Context {
   req: http.IncomingMessage
   res: http.ServerResponse
   request: Koa.Request
+  onError: (e: Error) => void | Promise<void>
 
-  constructor (req: http.IncomingMessage, res: http.ServerResponse) {
+  constructor (config: Koa.Config, req: http.IncomingMessage, res: http.ServerResponse) {
     this.req = req
     this.res = res
     this.request = this.initRequest(req)
+    this.onError = config.onError
   }
 
   get method (): HttpMethod {
