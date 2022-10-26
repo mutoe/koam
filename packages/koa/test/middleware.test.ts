@@ -40,6 +40,18 @@ describe('# middleware', () => {
 
       expect(cb.mock.calls.map(it => it[0])).toEqual([1, 3, 5, 7, 6, 4, 2])
     })
+
+    // TODO: need implement error handling first
+    it.skip('should not support call next callback multiple times in same middleware', async () => {
+      app.use(async (ctx, next) => { await next(); await next() })
+      testAddress = app.listen(0)
+        .on('error', cb)
+        .address()
+
+      await fetch(baseUrl())
+
+      expect(cb).toBeCalledTimes(1)
+    })
   })
 
   describe('parse request body', () => {

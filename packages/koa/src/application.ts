@@ -51,10 +51,13 @@ export default class Application {
 
   private composeMiddleware (): Koa.MiddlewareGenerator {
     return () => {
-      const dispatch = (n: number): any => {
-        const fn = this.middlewares[n]
-        if (!fn) return Promise.resolve()
-        return fn(this.ctx, dispatch.bind(undefined, n + 1))
+      let n = -1
+      const dispatch = (i: number): any => {
+        if (n >= i) throw new Error('next() called more than one time in the same middleware function')
+        n = i
+        const fn = this.middlewares[i]
+        if (!fn) return
+        return fn(this.ctx, dispatch.bind(undefined, i + 1))
       }
       return dispatch(0)
     }
