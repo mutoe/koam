@@ -24,8 +24,8 @@ describe('# application', () => {
           status: 500,
           statusText: 'Internal Server Error',
         })
-        expect(await result.text()).toEqual('')
-        expect(consoleError).toBeCalledWith(error)
+        await expect(result.text()).resolves.toBe('')
+        expect(consoleError).toHaveBeenCalledWith(error)
       })
     })
 
@@ -38,8 +38,8 @@ describe('# application', () => {
 
         await fetch(baseUrl())
 
-        expect(onError).toBeCalledWith(error)
-        expect(consoleError).not.toBeCalled()
+        expect(onError).toHaveBeenCalledWith(error)
+        expect(consoleError).toHaveBeenCalledTimes(0)
 
         app.close()
       })
