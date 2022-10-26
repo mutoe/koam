@@ -1,6 +1,8 @@
+import assert from 'node:assert'
 import http from 'node:http'
 import { ListenOptions } from 'node:net'
 import { Context } from './context'
+import { HttpStatus } from './enums/http-status'
 import { bodyParser } from './middlewares/body-parser'
 import { fallbackResponse } from './middlewares/fallback-response'
 import { deepMerge } from './utils/deep-merge'
@@ -47,10 +49,18 @@ export default class Application {
   }
 
   private onRequestReceive (): http.RequestListener {
-    const firstMiddleware = this.composeMiddleware()
+    const middleware = this.composeMiddleware()
     return async (req, res) => {
-      this.ctx = new Context(req, res)
-      await firstMiddleware()
+      this.ctx = new Context(this.config, req, res)
+      try {
+        await middleware()
+      } catch (error) {
+        // TODO: using this.ctx.status setter
+        this.ctx.res.statusCode = HttpStatus.InternalServerError
+        assert(error instanceof Error)
+        this.ctx.onError(error)
+        this.ctx.res.end()
+      }
     }
   }
 
