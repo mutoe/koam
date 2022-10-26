@@ -3,6 +3,7 @@ import { ListenOptions } from 'node:net'
 import { Context } from './context'
 import { bodyParser } from './middlewares/body-parser'
 import { fallbackResponse } from './middlewares/fallback-response'
+import { deepMerge } from './utils/deep-merge'
 import { Koa } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
@@ -11,8 +12,12 @@ export default class Application {
   private readonly httpServer: HttpServer
   private ctx!: Context
   private middlewares: Koa.Middleware[] = []
+  private readonly config: Koa.Config = {
+    onError: (error: Error) => console.error(error),
+  }
 
-  constructor () {
+  constructor (config: Partial<Koa.Config> = {}) {
+    this.config = deepMerge(this.config, config)
     this.middlewares.push(bodyParser(), fallbackResponse())
     this.httpServer = http.createServer(this.onRequestReceive())
   }

@@ -1,6 +1,10 @@
 import { Context } from './context'
 
 declare namespace Koa {
+  export interface Config {
+    onError: (error: Error) => void
+  }
+
   export interface Request {
     method?: string
     url?: string
