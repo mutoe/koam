@@ -16,7 +16,7 @@ describe('# middleware', () => {
     const query = '?foo=1&bar=true&baz=baz'
     await fetch(`${baseUrl()}${path}${query}`, { method: 'GET' })
 
-    expect(cb).toBeCalledTimes(1)
+    expect(cb).toHaveBeenCalledTimes(1)
     const ctx = cb.mock.calls[0][0]
     expect(ctx).toMatchObject({
       method: 'GET',
@@ -50,7 +50,7 @@ describe('# middleware', () => {
 
       await fetch(baseUrl())
 
-      expect(cb).toBeCalledTimes(1)
+      expect(cb).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -66,9 +66,9 @@ describe('# middleware', () => {
         body: JSON.stringify({ foo: 'bar', count: 1 }),
       })
 
-      expect(cb).toBeCalledTimes(1)
+      expect(cb).toHaveBeenCalledTimes(1)
       const ctx = cb.mock.calls[0][0]
-      expect(ctx.method).toEqual('POST')
+      expect(ctx.method).toBe('POST')
       expect(ctx.body).toEqual({ foo: 'bar', count: 1 })
     })
   })
