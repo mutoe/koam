@@ -7,6 +7,7 @@ export function parseQuery (queryString: string): Record<string, QueryValue | Qu
   const entries = [...new URLSearchParams(queryString).entries()]
   const result: Record<string, QueryValue | QueryValue[]> = {}
   for (let [k, v] of entries) {
+    k = k.replace(/\[.*$/, '')
     if (!k) continue
     try { v = JSON.parse(v) } catch {}
     const prevValue = result[k]

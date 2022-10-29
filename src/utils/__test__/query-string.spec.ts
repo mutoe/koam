@@ -9,8 +9,7 @@ describe('# query string', () => {
       { qs: 'foo=-1&bar=true', expected: { foo: -1, bar: true } },
       { qs: 'foo=0&bar=', expected: { foo: 0, bar: '' } },
       { qs: 'foo=0&foo=true&foo=bar', expected: { foo: [0, true, 'bar'] } },
-      // TODO: query string parse array format
-      // { qs: 'foo[]=0&foo[]=true&foo[]=bar', expected: { foo: [0, true, 'bar'] } },
+      { qs: 'foo[]=0&foo[]=true&foo[]=bar', expected: { foo: [0, true, 'bar'] } },
       { qs: 'foo=0,1,bar', expected: { foo: '0,1,bar' } },
       { qs: 'foo', expected: { foo: '' } },
       { qs: '=', expected: {} },
