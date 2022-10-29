@@ -27,9 +27,11 @@ export class Context {
   }
 
   get method (): HttpMethod { return this.request.method as HttpMethod }
+  get host (): string | undefined { return this.request.host }
   get url (): string { return this.request.url ?? '' }
   get path (): string { return this.request.path ?? '' }
   get query (): Koa.JsonValue { return this.request.query }
+  get querystring (): string | undefined { return this.request.querystring }
 
   get body (): Koa.JsonValue { return this.response.body }
   set body (value: Koa.JsonValue) { this.response.body = value }
@@ -40,10 +42,13 @@ export class Context {
   private initRequest (req: http.IncomingMessage): Koa.Request {
     const [path, queryString] = this.req.url?.split('?') ?? []
     return {
-      method: req.method?.toUpperCase(),
-      url: req.url,
+      method: req.method?.toUpperCase() ?? 'GET',
+      url: req.url ?? '',
       path,
       query: parseQuery(queryString),
+      querystring: queryString,
+      search: queryString,
+      host: req.headers.host,
     }
   }
 

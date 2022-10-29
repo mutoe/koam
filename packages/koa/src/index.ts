@@ -8,10 +8,14 @@ declare namespace Koa {
   }
 
   export interface Request {
-    method?: string
-    url?: string
-    path?: string
+    method: string
+    host?: string
+    url: string
+    path: string
     query?: any
+    querystring?: string
+    /** @deprecated Not recommended. using `querystring` instead */
+    search?: string
     /** @deprecated Non-standard API */
     bodyChunks?: string
     body?: any
