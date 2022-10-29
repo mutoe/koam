@@ -1,5 +1,6 @@
 import http from 'node:http'
 import { HttpStatus } from 'src/enums/http-status'
+import { parseQuery } from 'src/utils/query-string'
 import { Koa } from './index'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
@@ -36,24 +37,13 @@ export class Context {
   get status (): HttpStatus { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
 
-  private parseQuery (queryString: string): Record<string, any> {
-    if (!queryString) return {}
-    const entries = [...new URLSearchParams(queryString).entries()]
-    return Object.fromEntries(entries.map(([k, v]) => {
-      try {
-        v = JSON.parse(v)
-      } catch {}
-      return [k, v]
-    }))
-  }
-
   private initRequest (req: http.IncomingMessage): Koa.Request {
     const [path, queryString] = this.req.url?.split('?') ?? []
     return {
       method: req.method?.toUpperCase(),
       url: req.url,
       path,
-      query: this.parseQuery(queryString),
+      query: parseQuery(queryString),
     }
   }
 
