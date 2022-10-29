@@ -16,7 +16,9 @@
     "prepare": "husky install",
     "test": "jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",
-    "start": "node -r @swc-node/register src/index.ts"
+    "start": "node -r @swc-node/register src/index.ts",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint"
   },
   "lint-staged": {
     "*.{ts,js,json,yml,yaml,snap}": "eslint --fix"
