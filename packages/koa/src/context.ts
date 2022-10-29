@@ -14,6 +14,7 @@ export class Context {
   /** Koa response object  */
   response: Koa.Response
 
+  /** @deprecated Non-standard API */
   onError: (e: Error) => void | Promise<void>
 
   constructor (config: Koa.Config, req: http.IncomingMessage, res: http.ServerResponse) {
