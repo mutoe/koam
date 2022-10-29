@@ -3,6 +3,7 @@ import { Context } from './context'
 
 declare namespace Koa {
   export interface Config {
+    /** @deprecated Non-standard API */
     onError: (error: Error) => void
   }
 
@@ -11,6 +12,7 @@ declare namespace Koa {
     url?: string
     path?: string
     query?: any
+    /** @deprecated Non-standard API */
     bodyChunks?: string
     body?: any
   }
