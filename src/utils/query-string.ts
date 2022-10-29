@@ -1,6 +1,6 @@
 /* eslint-disable max-statements-per-line */
 
-type QueryValue = string | boolean | number | undefined
+type QueryValue = string | boolean | number
 
 export function parseQuery (queryString: string): Record<string, QueryValue | QueryValue[]> {
   if (!queryString) return {}
