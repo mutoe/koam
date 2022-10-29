@@ -13,9 +13,8 @@ describe('# query string', () => {
       // { qs: 'foo[]=0&foo[]=true&foo[]=bar', expected: { foo: [0, true, 'bar'] } },
       { qs: 'foo=0,1,bar', expected: { foo: '0,1,bar' } },
       { qs: 'foo', expected: { foo: '' } },
-      // TODO: fix side path case
-      // { qs: '=', expected: {} },
-      // { qs: '=a', expected: {} },
+      { qs: '=', expected: {} },
+      { qs: '=a', expected: {} },
     ]
 
     it.each(testcases)('should return object correctly when passed "$qs"', ({ qs, expected }) => {
