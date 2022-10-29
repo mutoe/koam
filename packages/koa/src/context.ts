@@ -5,10 +5,15 @@ import { Koa } from './index'
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
 
 export class Context {
+  /** Nodejs http server vanilla request object  */
   req: http.IncomingMessage
+  /** Nodejs http server vanilla response object  */
   res: http.ServerResponse
+  /** Koa request object  */
   request: Koa.Request
+  /** Koa response object  */
   response: Koa.Response
+
   onError: (e: Error) => void | Promise<void>
 
   constructor (config: Koa.Config, req: http.IncomingMessage, res: http.ServerResponse) {
@@ -23,7 +28,9 @@ export class Context {
   get url (): string { return this.request.url ?? '' }
   get path (): string { return this.request.path ?? '' }
   get query (): Koa.JsonValue { return this.request.query }
-  get body (): Koa.JsonValue { return this.request.jsonBody }
+
+  get body (): Koa.JsonValue { return this.response.body }
+  set body (value: Koa.JsonValue) { this.response.body = value }
 
   get status (): HttpStatus { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
@@ -53,6 +60,7 @@ export class Context {
   private initResponse (res: http.ServerResponse): Koa.Response {
     return {
       status: HttpStatus.Ok,
+      body: null,
     }
   }
 }

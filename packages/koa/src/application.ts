@@ -59,6 +59,9 @@ export default class Application {
           this.ctx.status = HttpStatus.InternalServerError
         }
       }
+      if (this.ctx.body !== undefined && this.ctx.body !== null) {
+        this.ctx.res.write(JSON.stringify(this.ctx.body))
+      }
       this.ctx.res.statusCode = this.ctx.status
       this.ctx.res.end()
     }

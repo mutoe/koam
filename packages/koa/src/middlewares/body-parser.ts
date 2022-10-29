@@ -12,9 +12,13 @@ export const bodyParser: Koa.MiddlewareGenerator = () => async (ctx, next) => {
   ctx.req.on('data', chunk => (chunks += chunk))
     .on('end', () => {
       ctx.request.bodyChunks = chunks
+      if (!chunks) return
       try {
-        ctx.request.jsonBody = JSON.parse(Buffer.from(chunks).toString())
-      } catch {}
+        ctx.request.body = JSON.parse(Buffer.from(chunks).toString())
+      } catch {
+        // TODO; replace to ctx.log method
+        console.info('parse request body failed')
+      }
     })
   await next()
 }
