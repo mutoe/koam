@@ -11,20 +11,33 @@ describe('# context', () => {
   afterEach(() => app.close())
 
   describe('request', () => {
-    it('should can get request basic information', async () => {
+    it('should can get request url basic information', async () => {
       testAddress = app.use(cb).listen(0).address()
 
+      // const protocol = 'http'
+      const host = `localhost:${testAddress.port}`
+      // const origin = `${protocol}://${host}`
       const path = '/path'
-      const query = '?foo=1&bar=true&baz=baz'
-      await fetch(`${baseUrl()}${path}${query}`, { method: 'GET' })
+      const querystring = 'foo=1&bar=true&baz=baz'
+      const url = `${path}?${querystring}`
+      // const href = `${origin}${url}`
+
+      await fetch(`${baseUrl()}${url}`, { method: 'GET' })
 
       expect(cb).toHaveBeenCalledTimes(1)
       const ctx = cb.mock.calls[0][0]
-      expect(ctx).toMatchObject({
+      const expectedContextProperties = {
         method: 'GET',
-        url: path + query,
+        host,
+        url,
         path,
         query: { foo: 1, bar: true, baz: 'baz' },
+        querystring,
+      }
+      expect(ctx).toMatchObject(expectedContextProperties)
+      expect(ctx.request).toMatchObject({
+        ...expectedContextProperties,
+        search: querystring,
       })
     })
 

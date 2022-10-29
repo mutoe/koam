@@ -54,7 +54,7 @@ Context request
 - [x] `request.method` `ctx.method`
 - [ ] `request.method=` `ctx.method=`
 - [ ] `request.length`
-- [ ] `request.url` `ctx.url`
+- [x] `request.url` `ctx.url`
 - [ ] `request.url=` `ctx.url=`
 - [ ] `request.originalUrl` `ctx.originalUrl`
 - [ ] `request.origin` `ctx.origin`
@@ -63,11 +63,11 @@ Context request
 - [ ] `request.path=` `ctx.path=`
 - [x] `request.query` `ctx.query`
 - [ ] `request.query=` `ctx.query=`
-- [ ] `request.querystring` `ctx.querystring`
-    - [ ] `request.search`
+- [x] `request.querystring` `ctx.querystring`
+    - [x] `request.search`
 - [ ] `request.querystring=` `ctx.querystring=`
     - [ ] `request.search=`
-- [ ] `request.host` `ctx.host`
+- [x] `request.host` `ctx.host`
 - [ ] `request.hostname` `ctx.hostname`
 - [ ] `request.URL`
 - [ ] `request.type` (get `mime-type` in `Content-Type` header)
