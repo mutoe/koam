@@ -1,3 +1,4 @@
+import { HttpStatus } from 'src/enums/http-status'
 import { Context } from './context'
 
 declare namespace Koa {
@@ -12,6 +13,10 @@ declare namespace Koa {
     query?: any
     bodyChunks?: string
     jsonBody?: any
+  }
+
+  export interface Response {
+    status: HttpStatus
   }
 
   export type JsonValue =

@@ -1,10 +1,8 @@
-import assert from 'node:assert'
 import http from 'node:http'
 import { ListenOptions } from 'node:net'
 import { Context } from './context'
 import { HttpStatus } from './enums/http-status'
 import { bodyParser } from './middlewares/body-parser'
-import { fallbackResponse } from './middlewares/fallback-response'
 import { deepMerge } from './utils/deep-merge'
 import { Koa } from './index'
 
@@ -20,7 +18,7 @@ export default class Application {
 
   constructor (config: Partial<Koa.Config> = {}) {
     this.config = deepMerge(this.config, config)
-    this.middlewares.push(bodyParser(), fallbackResponse())
+    this.middlewares.push(bodyParser())
     this.httpServer = http.createServer(this.onRequestReceive())
   }
 
@@ -55,12 +53,14 @@ export default class Application {
       try {
         await middleware()
       } catch (error) {
-        // TODO: using this.ctx.status setter
-        this.ctx.res.statusCode = HttpStatus.InternalServerError
-        assert(error instanceof Error)
-        this.ctx.onError(error)
-        this.ctx.res.end()
+        const err = error instanceof Error ? error : new Error(error?.toString())
+        this.ctx.onError(err)
+        if (HttpStatus.is2xxSuccess(this.ctx.status)) {
+          this.ctx.status = HttpStatus.InternalServerError
+        }
       }
+      this.ctx.res.statusCode = this.ctx.status
+      this.ctx.res.end()
     }
   }
 
