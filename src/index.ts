@@ -12,11 +12,12 @@ declare namespace Koa {
     path?: string
     query?: any
     bodyChunks?: string
-    jsonBody?: any
+    body?: any
   }
 
   export interface Response {
     status: HttpStatus
+    body: any
   }
 
   export type JsonValue =

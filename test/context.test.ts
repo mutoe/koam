@@ -42,7 +42,7 @@ describe('# context', () => {
       expect(cb).toHaveBeenCalledTimes(1)
       const ctx = cb.mock.calls[0][0]
       expect(ctx.method).toBe('POST')
-      expect(ctx.body).toEqual({ foo: 'bar', count: 1 })
+      expect(ctx.request.body).toEqual({ foo: 'bar', count: 1 })
     })
   })
 
@@ -57,6 +57,18 @@ describe('# context', () => {
 
       expect(cb).toHaveBeenCalledWith(HttpStatus.Unauthorized)
       expect(response.status).toBe(HttpStatus.Unauthorized)
+    })
+
+    it('should set correct json response when call body setter', async () => {
+      testAddress = app
+        .use(async (ctx, next) => { ctx.body = { foo: 'bar' }; await next() })
+        .use(ctx => { cb(ctx.body) })
+        .listen(0).address()
+
+      const response = await fetch(baseUrl())
+
+      expect(cb).toHaveBeenCalledWith({ foo: 'bar' })
+      expect(await response.json()).toEqual({ foo: 'bar' })
     })
   })
 })
