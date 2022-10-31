@@ -40,4 +40,7 @@ export class Context {
   set status (val: HttpStatus) { this.response.status = val }
 
   get headers (): http.IncomingHttpHeaders { return this.request.headers }
+
+  /** Get special request header */
+  get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
 }

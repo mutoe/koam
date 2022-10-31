@@ -50,7 +50,7 @@ Context request
     - [ ] ~~`request.header`~~ ~~`ctx.header`~~
 - [ ] `request.headers=`
     - [ ] `request.header=`
-- [ ] `request.get(field)` `ctx.get(field)`
+- [x] `request.get(field)` `ctx.get(field)`
 - [x] `request.method` `ctx.method`
 - [ ] `request.method=` `ctx.method=`
 - [ ] `request.length`

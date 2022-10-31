@@ -46,4 +46,7 @@ export default class Request {
   get query (): any { return parseQuery(this.#querystring) }
 
   get headers (): http.IncomingHttpHeaders { return this.#req.headers }
+
+  /** Get special request header */
+  get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
 }
