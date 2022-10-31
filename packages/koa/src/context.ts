@@ -1,6 +1,7 @@
 import http from 'node:http'
 import { HttpStatus } from 'src/enums/http-status'
 import Request from './request'
+import Response from './response'
 import { Koa } from './index'
 
 export class Context {
@@ -11,7 +12,7 @@ export class Context {
   /** Koa request object  */
   request: Request
   /** Koa response object  */
-  response: Koa.Response
+  response: Response
 
   /** @deprecated Non-standard API */
   onError: (e: Error) => void | Promise<void>
@@ -20,7 +21,7 @@ export class Context {
     this.req = req
     this.res = res
     this.request = new Request(req)
-    this.response = this.initResponse(res)
+    this.response = new Response(res)
     this.onError = config.onError
   }
 
@@ -37,12 +38,4 @@ export class Context {
 
   get status (): HttpStatus { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private initResponse (res: http.ServerResponse): Koa.Response {
-    return {
-      status: HttpStatus.Ok,
-      body: null,
-    }
-  }
 }
