@@ -1,4 +1,4 @@
-import { mockConsoleError } from 'src/utils/test-utils'
+import { mockConsoleError } from 'src/test-utils/mock-console'
 import Koa from '../src'
 
 describe('# application', () => {

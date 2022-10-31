@@ -1,5 +1,3 @@
-// istanbul ignore file
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const mockConsoleError = async (fn: (mockError: jest.Mock) => any): Promise<void> => {
   const { error } = console

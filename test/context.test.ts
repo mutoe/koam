@@ -1,5 +1,8 @@
 import { HttpStatus } from 'src/enums/http-status'
+import { implementToObject } from 'src/test-utils/implement-to-object'
 import Koa from '../src'
+
+implementToObject()
 
 describe('# context', () => {
   let app: Koa
@@ -25,7 +28,8 @@ describe('# context', () => {
       await fetch(`${baseUrl()}${url}`, { method: 'GET' })
 
       expect(cb).toHaveBeenCalledTimes(1)
-      const ctx = cb.mock.calls[0][0]
+
+      const ctx = cb.mock.calls[0][0].toObject()
       const expectedContextProperties = {
         method: 'GET',
         protocol,
@@ -36,6 +40,7 @@ describe('# context', () => {
         querystring,
       }
       expect(ctx).toMatchObject(expectedContextProperties)
+
       expect(ctx.request).toMatchObject({
         ...expectedContextProperties,
         search: querystring,

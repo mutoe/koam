@@ -24,7 +24,7 @@
     "*.{ts,js,json,yml,yaml,snap}": "eslint --fix"
   },
   "devDependencies": {
-    "@mutoe/eslint-config-preset-ts": "^2.0.0-alpha.3",
+    "@mutoe/eslint-config-preset-ts": "2.0.0-alpha.6",
     "@swc-node/core": "^1.9.1",
     "@swc-node/jest": "^1.5.5",
     "@swc-node/register": "^1.5.4",
@@ -48,7 +48,13 @@
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "prefer-const": ["error", { "destructuring": "all", "ignoreReadBeforeAssign": true }]
+      "prefer-const": [
+        "error",
+        {
+          "destructuring": "all",
+          "ignoreReadBeforeAssign": true
+        }
+      ]
     }
   },
   "jest": {
@@ -65,6 +71,10 @@
     "clearMocks": true,
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1"
-    }
+    },
+    "collectCoverageFrom": [
+      "src",
+      "!src/test-utils"
+    ]
   }
 }
