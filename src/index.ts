@@ -9,6 +9,7 @@ declare namespace Koa {
 
   export interface Request {
     method: string
+    protocol: string
     host?: string
     url: string
     path: string

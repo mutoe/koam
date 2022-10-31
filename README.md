@@ -75,7 +75,7 @@ Context request
 - [ ] `request.fresh` `ctx.fresh`
 - [ ] `request.socket` `ctx.socket`
 - [ ] `request.stale` `ctx.stale`
-- [ ] `request.protocol` `ctx.protocol`
+- [x] `request.protocol` `ctx.protocol`
 - [ ] `request.secure` `ctx.secure`
 - [ ] `request.ip` `ctx.ip`
 - [ ] `request.ips` `ctx.ips`
