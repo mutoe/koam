@@ -38,4 +38,6 @@ export class Context {
 
   get status (): HttpStatus { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
+
+  get headers (): http.IncomingHttpHeaders { return this.request.headers }
 }
