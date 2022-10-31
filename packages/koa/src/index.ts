@@ -7,20 +7,7 @@ declare namespace Koa {
     onError: (error: Error) => void
   }
 
-  export interface Request {
-    method: string
-    protocol: string
-    host?: string
-    url: string
-    path: string
-    query?: any
-    querystring?: string
-    /** @deprecated Not recommended. using `querystring` instead */
-    search?: string
-    /** @deprecated Non-standard API */
-    bodyChunks?: string
-    body?: any
-  }
+  export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
 
   export interface Response {
     status: HttpStatus
