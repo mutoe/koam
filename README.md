@@ -64,9 +64,9 @@ Context request
 - [x] `request.query` `ctx.query`
 - [ ] `request.query=` `ctx.query=`
 - [x] `request.querystring` `ctx.querystring`
-    - [x] `request.search`
 - [ ] `request.querystring=` `ctx.querystring=`
-    - [ ] `request.search=`
+- [x] `request.search`
+- [x] `request.search=`
 - [x] `request.host` `ctx.host`
 - [ ] `request.hostname` `ctx.hostname`
 - [ ] `request.URL`
