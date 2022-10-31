@@ -54,7 +54,9 @@
           "destructuring": "all",
           "ignoreReadBeforeAssign": true
         }
-      ]
+      ],
+      "unicorn/text-encoding-identifier-case": "off",
+      "jest/max-expects": "off"
     }
   },
   "jest": {

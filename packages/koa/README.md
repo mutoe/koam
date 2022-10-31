@@ -70,8 +70,8 @@ Context request
 - [x] `request.host` `ctx.host`
 - [ ] `request.hostname` `ctx.hostname`
 - [ ] `request.URL`
-- [ ] `request.type` (get `mime-type` in `Content-Type` header)
-- [ ] `request.charset` (get `charset` in `Content-Type` header)
+- [x] `request.type` (get `mime-type` in `Content-Type` header)
+- [x] `request.charset` (get `charset` in `Content-Type` header)
 - [ ] `request.fresh` `ctx.fresh`
 - [ ] `request.socket` `ctx.socket`
 - [ ] `request.stale` `ctx.stale`
