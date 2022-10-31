@@ -28,6 +28,7 @@ export class Context {
 
   get method (): HttpMethod { return this.request.method as HttpMethod }
   get host (): string | undefined { return this.request.host }
+  get protocol (): string { return this.request.protocol }
   get url (): string { return this.request.url ?? '' }
   get path (): string { return this.request.path ?? '' }
   get query (): Koa.JsonValue { return this.request.query }
@@ -43,6 +44,8 @@ export class Context {
     const [path, queryString] = this.req.url?.split('?') ?? []
     return {
       method: req.method?.toUpperCase() ?? 'GET',
+      /** TODO: (proxy) get protocol from 'X-Forwarded-Proto' */
+      protocol: (req.socket as any).encrypted ? 'https' : 'http',
       url: req.url ?? '',
       path,
       query: parseQuery(queryString),

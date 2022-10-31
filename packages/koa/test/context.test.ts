@@ -14,7 +14,7 @@ describe('# context', () => {
     it('should can get request url basic information', async () => {
       testAddress = app.use(cb).listen(0).address()
 
-      // const protocol = 'http'
+      const protocol = 'http'
       const host = `localhost:${testAddress.port}`
       // const origin = `${protocol}://${host}`
       const path = '/path'
@@ -28,6 +28,7 @@ describe('# context', () => {
       const ctx = cb.mock.calls[0][0]
       const expectedContextProperties = {
         method: 'GET',
+        protocol,
         host,
         url,
         path,
