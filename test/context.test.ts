@@ -73,7 +73,11 @@ describe('# context', () => {
         'X-Request-Id': 'abc',
       }
 
-      await fetch(baseUrl(), { headers })
+      await fetch(baseUrl(), {
+        method: 'post',
+        headers,
+        body: JSON.stringify({ foo: 'bar' }),
+      })
 
       expect(cb).toHaveBeenCalledTimes(1)
       const ctx = cb.mock.calls[0][0]
@@ -84,6 +88,8 @@ describe('# context', () => {
       })
       expect(ctx.get('x-request-id')).toBe(headers['X-Request-Id'])
       expect(ctx.request.get('content-type')).toBe(headers['Content-Type'])
+      // eslint-disable-next-line jest/prefer-to-have-length
+      expect(ctx.request.length).toBe(13)
     })
   })
 

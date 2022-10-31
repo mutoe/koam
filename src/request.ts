@@ -49,4 +49,6 @@ export default class Request {
 
   /** Get special request header */
   get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
+
+  get length (): number | undefined { return this.get('content-length') ? Number(this.get('content-length')) : undefined }
 }
