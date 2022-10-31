@@ -69,7 +69,7 @@ describe('# context', () => {
     it('should return request headers correctly', async () => {
       testAddress = app.use(cb).listen(0).address()
       const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
         'X-Request-Id': 'abc',
       }
 
@@ -83,13 +83,14 @@ describe('# context', () => {
       const ctx = cb.mock.calls[0][0]
       expect(ctx.headers).toBe(ctx.request.headers)
       expect(ctx.headers).toMatchObject({
-        'content-type': 'application/json',
+        'content-type': 'application/json; charset=utf-8',
         'x-request-id': 'abc',
       })
-      expect(ctx.get('x-request-id')).toBe(headers['X-Request-Id'])
-      expect(ctx.request.get('content-type')).toBe(headers['Content-Type'])
-      // eslint-disable-next-line jest/prefer-to-have-length
-      expect(ctx.request.length).toBe(13)
+      expect(ctx.get('x-request-id')).toBe('abc')
+      expect(ctx.request.get('content-type')).toBe('application/json')
+      expect(ctx.request).toHaveLength(13)
+      expect(ctx.request.type).toBe('application/json')
+      expect(ctx.request.charset).toBe('utf-8')
     })
   })
 

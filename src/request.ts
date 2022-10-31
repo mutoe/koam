@@ -6,6 +6,8 @@ export default class Request {
   /** @deprecated Non-standard API */
   bodyChunks?: string
   body?: any
+  readonly type: string | undefined
+  readonly charset: string | undefined
 
   #req: http.IncomingMessage
   #querystring: string = ''
@@ -15,6 +17,13 @@ export default class Request {
     const [path, queryString] = req.url?.split('?') ?? []
     this.path = path
     this.querystring = queryString
+    const contentType = this.get('content-type')?.split('; ')
+    if (contentType) {
+      const [type, ...rest] = contentType
+      const others = Object.fromEntries(rest.map(it => it.split('=')))
+      this.type = type
+      this.charset = others.charset
+    }
   }
 
   /** TODO: change return value to special type (uppercase string literal) */
@@ -47,8 +56,9 @@ export default class Request {
 
   get headers (): http.IncomingHttpHeaders { return this.#req.headers }
 
-  /** Get special request header */
-  get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
+  get<T extends string>(key: T): T extends keyof http.IncomingHttpHeaders ? http.IncomingHttpHeaders[T] : (string | string[] | undefined) {
+    return this.headers[key] as any
+  }
 
   get length (): number | undefined { return this.get('content-length') ? Number(this.get('content-length')) : undefined }
 }
