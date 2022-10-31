@@ -65,6 +65,27 @@ describe('# context', () => {
     })
   })
 
+  describe('request headers', () => {
+    it('should return request headers correctly', async () => {
+      testAddress = app.use(cb).listen(0).address()
+
+      await fetch(baseUrl(), {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Request-Id': 'abc',
+        },
+      })
+
+      expect(cb).toHaveBeenCalledTimes(1)
+      const ctx = cb.mock.calls[0][0].toObject()
+      expect(ctx.headers).toBe(ctx.request.headers)
+      expect(ctx.headers).toMatchObject({
+        'content-type': 'application/json',
+        'x-request-id': 'abc',
+      })
+    })
+  })
+
   describe('response', () => {
     it('should can set response status', async () => {
       testAddress = app

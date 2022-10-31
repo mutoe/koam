@@ -46,8 +46,8 @@ Context properties
 
 Context request
 
-- [ ] `request.headers` `ctx.headers`
-    - [ ] `request.header` `ctx.header`
+- [x] `request.headers` `ctx.headers`
+    - [ ] ~~`request.header`~~ ~~`ctx.header`~~
 - [ ] `request.headers=`
     - [ ] `request.header=`
 - [ ] `request.get(field)` `ctx.get(field)`

@@ -44,4 +44,6 @@ export default class Request {
   set search (val: string) { this.querystring = val }
 
   get query (): any { return parseQuery(this.#querystring) }
+
+  get headers (): http.IncomingHttpHeaders { return this.#req.headers }
 }
