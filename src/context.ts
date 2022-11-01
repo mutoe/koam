@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import http from 'node:http'
+import { HttpMethod } from 'src/enums/http-method'
 import { HttpStatus } from 'src/enums/http-status'
 import Request from './request'
 import Response from './response'
@@ -30,7 +31,10 @@ export class Context {
   get socket () { return this.request.socket }
   get ip () { return this.request.ip }
   get ips () { return this.request.ips }
+
   get method () { return this.request.method }
+  set method (val: HttpMethod) { this.request.method = val }
+
   get host () { return this.request.host }
   get protocol () { return this.request.protocol }
   get url () { return this.request.url ?? '' }
