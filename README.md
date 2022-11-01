@@ -15,10 +15,10 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 Configuration
 
 - [ ] `app.env`
-- [ ] `app.proxy`
+- [x] `app.proxy`
 - [ ] `app.keys`
-- [ ] `app.proxyIpHeader`
-- [ ] `app.maxIpsCount`
+- [x] `app.proxyIpHeader`
+- [x] `app.maxIpsCount`
 
 Application properties / methods
 
@@ -77,8 +77,8 @@ Context request
 - [ ] `request.stale` `ctx.stale`
 - [x] `request.protocol` `ctx.protocol`
 - [ ] `request.secure` `ctx.secure`
-- [ ] `request.ip` `ctx.ip`
-- [ ] `request.ips` `ctx.ips`
+- [x] `request.ip` `ctx.ip`
+- [x] `request.ips` `ctx.ips`
 - [ ] `request.subdomains` `ctx.subdomains`
 - [ ] `request.is()` `ctx.is()`
 - [ ] `request.accepts()` `ctx.accepts()`

@@ -9,12 +9,16 @@ import { Koa } from './index'
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
 export default class Application {
-  private readonly httpServer: HttpServer
-  private ctx!: Context
-  private middlewares: Koa.Middleware[] = []
-  private readonly config: Koa.Config = {
+  context!: Context
+  readonly config: Koa.Config = {
+    proxy: false,
+    proxyIpHeader: 'x-forwarded-for',
+    maxIpsCount: 0,
     onError: (error: Error) => console.error(error),
   }
+
+  private readonly httpServer: HttpServer
+  private middlewares: Koa.Middleware[] = []
 
   constructor (config: Partial<Koa.Config> = {}) {
     this.config = deepMerge(this.config, config)
@@ -41,7 +45,7 @@ export default class Application {
   }
 
   close (callback?: (err?: Error) => void): HttpServer {
-    this.ctx = null!
+    this.context = null!
     this.middlewares = null!
     return this.httpServer.close(callback)
   }
@@ -49,21 +53,21 @@ export default class Application {
   private onRequestReceive (): http.RequestListener {
     const middleware = this.composeMiddleware()
     return async (req, res) => {
-      this.ctx = new Context(this.config, req, res)
+      this.context = new Context(this, req, res)
       try {
         await middleware()
       } catch (error) {
         const err = error instanceof Error ? error : new Error(error?.toString())
-        this.ctx.onError(err)
-        if (HttpStatus.is2xxSuccess(this.ctx.status)) {
-          this.ctx.status = HttpStatus.InternalServerError
+        this.context.onError(err)
+        if (HttpStatus.is2xxSuccess(this.context.status)) {
+          this.context.status = HttpStatus.InternalServerError
         }
       }
-      if (this.ctx.body !== undefined && this.ctx.body !== null) {
-        this.ctx.res.write(JSON.stringify(this.ctx.body))
+      if (this.context.body !== undefined && this.context.body !== null) {
+        this.context.res.write(JSON.stringify(this.context.body))
       }
-      this.ctx.res.statusCode = this.ctx.status
-      this.ctx.res.end()
+      this.context.res.statusCode = this.context.status
+      this.context.res.end()
     }
   }
 
@@ -75,7 +79,7 @@ export default class Application {
         n = i
         const fn = this.middlewares[i]
         if (!fn) return
-        return fn(this.ctx, dispatch.bind(undefined, i + 1))
+        return fn(this.context, dispatch.bind(undefined, i + 1))
       }
       return dispatch(0)
     }

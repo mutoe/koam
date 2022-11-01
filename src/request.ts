@@ -1,4 +1,6 @@
 import http from 'node:http'
+import Application from 'src/application'
+import { Context } from 'src/context'
 import { parseQuery } from 'src/utils/query-string'
 
 export default class Request {
@@ -6,13 +8,17 @@ export default class Request {
   /** @deprecated Non-standard API */
   bodyChunks?: string
   body?: any
+  readonly app: Application
+  readonly context: Context
   readonly type: string | undefined
   readonly charset: string | undefined
 
   #req: http.IncomingMessage
   #querystring: string = ''
 
-  constructor (req: http.IncomingMessage) {
+  constructor (app: Application, req: http.IncomingMessage) {
+    this.app = app
+    this.context = app.context
     this.#req = req
     const [path, queryString] = req.url?.split('?') ?? []
     this.path = path
@@ -37,14 +43,34 @@ export default class Request {
   // TODO: set url (val: string) { this.#req.url = val }
 
   get protocol (): string {
-    // TODO: (proxy) get protocol from 'X-Forwarded-Proto'
-    return (this.#req.socket as any).encrypted ? 'https' : 'http'
+    if ((this.#req.socket as any).encrypted) return 'https'
+    if (!this.app.config.proxy) return 'http'
+    const proto = this.get('x-forwarded-proto') as string | undefined
+    return proto?.split(/\s*,\s*/, 1).at(0) || 'http'
   }
 
   get host (): string {
-    // TODO: (proxy) get protocol from 'X-Forwarded-Host'
-    return this.#req.headers.host || ''
+    let host: string | undefined
+    if (this.app.config.proxy) {
+      host = this.get('x-forwarded-host') as string
+    }
+    if (!host) {
+      host = this.get('host')
+    }
+    return host?.split(/\s*,\s*/, 1).at(0) || ''
   }
+
+  get ips (): string[] {
+    if (!this.app.config.proxy) return []
+    let ips = (this.get(this.app.config.proxyIpHeader) as string | undefined)
+      ?.split(/\s*,\s*/) ?? []
+    if (this.app.config.maxIpsCount > 0) {
+      ips = ips.slice(-this.app.config.maxIpsCount)
+    }
+    return ips
+  }
+
+  get ip (): string { return this.ips.at(0) || this.socket.remoteAddress || '' }
 
   /** Get search string. */
   get querystring (): string { return this.#querystring }

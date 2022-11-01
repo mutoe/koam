@@ -56,7 +56,8 @@
         }
       ],
       "unicorn/text-encoding-identifier-case": "off",
-      "jest/max-expects": "off"
+      "jest/max-expects": "off",
+      "jest/prefer-to-be": "off"
     }
   },
   "jest": {

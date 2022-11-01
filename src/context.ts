@@ -2,7 +2,7 @@ import http from 'node:http'
 import { HttpStatus } from 'src/enums/http-status'
 import Request from './request'
 import Response from './response'
-import { Koa } from './index'
+import Application, { Koa } from './index'
 
 export class Context {
   /** Nodejs http server vanilla request object  */
@@ -17,16 +17,17 @@ export class Context {
   /** @deprecated Non-standard API */
   onError: (e: Error) => void | Promise<void>
 
-  constructor (config: Koa.Config, req: http.IncomingMessage, res: http.ServerResponse) {
+  constructor (app: Application, req: http.IncomingMessage, res: http.ServerResponse) {
     this.req = req
     this.res = res
-    this.request = new Request(req)
-    this.response = new Response(res)
-    this.onError = config.onError
+    this.request = new Request(app, req)
+    this.response = new Response(app, res)
+    this.onError = app.config.onError
   }
 
-  get socket (): http.IncomingMessage['socket'] { return this.req.socket }
-
+  get socket (): http.IncomingMessage['socket'] { return this.request.socket }
+  get ip (): string { return this.request.ip }
+  get ips (): string[] { return this.request.ips }
   get method (): Koa.HttpMethod { return this.request.method as Koa.HttpMethod }
   get host (): string | undefined { return this.request.host }
   get protocol (): string { return this.request.protocol }
@@ -43,6 +44,6 @@ export class Context {
 
   get headers (): http.IncomingHttpHeaders { return this.request.headers }
 
-  /** Get special request header */
+  /** Get special request header. TODO: infer return type */
   get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
 }
