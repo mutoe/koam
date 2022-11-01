@@ -26,6 +26,8 @@ export default class Request {
     }
   }
 
+  get socket (): http.IncomingMessage['socket'] { return this.#req.socket }
+
   /** TODO: change return value to special type (uppercase string literal) */
   get method (): string { return this.#req.method || '' }
   /** TODO: change value to special type (uppercase string literal) */
