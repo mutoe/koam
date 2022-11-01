@@ -9,7 +9,7 @@ import { Koa } from './index'
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
 export default class Application {
-  context!: Context
+  context: Context | null = null
   readonly config: Koa.Config = {
     proxy: false,
     proxyIpHeader: 'x-forwarded-for',
@@ -79,7 +79,7 @@ export default class Application {
         n = i
         const fn = this.middlewares[i]
         if (!fn) return
-        return fn(this.context, dispatch.bind(undefined, i + 1))
+        return fn(this.context!, dispatch.bind(undefined, i + 1))
       }
       return dispatch(0)
     }

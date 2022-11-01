@@ -12,7 +12,7 @@ export default class Response {
 
   constructor (app: Application, res: http.ServerResponse) {
     this.app = app
-    this.context = app.context
+    this.context = app.context!
     this.#res = res
   }
 

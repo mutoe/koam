@@ -25,7 +25,7 @@ Application properties / methods
 - [x] `app.use(middleware)`
 - [ ] `app.callback()`
 - [x] `app.listen(...)`
-- [ ] `app.context`
+- [x] `app.context`
 - [ ] `app.keys=`
 - [ ] `app.on('error', error)`
 
