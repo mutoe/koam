@@ -80,13 +80,13 @@ describe('# context', () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ foo: 'bar', count: 1 }),
+        body: JSON.stringify({ foo: '你好, Nodejs!', count: 1 }),
       })
 
       expect(cb).toHaveBeenCalledTimes(1)
       const ctx = cb.mock.calls[0][0]
       expect(ctx.method).toBe('POST')
-      expect(ctx.request.body).toEqual({ foo: 'bar', count: 1 })
+      expect(ctx.request.body).toEqual({ foo: '你好, Nodejs!', count: 1 })
     })
   })
 
