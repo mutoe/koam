@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import http from 'node:http'
 import { HttpStatus } from 'src/enums/http-status'
 import Request from './request'
@@ -25,25 +27,25 @@ export class Context {
     this.onError = app.config.onError
   }
 
-  get socket (): http.IncomingMessage['socket'] { return this.request.socket }
-  get ip (): string { return this.request.ip }
-  get ips (): string[] { return this.request.ips }
-  get method (): Koa.HttpMethod { return this.request.method as Koa.HttpMethod }
-  get host (): string | undefined { return this.request.host }
-  get protocol (): string { return this.request.protocol }
-  get url (): string { return this.request.url ?? '' }
-  get path (): string { return this.request.path ?? '' }
-  get query (): Koa.JsonValue { return this.request.query }
-  get querystring (): string | undefined { return this.request.querystring }
+  get socket () { return this.request.socket }
+  get ip () { return this.request.ip }
+  get ips () { return this.request.ips }
+  get method () { return this.request.method as Koa.HttpMethod }
+  get host () { return this.request.host }
+  get protocol () { return this.request.protocol }
+  get url () { return this.request.url ?? '' }
+  get path () { return this.request.path ?? '' }
+  get query () { return this.request.query }
+  get querystring () { return this.request.querystring }
 
-  get body (): Koa.JsonValue { return this.response.body }
+  get body () { return this.response.body }
   set body (value: Koa.JsonValue) { this.response.body = value }
 
-  get status (): HttpStatus { return this.response.status }
+  get status () { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
 
-  get headers (): http.IncomingHttpHeaders { return this.request.headers }
+  get headers () { return this.request.headers }
 
-  /** Get special request header. TODO: infer return type */
-  get (key: keyof http.IncomingHttpHeaders | string): string | string[] | undefined { return this.headers[key] }
+  /** Get special request header. */
+  get <T extends string>(key: T) { return this.request.get(key) }
 }
