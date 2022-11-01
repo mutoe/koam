@@ -52,7 +52,7 @@ Context request
     - [ ] `request.header=`
 - [x] `request.get(field)` `ctx.get(field)`
 - [x] `request.method` `ctx.method`
-- [ ] `request.method=` `ctx.method=`
+- [x] `request.method=` `ctx.method=`
 - [x] `request.length`
 - [x] `request.url` `ctx.url`
 - [ ] `request.url=` `ctx.url=`
