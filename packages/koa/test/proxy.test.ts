@@ -1,5 +1,5 @@
 import { Context } from 'src/context'
-import { implementToObject } from 'src/test-utils/implement-to-object'
+import { implementToObject } from 'test/utils/implement-to-object'
 import Koa from '../src'
 implementToObject()
 

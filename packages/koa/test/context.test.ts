@@ -1,6 +1,6 @@
 import { Context } from 'src/context'
 import { HttpStatus } from 'src/enums/http-status'
-import { implementToObject } from 'src/test-utils/implement-to-object'
+import { implementToObject } from 'test/utils/implement-to-object'
 import { setUserToStateMiddleware } from 'test/utils/middlewares'
 import Koa from '../src'
 
