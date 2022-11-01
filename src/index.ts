@@ -10,8 +10,6 @@ declare namespace Koa {
     onError: (error: Error) => void
   }
 
-  export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
-
   export interface Response {
     status: HttpStatus
     body: any

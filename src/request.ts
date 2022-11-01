@@ -1,6 +1,7 @@
 import http from 'node:http'
 import Application from 'src/application'
 import { Context } from 'src/context'
+import { HttpMethod } from 'src/enums/http-method'
 import { parseQuery } from 'src/utils/query-string'
 
 export default class Request {
@@ -34,10 +35,8 @@ export default class Request {
 
   get socket (): http.IncomingMessage['socket'] { return this.#req.socket }
 
-  /** TODO: change return value to special type (uppercase string literal) */
-  get method (): string { return this.#req.method || '' }
-  /** TODO: change value to special type (uppercase string literal) */
-  set method (val: string) { this.#req.method = val }
+  get method (): HttpMethod { return this.#req.method as HttpMethod || '' }
+  set method (val: HttpMethod) { this.#req.method = val }
 
   get url (): string { return this.#req.url || '' }
   // TODO: set url (val: string) { this.#req.url = val }
