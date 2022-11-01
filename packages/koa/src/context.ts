@@ -30,7 +30,7 @@ export class Context {
   get socket () { return this.request.socket }
   get ip () { return this.request.ip }
   get ips () { return this.request.ips }
-  get method () { return this.request.method as Koa.HttpMethod }
+  get method () { return this.request.method }
   get host () { return this.request.host }
   get protocol () { return this.request.protocol }
   get url () { return this.request.url ?? '' }
