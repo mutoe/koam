@@ -86,11 +86,21 @@ describe('# context', () => {
         'content-type': 'application/json; charset=utf-8',
         'x-request-id': 'abc',
       })
-      expect(ctx.get('x-request-id')).toBe('abc')
-      expect(ctx.request.get('content-type')).toBe('application/json')
+      expect(ctx.get('x-request-id')).toEqual('abc')
+      expect(ctx.request.get('content-type')).toEqual(headers['Content-Type'])
       expect(ctx.request).toHaveLength(13)
       expect(ctx.request.type).toBe('application/json')
       expect(ctx.request.charset).toBe('utf-8')
+    })
+
+    it('should return correct client ip address correctly', async () => {
+      testAddress = app.use(cb).listen(0).address()
+      await fetch(baseUrl())
+
+      const ctx = cb.mock.calls[0][0]
+      expect(ctx.request.socket).toBe(ctx.socket)
+      // TODO: get ip address from proxy header
+      expect(ctx.request.socket.remoteAddress).toBe('::1')
     })
   })
 

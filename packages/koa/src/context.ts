@@ -25,6 +25,8 @@ export class Context {
     this.onError = config.onError
   }
 
+  get socket (): http.IncomingMessage['socket'] { return this.req.socket }
+
   get method (): Koa.HttpMethod { return this.request.method as Koa.HttpMethod }
   get host (): string | undefined { return this.request.host }
   get protocol (): string { return this.request.protocol }

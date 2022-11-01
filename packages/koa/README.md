@@ -73,7 +73,7 @@ Context request
 - [x] `request.type` (get `mime-type` in `Content-Type` header)
 - [x] `request.charset` (get `charset` in `Content-Type` header)
 - [ ] `request.fresh` `ctx.fresh`
-- [ ] `request.socket` `ctx.socket`
+- [x] `request.socket` `ctx.socket`
 - [ ] `request.stale` `ctx.stale`
 - [x] `request.protocol` `ctx.protocol`
 - [ ] `request.secure` `ctx.secure`
