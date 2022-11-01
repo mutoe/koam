@@ -1,3 +1,4 @@
+import { Context } from 'src/context'
 import { mockConsoleError } from 'src/test-utils/mock-console'
 import Koa from '../src'
 
@@ -8,6 +9,15 @@ describe('# application', () => {
 
   beforeEach(() => { testAddress = 33_000; app = new Koa() })
   afterEach(() => app.close())
+
+  it('should expose context property', async () => {
+    expect(app.context).toBeNull()
+
+    testAddress = app.listen(0).address()
+    await fetch(baseUrl())
+
+    expect(app.context).toBeInstanceOf(Context)
+  })
 
   describe('error handing', () => {
     const error = new Error('this is error message')

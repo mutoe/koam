@@ -19,7 +19,7 @@ export default class Request {
 
   constructor (app: Application, req: http.IncomingMessage) {
     this.app = app
-    this.context = app.context
+    this.context = app.context!
     this.#req = req
     const [path, queryString] = req.url?.split('?') ?? []
     this.path = path
