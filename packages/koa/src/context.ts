@@ -17,6 +17,8 @@ export class Context {
   readonly request: Request
   /** Koa response object  */
   readonly response: Response
+  /** Custom properties */
+  state: Koa.State = {}
 
   /** @deprecated Non-standard API */
   onError: (e: Error) => void | Promise<void>

@@ -35,7 +35,7 @@ Context properties
 - [x] `ctx.res`
 - [x] `ctx.request`
 - [x] `ctx.response`
-- [ ] `ctx.state`
+- [x] `ctx.state`
 - [x] `ctx.app`
 - [ ] `ctx.app.emit`
 - [ ] `ctx.cookies.get(name, [options])`

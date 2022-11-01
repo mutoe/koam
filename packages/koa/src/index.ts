@@ -1,8 +1,16 @@
+import { Context } from 'src/context'
 import { HttpStatus } from 'src/enums/http-status'
-import { Context } from './context'
+
+declare global {
+  /** Append properties to this interface */
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface KoaState {}
+}
 
 declare namespace Koa {
-  export interface Config {
+  type State = KoaState
+
+  interface Config {
     proxy: boolean
     proxyIpHeader: string
     maxIpsCount: number
@@ -10,19 +18,18 @@ declare namespace Koa {
     onError: (error: Error) => void
   }
 
-  export interface Response {
+  interface Response {
     status: HttpStatus
     body: any
   }
 
-  export type JsonValue =
-      | string | number | boolean
-      | { [x: string]: JsonValue }
-      | JsonValue[]
+  type JsonValue =
+    | string | number | boolean
+    | { [x: string]: JsonValue }
+    | JsonValue[]
 
-  export type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
-  export type MiddlewareGenerator = (...args: any[]) => Middleware
-
+  type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
+  type MiddlewareGenerator = (...args: any[]) => Middleware
 }
 
 export { Koa }

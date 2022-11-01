@@ -73,11 +73,13 @@
     },
     "clearMocks": true,
     "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/src/$1"
+      "src/(.*)": "<rootDir>/src/$1",
+      "test/(.*)": "<rootDir>/test/$1"
     },
     "collectCoverageFrom": [
       "src",
-      "!src/test-utils"
+      "!src/test-utils",
+      "!test"
     ]
   }
 }
