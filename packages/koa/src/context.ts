@@ -8,19 +8,21 @@ import Response from './response'
 import Application, { Koa } from './index'
 
 export class Context {
+  readonly app: Application
   /** Nodejs http server vanilla request object  */
-  req: http.IncomingMessage
+  readonly req: http.IncomingMessage
   /** Nodejs http server vanilla response object  */
-  res: http.ServerResponse
+  readonly res: http.ServerResponse
   /** Koa request object  */
-  request: Request
+  readonly request: Request
   /** Koa response object  */
-  response: Response
+  readonly response: Response
 
   /** @deprecated Non-standard API */
   onError: (e: Error) => void | Promise<void>
 
   constructor (app: Application, req: http.IncomingMessage, res: http.ServerResponse) {
+    this.app = app
     this.req = req
     this.res = res
     this.request = new Request(app, req)
