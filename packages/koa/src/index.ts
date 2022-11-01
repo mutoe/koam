@@ -3,6 +3,9 @@ import { Context } from './context'
 
 declare namespace Koa {
   export interface Config {
+    proxy: boolean
+    proxyIpHeader: string
+    maxIpsCount: number
     /** @deprecated Non-standard API */
     onError: (error: Error) => void
   }
