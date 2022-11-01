@@ -154,4 +154,25 @@ describe('# context', () => {
       expect(await response.json()).toEqual({ foo: 'bar' })
     })
   })
+
+  describe('response headers', () => {
+    it('should can get/set/append/remove response header', async () => {
+      testAddress = app
+        .use(async (ctx, next) => { ctx.set('x-request-id', '1'); await next() })
+        .use(async (ctx, next) => { ctx.append('x-request-id', '2'); await next() })
+        .use(async (ctx, next) => { ctx.append('trace-id', '1'); await next() })
+        .use(async (ctx, next) => { cb(ctx.response.get('trace-id')); await next() })
+        .use(async (ctx, next) => { ctx.remove('trace-id'); await next() })
+        .use(async (ctx, next) => { cb(ctx.response.get('trace-id')); await next() })
+        .listen(0).address()
+
+      const response = await fetch(baseUrl())
+
+      const headers = Object.fromEntries(response.headers as any)
+      expect(headers).toMatchObject({ 'x-request-id': '1, 2' })
+      expect(headers).not.toHaveProperty('trace-id')
+      expect(cb).toHaveBeenNthCalledWith(1, '1')
+      expect(cb).toHaveBeenNthCalledWith(2, undefined)
+    })
+  })
 })

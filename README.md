@@ -89,8 +89,15 @@ Context request
 
 Context response
 
-- [ ] `response.header` 
-- [ ] `response.headers`
+- [x] `response.headers`
+  - [ ] ~~`response.header`~~
+- [x] `response.headerSent` `ctx.headerSent` <!-- Need tests -->
+- [ ] `response.flushHeaders()` <!-- Need tests -->
+- [x] `response.has(header)`
+- [x] `response.get(header)`
+- [x] `response.set(headers)` `ctx.set(headers)`
+- [x] `response.append(header, value)` `ctx.append(header, value)`
+- [x] `response.remove(header)` `ctx.remove(header)`
 - [ ] `response.socket`
 - [x] `response.body` `ctx.body`
 - [x] `response.body=` `ctx.body=` (currently only finished json body)
@@ -104,14 +111,7 @@ Context response
 - [ ] `response.type=` `ctx.type=`
 - [ ] `response.is(mimeTypes...)`
 - [ ] `response.redirect(url, [alt])` `ctx.redirect(url, [alt])`
-- [ ] `response.headerSent` `ctx.headerSent`
 - [ ] `response.attachment([filename], [options])` `ctx.attachment([filename], [options])`
-- [ ] `response.has(header)`
-- [ ] `response.get(header)`
-- [ ] `response.set(headers)` `ctx.set(headers)`
-- [ ] `response.append(header, value)` `ctx.append(header, value)`
-- [ ] `response.remove(header)` `ctx.remove(header)`
 - [ ] `response.lastModified=` `ctx.lastModified=`
 - [ ] `response.etag=` `ctx.etag=`
 - [ ] `response.vary(field)`
-- [ ] `response.flushHeaders()`

@@ -1,3 +1,4 @@
+import http from 'node:http'
 import { Context } from 'src/context'
 import { HttpStatus } from 'src/enums/http-status'
 
@@ -22,6 +23,9 @@ declare namespace Koa {
     status: HttpStatus
     body: any
   }
+
+  type HeaderKey = keyof http.IncomingHttpHeaders | string
+  type HeaderValue = http.OutgoingHttpHeader
 
   type JsonValue =
     | string | number | boolean

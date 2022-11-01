@@ -53,7 +53,25 @@ export class Context {
   set status (val: HttpStatus) { this.response.status = val }
 
   get headers () { return this.request.headers }
+  get headerSent () { return this.response.headerSent }
 
   /** Get special request header. */
   get <T extends string>(key: T) { return this.request.get(key) }
+  /** Set special response header.\nTODO: implement object overload */
+  set = (key: Koa.HeaderKey, value: Koa.HeaderValue): this => {
+    this.response.set(key, value)
+    return this
+  }
+
+  /** Append a value to special response header. */
+  append = (key: Koa.HeaderKey, value: Koa.HeaderValue): this => {
+    this.response.append(key, value)
+    return this
+  }
+
+  /** Remove a special key. */
+  remove = (key: Koa.HeaderKey): this => {
+    this.response.remove(key)
+    return this
+  }
 }
