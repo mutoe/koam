@@ -1,5 +1,7 @@
+import { Context } from 'src/context'
 import { HttpStatus } from 'src/enums/http-status'
 import { implementToObject } from 'src/test-utils/implement-to-object'
+import { setUserToStateMiddleware } from 'test/utils/middlewares'
 import Koa from '../src'
 
 implementToObject()
@@ -21,6 +23,18 @@ describe('# context', () => {
 
       const ctx = cb.mock.calls[0][0]
       expect(ctx.app).toBe(app)
+    })
+
+    it('should can be expanded when add properties to state', async () => {
+      testAddress = app
+        .use(setUserToStateMiddleware('abc'))
+        .use(cb)
+        .listen(0).address()
+
+      await fetch(baseUrl())
+
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(ctx.state.userId).toEqual('abc')
     })
   })
 
