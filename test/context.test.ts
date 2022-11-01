@@ -13,6 +13,17 @@ describe('# context', () => {
   beforeEach(() => { testAddress = 33_000; app = new Koa() })
   afterEach(() => app.close())
 
+  describe('context properties', () => {
+    it('should equal between app and context.app', async () => {
+      testAddress = app.use(cb).listen(0).address()
+
+      await fetch(baseUrl())
+
+      const ctx = cb.mock.calls[0][0]
+      expect(ctx.app).toBe(app)
+    })
+  })
+
   describe('request', () => {
     it('should can get request url basic information', async () => {
       testAddress = app.use(cb).listen(0).address()
