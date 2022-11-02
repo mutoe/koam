@@ -19,6 +19,8 @@ export default class Response {
 
   get status (): HttpStatus { return this.#res.statusCode }
   set status (val: HttpStatus) { this.#res.statusCode = val }
+  get message (): string { return this.#res.statusMessage }
+  set message (val: string) { this.#res.statusMessage = val }
 
   get headerSent (): boolean { return this.#res.headersSent }
   get headers (): http.OutgoingHttpHeaders { return this.#res.getHeaders() }
