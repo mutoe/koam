@@ -1,6 +1,6 @@
-import { Context } from 'src/context'
 import { implementToObject } from 'test/utils/implement-to-object'
-import Koa from '../src'
+import Koa, { Context } from '../src'
+
 implementToObject()
 
 describe('# proxy server is available', () => {

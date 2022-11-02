@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import http from 'node:http'
-import { HttpMethod } from 'src/enums/http-method'
-import { HttpStatus } from 'src/enums/http-status'
-import Request from './request'
-import Response from './response'
-import Application, { AppError, Koa } from './index'
+import { HttpMethod, HttpStatus } from 'src/enums'
+import Application, { AppError, Koa } from 'src/index'
+import Request from 'src/request'
+import Response from 'src/response'
 
-export class Context {
+export default class Context {
   readonly app: Application
   /** Nodejs http server vanilla request object  */
   readonly req: http.IncomingMessage
