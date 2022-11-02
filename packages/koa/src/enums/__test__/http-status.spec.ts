@@ -40,4 +40,27 @@ describe('# HttpStatus', () => {
       expect(HttpStatus.is5xxError(HttpStatus.Continue)).toBe(false)
     })
   })
+
+  describe('call isError', () => {
+    it('should return true when pass "InternalServerError", "BadGateway"', () => {
+      expect(HttpStatus.isError(HttpStatus.InternalServerError)).toBe(true)
+      expect(HttpStatus.isError(HttpStatus.BadGateway)).toBe(true)
+    })
+
+    it('should return false when pass "MovedPermanently", "Continue"', () => {
+      expect(HttpStatus.isError(HttpStatus.MovedPermanently)).toBe(false)
+      expect(HttpStatus.isError(HttpStatus.Continue)).toBe(false)
+    })
+  })
+
+  describe('call getMessage', () => {
+    const testcases: {status: HttpStatus, expected: string}[] = [
+      { status: HttpStatus.Ok, expected: 'Ok' },
+      { status: HttpStatus.NotFound, expected: 'Not Found' },
+      { status: HttpStatus.InternalServerError, expected: 'Internal Server Error' },
+    ]
+    it.each(testcases)('should transform $status correctly', ({ status, expected }) => {
+      expect(HttpStatus.getMessage(status)).toEqual(expected)
+    })
+  })
 })

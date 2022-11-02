@@ -6,6 +6,12 @@ declare global {
   /** Append properties to this interface */
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface KoaState {}
+
+  type JsonValue =
+    | string | number | boolean
+    | { [x: string]: JsonValue }
+    | JsonValue[]
+    | null
 }
 
 declare namespace Koa {
@@ -27,14 +33,10 @@ declare namespace Koa {
   type HeaderKey = keyof http.IncomingHttpHeaders | string
   type HeaderValue = http.OutgoingHttpHeader
 
-  type JsonValue =
-    | string | number | boolean
-    | { [x: string]: JsonValue }
-    | JsonValue[]
-
   type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
   type MiddlewareGenerator = (...args: any[]) => Middleware
 }
 
 export { Koa }
+export { default as AppError } from './app-error'
 export { default } from './application'

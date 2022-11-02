@@ -45,4 +45,10 @@ export namespace HttpStatus {
   export function is5xxError (status: HttpStatus): boolean {
     return status >= 500 && status < 600
   }
+  export function isError (status: HttpStatus): boolean {
+    return status >= 400 && status < 600
+  }
+  export function getMessage (status: HttpStatus): string {
+    return HttpStatus[status].replace(/[A-Z]/g, c => ` ${c}`).trimStart()
+  }
 }

@@ -5,7 +5,7 @@ import { HttpMethod } from 'src/enums/http-method'
 import { HttpStatus } from 'src/enums/http-status'
 import Request from './request'
 import Response from './response'
-import Application, { Koa } from './index'
+import Application, { AppError, Koa } from './index'
 
 export class Context {
   readonly app: Application
@@ -47,7 +47,7 @@ export class Context {
   get querystring () { return this.request.querystring }
 
   get body () { return this.response.body }
-  set body (value: Koa.JsonValue) { this.response.body = value }
+  set body (value: JsonValue | undefined) { this.response.body = value }
 
   get status () { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
@@ -77,5 +77,20 @@ export class Context {
   remove = (key: Koa.HeaderKey): this => {
     this.response.remove(key)
     return this
+  }
+
+  throw (): void
+  throw (appError: AppError): void
+  throw (status?: HttpStatus, message?: string, detail?: JsonValue): void
+  throw (status?: HttpStatus, detail?: JsonValue): void
+  throw (message?: string, detail?: JsonValue): void
+  throw (detail?: JsonValue): void
+  throw (...args: any[]): void {
+    if (args.length === 0) throw new AppError()
+    if (args[0] instanceof AppError) throw args[0]
+    const { message, detail, status } = AppError.handleArguments(args)
+    const error = new AppError(status, message, detail)
+    error.expose = true
+    throw error
   }
 }
