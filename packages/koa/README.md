@@ -103,8 +103,8 @@ Context response
 - [x] `response.body=` `ctx.body=` (currently only finished json body)
 - [x] `response.status` `ctx.status`
 - [x] `response.status=` `ctx.status=`
-- [ ] `response.message` `ctx.message`
-- [ ] `response.message=` `ctx.message=`
+- [x] `response.message` `ctx.message`
+- [x] `response.message=` `ctx.message=`
 - [ ] `response.length` `ctx.length`
 - [ ] `response.length=` `ctx.length=`
 - [ ] `response.type` `ctx.type`

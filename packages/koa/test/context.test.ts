@@ -174,5 +174,18 @@ describe('# context', () => {
       expect(cb).toHaveBeenNthCalledWith(1, '1')
       expect(cb).toHaveBeenNthCalledWith(2, undefined)
     })
+
+    it('should can get status message correctly', async () => {
+      testAddress = app
+        .use((ctx, next) => { ctx.message = 'hello'; return next() })
+        .use(cb)
+        .listen(0).address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.statusText).toEqual('hello')
+      const ctx = cb.mock.calls[0][0]
+      expect(ctx.message).toEqual('hello')
+    })
   })
 })
