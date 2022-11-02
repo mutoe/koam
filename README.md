@@ -107,8 +107,8 @@ Context response
 - [x] `response.message=` `ctx.message=`
 - [ ] `response.length` `ctx.length`
 - [ ] `response.length=` `ctx.length=`
-- [ ] `response.type` `ctx.type`
-- [ ] `response.type=` `ctx.type=`
+- [x] `response.type` `ctx.type`
+- [x] `response.type=` `ctx.type=`
 - [ ] `response.is(mimeTypes...)`
 - [ ] `response.redirect(url, [alt])` `ctx.redirect(url, [alt])`
 - [ ] `response.attachment([filename], [options])` `ctx.attachment([filename], [options])`
