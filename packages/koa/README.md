@@ -41,7 +41,7 @@ Context properties
 - [ ] `ctx.cookies.get(name, [options])`
 - [ ] `ctx.cookies.set(name, value [,options])`
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`
-- [ ] `ctx.assert(value, [status], [message], [detail])`
+- [x] `ctx.assert(value, [status], [message], [detail])`
 - [ ] `ctx.respond`
 
 Context request
