@@ -1,9 +1,7 @@
-import { Context } from 'src/context'
-import { HttpStatus } from 'src/enums/http-status'
 import { implementToObject } from 'test/utils/implement-to-object'
 import { setUserToStateMiddleware } from 'test/utils/middlewares'
 import { mockConsoleError } from 'test/utils/mock-console'
-import Koa, { AppError } from '../src'
+import Koa, { AppError, Context, HttpStatus } from '../src'
 
 implementToObject()
 

@@ -1,7 +1,7 @@
 import http from 'node:http'
 import Application from 'src/application'
-import { Context } from 'src/context'
-import { HttpStatus } from 'src/enums/http-status'
+import Context from 'src/context'
+import { HttpStatus } from 'src/enums'
 import { Koa } from 'src/index'
 
 export default class Response {

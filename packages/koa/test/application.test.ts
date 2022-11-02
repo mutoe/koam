@@ -1,6 +1,5 @@
-import { Context } from 'src/context'
 import { mockConsoleError } from 'test/utils/mock-console'
-import Koa from '../src'
+import Koa, { Context } from '../src'
 
 describe('# application', () => {
   let app: Koa

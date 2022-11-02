@@ -1,8 +1,8 @@
 import http from 'node:http'
 import Application from 'src/application'
-import { Context } from 'src/context'
-import { HttpMethod } from 'src/enums/http-method'
-import { parseQuery } from 'src/utils/query-string'
+import Context from 'src/context'
+import { HttpMethod } from 'src/enums'
+import { parseQuery } from 'src/utils'
 
 export default class Request {
   path: string

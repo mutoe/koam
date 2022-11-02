@@ -1,11 +1,11 @@
 import assert from 'node:assert'
 import http from 'node:http'
 import { ListenOptions } from 'node:net'
-import { Context } from './context'
-import { HttpStatus } from './enums/http-status'
-import { bodyParser } from './middlewares/body-parser'
-import { deepMerge } from './utils/deep-merge'
-import { AppError, Koa } from './index'
+import Context from 'src/context'
+import { HttpStatus } from 'src/enums'
+import { AppError, Koa } from 'src/index'
+import { bodyParser } from 'src/middlewares'
+import { deepMerge } from 'src/utils/deep-merge'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
