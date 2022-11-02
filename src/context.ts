@@ -79,18 +79,28 @@ export class Context {
     return this
   }
 
-  throw (): void
-  throw (appError: AppError): void
-  throw (status?: HttpStatus, message?: string, detail?: JsonValue): void
-  throw (status?: HttpStatus, detail?: JsonValue): void
-  throw (message?: string, detail?: JsonValue): void
-  throw (detail?: JsonValue): void
-  throw (...args: any[]): void {
+  throw (): never
+  throw (appError: AppError): never
+  throw (status?: HttpStatus, message?: string, detail?: JsonValue): never
+  throw (status?: HttpStatus, detail?: JsonValue): never
+  throw (message?: string, detail?: JsonValue): never
+  throw (detail?: JsonValue): never
+  throw (...args: any[]): never {
     if (args.length === 0) throw new AppError()
     if (args[0] instanceof AppError) throw args[0]
     const { message, detail, status } = AppError.handleArguments(args)
     const error = new AppError(status, message, detail)
     error.expose = true
     throw error
+  }
+
+  assert (value: any): asserts value
+  assert (value: any, appError: AppError): asserts value
+  assert (value: any, status?: HttpStatus, message?: string, detail?: JsonValue): asserts value
+  assert (value: any, status?: HttpStatus, detail?: JsonValue): asserts value
+  assert (value: any, message?: string, detail?: JsonValue): asserts value
+  assert (value: any, detail?: JsonValue): asserts value
+  assert (value: any, ...args: any[]): asserts value {
+    if (!value) this.throw(...args)
   }
 }

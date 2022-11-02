@@ -236,14 +236,14 @@ describe('# context', () => {
     })
 
     it('should get BadRequest response when error thrown in middleware', async () => {
-      testAddress = app.use(ctx => ctx.throw(HttpStatus.BadRequest, 'form error', { username: 'exist' }))
+      testAddress = app.use(ctx => ctx.throw(HttpStatus.BadRequest, 'Form error', { username: 'exist' }))
         .listen(0).address()
 
       await mockConsoleError(async () => {
         const res = await fetch(baseUrl())
 
         expect(res.status).toEqual(400)
-        expect(res.statusText).toEqual('Bad Request')
+        expect(res.statusText).toEqual('Form error')
         await expect(res.json()).resolves.toEqual({ username: 'exist' })
       })
     })
@@ -260,6 +260,35 @@ describe('# context', () => {
         expect(res.statusText).toEqual('Unauthorized')
         await expect(res.json()).resolves.toEqual({ token: 'expired' })
       })
+    })
+  })
+
+  describe('assert', () => {
+    it('should not call next middleware and following actions in previous middlewares', async () => {
+      testAddress = app
+        .use(async (ctx, next) => { cb(1); await next(); cb(2) })
+        .use(async (ctx: Context, next) => {
+          const val: unknown = 1.2345
+          ctx.assert(typeof val === 'number', 500)
+          cb(val.toFixed(2))
+          await next()
+          cb(3)
+        })
+        .use((ctx: Context) => {
+          cb(4)
+          ctx.assert(ctx.state.userId, 400, 'User not exist')
+          cb(ctx.state.userId.padStart(20))
+        })
+        .listen(0).address()
+
+      await mockConsoleError(async () => {
+        const res = await fetch(baseUrl())
+
+        expect(res.status).toEqual(400)
+        expect(res.statusText).toEqual('User not exist')
+      })
+
+      expect(cb.mock.calls.map(it => it[0])).toEqual([1, '1.23', 4])
     })
   })
 })

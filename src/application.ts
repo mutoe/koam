@@ -80,6 +80,7 @@ export default class Application {
     }
     assert.ok(error instanceof Error)
     if (!error.message) error.message = HttpStatus.getMessage(this.context.status)
+    this.context.message = error.message
     this.context.onError(error as Error)
   }
 

@@ -20,7 +20,7 @@ describe('# application', () => {
   })
 
   describe('error handing', () => {
-    const error = new Error('this is error message')
+    const error = new Error('This is error message')
 
     it('should return Internal Server Error status', async () => {
       await mockConsoleError(async (consoleError) => {
@@ -29,11 +29,9 @@ describe('# application', () => {
 
         const result = await fetch(baseUrl())
 
-        expect(result).toMatchObject({
-          ok: false,
-          status: 500,
-          statusText: 'Internal Server Error',
-        })
+        expect(result.ok).toEqual(false)
+        expect(result.status).toEqual(500)
+        expect(result.statusText).toEqual('This is error message')
         await expect(result.text()).resolves.toBe('')
         expect(consoleError).toHaveBeenCalledWith(error)
       })
