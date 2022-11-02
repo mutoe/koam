@@ -53,6 +53,8 @@ export class Context {
   set status (val: HttpStatus) { this.response.status = val }
   get message () { return this.response.message }
   set message (val: string) { this.response.message = val }
+  get type () { return this.response.type }
+  set type (val: string) { this.response.type = val }
 
   get headers () { return this.request.headers }
   get headerSent () { return this.response.headerSent }

@@ -187,5 +187,18 @@ describe('# context', () => {
       const ctx = cb.mock.calls[0][0]
       expect(ctx.message).toEqual('hello')
     })
+
+    it('should can set and get response content correctly', async () => {
+      testAddress = app
+        .use((ctx, next) => { ctx.type = 'application/json'; return next() })
+        .use(cb)
+        .listen(0).address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.headers.get('content-type')).toEqual('application/json; charset=utf-8')
+      const ctx = cb.mock.calls[0][0]
+      expect(ctx.type).toEqual('application/json; charset=utf-8')
+    })
   })
 })

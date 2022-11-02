@@ -26,8 +26,8 @@ export default class Response {
   get headers (): http.OutgoingHttpHeaders { return this.#res.getHeaders() }
   flushHeaders = (): void => this.#res.flushHeaders()
   has = (key: Koa.HeaderKey): boolean => this.#res.hasHeader(key as string)
-  get = (key: Koa.HeaderKey): Koa.HeaderValue | undefined =>
-    this.#res.getHeader(key as string)
+  get = <T extends Koa.HeaderKey>(key: T): T extends keyof http.IncomingHttpHeaders ? http.IncomingHttpHeaders[T] : (string | undefined) =>
+    this.#res.getHeader(String(key)) as any
 
   set = (key: Koa.HeaderKey, value: Koa.HeaderValue): this => {
     if (this.headerSent) return this
@@ -51,5 +51,14 @@ export default class Response {
     if (this.headerSent) return this
     this.#res.removeHeader(String(key))
     return this
+  }
+
+  get type (): string {
+    return this.get('content-type')?.split(/\s*,\s*/, 1).at(0) || ''
+  }
+
+  set type (val: string) {
+    // TODO: use `mime-types` package to friendly set content type
+    this.set('content-type', `${val}; charset=utf-8`)
   }
 }
