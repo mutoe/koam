@@ -1,10 +1,11 @@
+import assert from 'node:assert'
 import http from 'node:http'
 import { ListenOptions } from 'node:net'
 import { Context } from './context'
 import { HttpStatus } from './enums/http-status'
 import { bodyParser } from './middlewares/body-parser'
 import { deepMerge } from './utils/deep-merge'
-import { Koa } from './index'
+import { AppError, Koa } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
@@ -57,18 +58,29 @@ export default class Application {
       try {
         await middleware()
       } catch (error) {
-        const err = error instanceof Error ? error : new Error(error?.toString())
-        this.context.onError(err)
-        if (HttpStatus.is2xxSuccess(this.context.status)) {
-          this.context.status = HttpStatus.InternalServerError
-        }
+        this.handleError(error)
       }
       if (this.context.body !== undefined && this.context.body !== null) {
         this.context.res.write(JSON.stringify(this.context.body))
       }
-      this.context.res.statusCode = this.context.status
       this.context.res.end()
     }
+  }
+
+  private handleError (error: unknown) {
+    assert.ok(this.context, 'Context not exist!')
+    if (error instanceof AppError) {
+      this.context.status = error.status
+      this.context.body = error.expose ? error.detail : null
+    } else if (!(error instanceof Error)) {
+      error = new Error(error?.toString())
+    }
+    if (!HttpStatus.isError(this.context.status)) {
+      this.context.status = HttpStatus.InternalServerError
+    }
+    assert.ok(error instanceof Error)
+    if (!error.message) error.message = HttpStatus.getMessage(this.context.status)
+    this.context.onError(error as Error)
   }
 
   private composeMiddleware (): Koa.MiddlewareGenerator {

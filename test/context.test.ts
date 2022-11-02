@@ -2,7 +2,8 @@ import { Context } from 'src/context'
 import { HttpStatus } from 'src/enums/http-status'
 import { implementToObject } from 'test/utils/implement-to-object'
 import { setUserToStateMiddleware } from 'test/utils/middlewares'
-import Koa from '../src'
+import { mockConsoleError } from 'test/utils/mock-console'
+import Koa, { AppError } from '../src'
 
 implementToObject()
 
@@ -199,6 +200,66 @@ describe('# context', () => {
       expect(response.headers.get('content-type')).toEqual('application/json; charset=utf-8')
       const ctx = cb.mock.calls[0][0]
       expect(ctx.type).toEqual('application/json; charset=utf-8')
+    })
+  })
+
+  describe('throw', () => {
+    it('should not call next middleware and following actions in previous middlewares', async () => {
+      testAddress = app
+        .use(async (ctx, next) => { cb(1); await next(); cb(2) })
+        .use(async (ctx, next) => { ctx.throw(); cb(3); await next(); cb(4) })
+        .use(() => { cb(5) })
+        .listen(0).address()
+
+      await mockConsoleError(async () => {
+        await fetch(baseUrl())
+      })
+
+      expect(cb).toHaveBeenCalledTimes(1)
+      expect(cb).toHaveBeenNthCalledWith(1, 1)
+    })
+
+    it('should get ServerInternalError response when error thrown in middleware', async () => {
+      testAddress = app.use(ctx => ctx.throw())
+        .listen(0).address()
+
+      await mockConsoleError(async (consoleError) => {
+        const res = await fetch(baseUrl())
+
+        expect(res.status).toEqual(500)
+        expect(consoleError).toHaveBeenCalledTimes(1)
+        const error = consoleError.mock.calls[0][0] as AppError
+        expect(error.message).toEqual('Internal Server Error')
+        expect(error.name).toEqual('Error')
+        expect(error.expose).toBe(false)
+      })
+    })
+
+    it('should get BadRequest response when error thrown in middleware', async () => {
+      testAddress = app.use(ctx => ctx.throw(HttpStatus.BadRequest, 'form error', { username: 'exist' }))
+        .listen(0).address()
+
+      await mockConsoleError(async () => {
+        const res = await fetch(baseUrl())
+
+        expect(res.status).toEqual(400)
+        expect(res.statusText).toEqual('Bad Request')
+        await expect(res.json()).resolves.toEqual({ username: 'exist' })
+      })
+    })
+
+    it('should get custom error response when AppError thrown in middleware', async () => {
+      const unauthorizedError = new AppError(401, { token: 'expired' })
+      testAddress = app.use(ctx => ctx.throw(unauthorizedError))
+        .listen(0).address()
+
+      await mockConsoleError(async () => {
+        const res = await fetch(baseUrl())
+
+        expect(res.status).toEqual(401)
+        expect(res.statusText).toEqual('Unauthorized')
+        await expect(res.json()).resolves.toEqual({ token: 'expired' })
+      })
     })
   })
 })
