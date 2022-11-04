@@ -265,6 +265,7 @@ describe('# context', () => {
     it('should not call next middleware and following actions in previous middlewares', async () => {
       testAddress = app
         .use(async (ctx, next) => { cb(1); await next(); cb(2) })
+        // `ctx.assert` must explicit declare Context type. See https://github.com/microsoft/TypeScript/issues/34523
         .use(async (ctx: Context, next) => {
           const val: unknown = 1.2345
           ctx.assert(typeof val === 'number', 500)

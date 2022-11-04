@@ -10,6 +10,20 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 - Lightweight
 - TypeScript
 
+## Notes
+
+1. `ctx.assert` must explicit declare `Context` type. See https://github.com/microsoft/TypeScript/issues/34523
+   ```ts example.ts
+   app.use(async (ctx: Context, next) => {
+     //                ^^^^^^^
+     const val: unknown = 1.2345
+     //         ^^^^^^^
+     ctx.assert(typeof val === 'number', 500)
+     console.log(val.toFixed(2))
+     //          ^^^ now val is number type
+   })
+   ```
+
 ## Roadmap
 
 Configuration
