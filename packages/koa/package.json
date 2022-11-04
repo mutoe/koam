@@ -24,7 +24,7 @@
     "*.{ts,js,json,yml,yaml,snap}": "eslint --fix"
   },
   "devDependencies": {
-    "@mutoe/eslint-config-preset-ts": "2.0.0-alpha.6",
+    "@mutoe/eslint-config-preset-ts": "2.0.0",
     "@swc-node/core": "^1.9.1",
     "@swc-node/jest": "^1.5.5",
     "@swc-node/register": "^1.5.4",
@@ -47,18 +47,7 @@
     ],
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "prefer-const": [
-        "error",
-        {
-          "destructuring": "all",
-          "ignoreReadBeforeAssign": true
-        }
-      ],
-      "unicorn/text-encoding-identifier-case": "off",
-      "unicorn/no-useless-undefined":"off",
-      "jest/max-expects": "off",
-      "jest/prefer-to-be": "off"
+      "@typescript-eslint/no-non-null-assertion": "off"
     }
   },
   "jest": {
