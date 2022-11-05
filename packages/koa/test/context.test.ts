@@ -8,7 +8,7 @@ implementToObject()
 describe('# context', () => {
   let app: Koa
   let testAddress: any = {}
-  const baseUrl = () => `http://localhost:${testAddress.port || 33_000}`
+  const baseUrl = (url: string = '') => `http://localhost:${testAddress.port || 33_000}${url}`
   const cb = jest.fn()
 
   beforeEach(() => { testAddress = 33_000; app = new Koa() })
@@ -283,6 +283,58 @@ describe('# context', () => {
       })
 
       expect(cb.mock.calls.map(it => it[0])).toEqual([1, '1.23', 4])
+    })
+  })
+
+  describe('toJSON', () => {
+    it('should return useful information', async () => {
+      testAddress = app
+        .use(async (ctx, next) => {
+          ctx.body = { foo: 'bar' }
+          await next()
+          cb(ctx.toJSON())
+        })
+        .listen(0).address()
+
+      await fetch(baseUrl('/foo?bar=1'), {
+        method: 'post',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ hello: 'world' }),
+      })
+
+      expect(cb).toHaveBeenCalledWith(expect.objectContaining({
+        app: {
+          env: 'test',
+          silent: false,
+          proxy: false,
+        },
+        request: {
+          ip: '::1',
+          method: 'POST',
+          url: '/foo?bar=1',
+          headers: {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate',
+            'accept-language': '*',
+            'connection': 'keep-alive',
+            'content-length': '17',
+            'content-type': 'application/json',
+            'host': `localhost:${testAddress.port}`,
+            'sec-fetch-mode': 'cors',
+            'user-agent': expect.any(String),
+          },
+          body: {
+            hello: 'world',
+          },
+        },
+        response: {
+          status: 200,
+          headers: {},
+          body: {
+            foo: 'bar',
+          },
+        },
+      }))
     })
   })
 })

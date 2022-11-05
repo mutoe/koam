@@ -96,4 +96,12 @@ export default class Context {
   assert (value: any, ...args: any[]): asserts value {
     if (!value) this.throw(...args)
   }
+
+  toJSON = (): JsonValue => {
+    return {
+      app: this.app.toJSON(),
+      request: this.request.toJSON(),
+      response: this.response.toJSON(),
+    }
+  }
 }

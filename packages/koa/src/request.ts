@@ -38,6 +38,7 @@ export default class Request {
   get method (): HttpMethod { return this.#req.method as HttpMethod || '' }
   set method (val: HttpMethod) { this.#req.method = val }
 
+  // TODO: url is host + path
   get url (): string { return this.#req.url || '' }
   // TODO: set url (val: string) { this.#req.url = val }
 
@@ -84,4 +85,14 @@ export default class Request {
   }
 
   get length (): number | undefined { return this.get('content-length') ? Number(this.get('content-length')) : undefined }
+
+  toJSON = (): JsonValue => {
+    return {
+      method: this.method,
+      url: this.url,
+      ip: this.ip,
+      headers: this.headers as JsonValue,
+      body: this.body,
+    }
+  }
 }

@@ -5,7 +5,7 @@ import Koa, { Context } from '../src'
 describe('# application', () => {
   let app: Koa
   let testAddress: any = {}
-  const baseUrl = () => `http://localhost:${testAddress.port || 33_000}`
+  const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
   beforeEach(() => { testAddress = 33_000; app = new Koa() })
   afterEach(() => app.close())
@@ -99,10 +99,39 @@ describe('# application', () => {
         testAddress = app.use(() => { throw error })
           .listen(0).address()
 
-        await fetch(baseUrl())
+        await fetch(baseUrl('/foo?bar=1'))
 
         expect(consoleError).toHaveBeenCalledWith(error)
-        expect(consoleDebug).toHaveBeenCalledWith(app.context)
+        expect(consoleDebug.mock.calls[0][0]).toMatchObject({
+          app: {
+            env: 'test',
+            maxIpsCount: 0,
+            proxy: false,
+            proxyIpHeader: 'x-forwarded-for',
+            silent: false,
+          },
+          request: {
+            ip: '::1',
+            method: 'GET',
+            url: '/foo?bar=1',
+            headers: {
+              'accept': '*/*',
+              'accept-encoding': 'gzip, deflate',
+              'accept-language': '*',
+              'connection': 'keep-alive',
+              'host': `localhost:${testAddress.port}`,
+              'sec-fetch-mode': 'cors',
+              'user-agent': 'undici',
+            },
+            body: undefined,
+          },
+          response: {
+            status: 500,
+            message: 'This is error message',
+            headers: {},
+            body: undefined,
+          },
+        })
       })
     })
   })
