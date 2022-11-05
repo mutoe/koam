@@ -12,6 +12,12 @@ export default class Application implements Koa.Config {
   context: Context | null = null
 
   /**
+   * Env config
+   * @description If not set env, will read `process.env.NODE_ENV`.
+   * @default 'development'
+   */
+  env: string
+  /**
    * @description You can log, send request, write file, trigger event and do anything you want.
    */
   onError: Koa.ErrorHandler
@@ -40,7 +46,8 @@ export default class Application implements Koa.Config {
   private middlewares: Koa.Middleware[] = []
 
   constructor (config: Partial<Koa.Config> = {}) {
-    const { onError, silent, proxy, proxyIpHeader, maxIpsCount } = config
+    const { env, onError, silent, proxy, proxyIpHeader, maxIpsCount } = config
+    this.env = env || process.env.NODE_ENV || 'development'
     this.onError = onError ?? defaultErrorHandler
     this.silent = silent ?? false
     this.proxy = proxy ?? false

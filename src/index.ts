@@ -29,6 +29,13 @@ declare namespace Koa {
 
   interface Config {
     /**
+     * Env config
+     * @description If not set env, will read `process.env.NODE_ENV`.
+     * @default 'development'
+     */
+    env: string
+
+    /**
      * @description You can log, send request, write file, trigger event and do anything you want.
      */
     onError: Koa.ErrorHandler
