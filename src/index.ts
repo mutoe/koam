@@ -25,12 +25,13 @@ declare global {
 declare namespace Koa {
   type State = KoaState
 
+  type ErrorHandler = (error: Error, context: Context) => void | Promise<void>
+
   interface Config {
+    silent: boolean
     proxy: boolean
     proxyIpHeader: string
     maxIpsCount: number
-    /** @deprecated Non-standard API */
-    onError: (error: Error) => void
   }
 
   type HeaderKey = keyof http.IncomingHttpHeaders | string

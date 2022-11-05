@@ -45,7 +45,8 @@ export namespace HttpStatus {
   export function is5xxError (status: HttpStatus): boolean {
     return status >= 500 && status < 600
   }
-  export function isError (status: HttpStatus): boolean {
+  export function isError (status?: HttpStatus): status is HttpStatus {
+    if (!status) return false
     return status >= 400 && status < 600
   }
   export function getMessage (status: HttpStatus): string {

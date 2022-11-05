@@ -9,6 +9,7 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 
 - Lightweight
 - TypeScript
+- Built-in body parser middleware
 
 ## Notes
 
@@ -33,15 +34,16 @@ Configuration
 - [ ] `app.keys`
 - [x] `app.proxyIpHeader`
 - [x] `app.maxIpsCount`
+- [x] `app.onError(error, ctx)`
 
 Application properties / methods
 
 - [x] `app.use(middleware)`
-- [ ] `app.callback()`
+- [x] `app.callback()`
 - [x] `app.listen(...)`
 - [x] `app.context`
 - [ ] `app.keys=`
-- [ ] `app.on('error', error)`
+- [ ] ~~`app.on('error', error)`~~
 
 Context properties
 
@@ -51,7 +53,7 @@ Context properties
 - [x] `ctx.response`
 - [x] `ctx.state`
 - [x] `ctx.app`
-- [ ] `ctx.app.emit`
+- [ ] ~~`ctx.app.emit`~~
 - [ ] `ctx.cookies.get(name, [options])`
 - [ ] `ctx.cookies.set(name, value [,options])`
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`

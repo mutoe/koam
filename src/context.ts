@@ -19,16 +19,12 @@ export default class Context {
   /** Custom properties */
   state: Koa.State = {}
 
-  /** @deprecated Non-standard API */
-  onError: (e: Error) => void | Promise<void>
-
   constructor (app: Application, req: http.IncomingMessage, res: http.ServerResponse) {
     this.app = app
     this.req = req
     this.res = res
     this.request = new Request(app, req)
     this.response = new Response(app, res)
-    this.onError = app.config.onError
   }
 
   get socket () { return this.request.socket }
@@ -88,9 +84,7 @@ export default class Context {
     if (args.length === 0) throw new AppError()
     if (args[0] instanceof AppError) throw args[0]
     const { message, detail, status } = AppError.handleArguments(args)
-    const error = new AppError(status, message, detail)
-    error.expose = true
-    throw error
+    throw new AppError(status, message, detail)
   }
 
   assert (value: any): asserts value

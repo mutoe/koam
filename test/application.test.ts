@@ -1,4 +1,5 @@
-import { mockConsoleError } from 'test/utils/mock-console'
+import http from 'node:http'
+import { mockConsole } from 'test/utils/mock-console'
 import Koa, { Context } from '../src'
 
 describe('# application', () => {
@@ -18,11 +19,23 @@ describe('# application', () => {
     expect(app.context).toBeInstanceOf(Context)
   })
 
+  it('should as http server handler in native http server', async () => {
+    app.use(ctx => { ctx.body = 'Hello' })
+    const server = http.createServer(app.callback()).listen(0)
+    testAddress = server.address()
+
+    const res = await fetch(baseUrl())
+
+    await expect(res.json()).resolves.toEqual('Hello')
+
+    server.close()
+  })
+
   describe('error handing', () => {
     const error = new Error('This is error message')
 
     it('should return Internal Server Error status', async () => {
-      await mockConsoleError(async (consoleError) => {
+      await mockConsole(async ({ consoleError }) => {
         testAddress = app.use(() => { throw error })
           .listen(0).address()
 
@@ -36,8 +49,8 @@ describe('# application', () => {
       })
     })
 
-    it('should call onError handler', async () => {
-      await mockConsoleError(async (consoleError) => {
+    it('should call custom onError handler', async () => {
+      await mockConsole(async ({ consoleError }) => {
         const onError = jest.fn()
         const app = new Koa({ onError })
         testAddress = app.use(() => { throw error })
@@ -45,10 +58,51 @@ describe('# application', () => {
 
         await fetch(baseUrl())
 
-        expect(onError).toHaveBeenCalledWith(error)
+        expect(onError).toHaveBeenCalledWith(error, app.context)
         expect(consoleError).toHaveBeenCalledTimes(0)
 
         app.close()
+      })
+    })
+  })
+
+  describe('default error handling', () => {
+    const error = new Error('This is error message')
+
+    it('should not console anything when silent is true', async () => {
+      await mockConsole(async ({ consoleError }) => {
+        const app = new Koa({ silent: true })
+        testAddress = app.use(() => { throw error })
+          .listen(0).address()
+
+        await fetch(baseUrl())
+
+        expect(consoleError).toHaveBeenCalledTimes(0)
+
+        app.close()
+      })
+    })
+
+    it('should not console anything when response status is 4xx', async () => {
+      await mockConsole(async ({ consoleError }) => {
+        testAddress = app.use(ctx => { ctx.throw(400) })
+          .listen(0).address()
+
+        await fetch(baseUrl())
+
+        expect(consoleError).toHaveBeenCalledTimes(0)
+      })
+    })
+
+    it('should console error detail when response status is 5xx', async () => {
+      await mockConsole(async ({ consoleError, consoleDebug }) => {
+        testAddress = app.use(() => { throw error })
+          .listen(0).address()
+
+        await fetch(baseUrl())
+
+        expect(consoleError).toHaveBeenCalledWith(error)
+        expect(consoleDebug).toHaveBeenCalledWith(app.context)
       })
     })
   })
