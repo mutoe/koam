@@ -1,3 +1,4 @@
+import { mockConsole } from 'test/utils/mock-console'
 import Koa from '../src'
 
 describe('# middleware', () => {
@@ -24,16 +25,15 @@ describe('# middleware', () => {
       expect(cb.mock.calls.map(it => it[0])).toEqual([1, 3, 5, 7, 6, 4, 2])
     })
 
-    // TODO: need implement error handling first
-    it.skip('should not support call next callback multiple times in same middleware', async () => {
-      app.use(async (ctx, next) => { await next(); await next() })
-      testAddress = app.listen(0)
-        .on('error', cb)
-        .address()
+    it('should not support call next callback multiple times in same middleware', async () => {
+      await mockConsole(async ({ consoleError }) => {
+        app.use(async (ctx, next) => { await next(); await next() })
+        testAddress = app.listen(0).address()
 
-      await fetch(baseUrl())
+        await fetch(baseUrl())
 
-      expect(cb).toHaveBeenCalledTimes(1)
+        expect(consoleError).toHaveBeenCalledWith(new Error('next() called more than one time in the same middleware function'))
+      })
     })
   })
 })
