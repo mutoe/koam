@@ -12,8 +12,6 @@ export default class Request {
   readonly type: string | undefined
   readonly charset: string | undefined
   path: string
-  /** @deprecated Non-standard API */
-  bodyChunks?: string
   body?: any
 
   #req: http.IncomingMessage
