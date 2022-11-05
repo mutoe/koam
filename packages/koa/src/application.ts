@@ -11,20 +11,24 @@ export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.Se
 
 export default class Application {
   context: Context | null = null
+  /** App error handler.\nYou can log, send request, write file, trigger event and do anything in here */
+  onError: Koa.ErrorHandler
+
   readonly config: Koa.Config = {
+    silent: false,
     proxy: false,
     proxyIpHeader: 'x-forwarded-for',
     maxIpsCount: 0,
-    onError: (error: Error) => console.error(error),
   }
 
-  private readonly httpServer: HttpServer
+  private httpServer?: HttpServer
   private middlewares: Koa.Middleware[] = []
 
-  constructor (config: Partial<Koa.Config> = {}) {
-    this.config = deepMerge(this.config, config)
+  constructor (config: Partial<Koa.Config & {onError: Koa.ErrorHandler}> = {}) {
+    const { onError, ...restConfig } = config
+    this.onError = onError || defaultErrorHandler
+    this.config = deepMerge(this.config, restConfig)
     this.middlewares.push(bodyParser())
-    this.httpServer = http.createServer(this.onRequestReceive())
   }
 
   use (middleware: Koa.Middleware): this {
@@ -42,23 +46,25 @@ export default class Application {
   listen (handle: any, backlog?: number, listeningListener?: () => void): HttpServer
   listen (handle: any, listeningListener?: () => void): HttpServer
   listen (...args: any[]): HttpServer {
+    this.httpServer = http.createServer(this.callback())
     return this.httpServer.listen(...args)
   }
 
-  close (callback?: (err?: Error) => void): HttpServer {
+  close (callback?: (error?: Error) => void): HttpServer | undefined {
     this.context = null!
     this.middlewares = null!
-    return this.httpServer.close(callback)
+    return this.httpServer?.close(callback)
   }
 
-  private onRequestReceive (): http.RequestListener {
+  callback (): http.RequestListener {
     const middleware = this.composeMiddleware()
+
     return async (req, res) => {
       this.context = new Context(this, req, res)
       try {
         await middleware()
       } catch (error) {
-        this.handleError(error)
+        await Promise.resolve(this.handleError(error)).catch(console.error)
       }
       if (this.context.body !== undefined && this.context.body !== null) {
         this.context.res.write(JSON.stringify(this.context.body))
@@ -67,7 +73,7 @@ export default class Application {
     }
   }
 
-  private handleError (error: unknown) {
+  private handleError (error: unknown): void | Promise<void> {
     assert.ok(this.context, 'Context not exist!')
     if (error instanceof AppError) {
       this.context.status = error.status
@@ -81,7 +87,7 @@ export default class Application {
     assert.ok(error instanceof Error)
     if (!error.message) error.message = HttpStatus.getMessage(this.context.status)
     this.context.message = error.message
-    this.context.onError(error as Error)
+    this.onError(error, this.context)
   }
 
   private composeMiddleware (): Koa.MiddlewareGenerator {
@@ -97,4 +103,13 @@ export default class Application {
       return dispatch(0)
     }
   }
+}
+
+const defaultErrorHandler = (error: unknown, context: Context): void => {
+  if (context.app.config.silent) return
+  if (error instanceof AppError && error.expose) return
+  assert(error instanceof Error)
+
+  console.debug(context)
+  console.error(error)
 }

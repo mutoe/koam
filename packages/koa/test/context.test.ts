@@ -1,6 +1,6 @@
 import { implementToObject } from 'test/utils/implement-to-object'
 import { setUserToStateMiddleware } from 'test/utils/middlewares'
-import { mockConsoleError } from 'test/utils/mock-console'
+import { mockConsole } from 'test/utils/mock-console'
 import Koa, { AppError, Context, HttpStatus } from '../src'
 
 implementToObject()
@@ -209,7 +209,7 @@ describe('# context', () => {
         .use(() => { cb(5) })
         .listen(0).address()
 
-      await mockConsoleError(async () => {
+      await mockConsole(async () => {
         await fetch(baseUrl())
       })
 
@@ -221,15 +221,11 @@ describe('# context', () => {
       testAddress = app.use(ctx => ctx.throw())
         .listen(0).address()
 
-      await mockConsoleError(async (consoleError) => {
+      await mockConsole(async () => {
         const res = await fetch(baseUrl())
 
         expect(res.status).toEqual(500)
-        expect(consoleError).toHaveBeenCalledTimes(1)
-        const error = consoleError.mock.calls[0][0] as AppError
-        expect(error.message).toEqual('Internal Server Error')
-        expect(error.name).toEqual('Error')
-        expect(error.expose).toBe(false)
+        expect(res.statusText).toEqual('Internal Server Error')
       })
     })
 
@@ -237,7 +233,7 @@ describe('# context', () => {
       testAddress = app.use(ctx => ctx.throw(HttpStatus.BadRequest, 'Form error', { username: 'exist' }))
         .listen(0).address()
 
-      await mockConsoleError(async () => {
+      await mockConsole(async () => {
         const res = await fetch(baseUrl())
 
         expect(res.status).toEqual(400)
@@ -251,7 +247,7 @@ describe('# context', () => {
       testAddress = app.use(ctx => ctx.throw(unauthorizedError))
         .listen(0).address()
 
-      await mockConsoleError(async () => {
+      await mockConsole(async () => {
         const res = await fetch(baseUrl())
 
         expect(res.status).toEqual(401)
@@ -280,7 +276,7 @@ describe('# context', () => {
         })
         .listen(0).address()
 
-      await mockConsoleError(async () => {
+      await mockConsole(async () => {
         const res = await fetch(baseUrl())
 
         expect(res.status).toEqual(400)

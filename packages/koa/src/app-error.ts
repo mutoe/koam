@@ -30,8 +30,8 @@ export default class AppError extends Error {
   constructor (...args: any[]) {
     const { message, status, detail } = AppError.handleArguments(args)
     super(message)
-    this.status = status ?? HttpStatus.InternalServerError
+    this.status = HttpStatus.isError(status) ? status : HttpStatus.InternalServerError
     this.detail = detail
-    this.expose = !!detail
+    this.expose = HttpStatus.is4xxError(this.status)
   }
 }
