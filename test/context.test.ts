@@ -213,7 +213,7 @@ describe('# context', () => {
 
       expect(res.status).toEqual(302)
       expect(res.headers.get('location')).toEqual(referer)
-      await expect(res.text()).resolves.toEqual('"Redirecting to example.com ..."')
+      await expect(res.text()).resolves.toEqual('Redirecting to example.com ...')
     })
 
     it('should set redirect header and body to referer when call context.redirect with back and url at the sametime', async () => {
