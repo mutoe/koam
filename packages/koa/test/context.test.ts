@@ -67,7 +67,6 @@ describe('# context', () => {
 
       expect(ctx.request).toMatchObject({
         ...expectedContextProperties,
-        search: querystring,
       })
     })
 
