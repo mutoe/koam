@@ -116,14 +116,50 @@ describe('# context', () => {
       expect(ctx.request.charset).toBe('utf-8')
     })
 
-    it('should return correct client ip address correctly', async () => {
+    it('should return request socket correctly', async () => {
       testAddress = app.use(cb).listen(0).address()
       await fetch(baseUrl())
 
-      const ctx = cb.mock.calls[0][0]
+      const ctx = cb.mock.calls[0][0] as Context
       expect(ctx.request.socket).toBe(ctx.socket)
-      // TODO: get ip address from proxy header
-      expect(ctx.request.socket.remoteAddress).toBe('::1')
+    })
+  })
+
+  describe('request IP', () => {
+    it('should return correct client ip address correctly', async () => {
+      testAddress = app.use(ctx => cb(ctx.ip))
+        .listen().address()
+
+      await fetch(baseUrl(), {
+        headers: { 'x-forwarded-for': '1.2.3.4, 192.168.1.1, 127.0.0.1' },
+      })
+
+      expect(cb).toHaveBeenCalledTimes(1)
+      expect(cb.mock.calls[0][0]).not.toEqual('1.2.3.4')
+    })
+
+    it('should return forwarded client ip address correctly', async () => {
+      app.proxy = true
+      testAddress = app.use(ctx => cb(ctx.ip))
+        .listen().address()
+
+      await fetch(baseUrl(), {
+        headers: { 'x-forwarded-for': '1.2.3.4, 192.168.1.1, 127.0.0.1' },
+      })
+
+      expect(cb).toHaveBeenCalledWith('1.2.3.4')
+    })
+
+    it('should could get proxy ips correctly', async () => {
+      app.proxy = true
+      testAddress = app.use(ctx => cb(ctx.ips))
+        .listen().address()
+
+      await fetch(baseUrl(), {
+        headers: { 'x-forwarded-for': '1.2.3.4, 192.168.1.1, 127.0.0.1' },
+      })
+
+      expect(cb).toHaveBeenCalledWith(['1.2.3.4', '192.168.1.1', '127.0.0.1'])
     })
   })
 
