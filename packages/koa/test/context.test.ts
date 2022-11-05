@@ -200,6 +200,59 @@ describe('# context', () => {
     })
   })
 
+  describe('redirect', () => {
+    it('should set redirect header with referer and body when call context.redirect with back', async () => {
+      const referer = 'example.com'
+      testAddress = app.use(ctx => ctx.redirect('back'))
+        .listen().address()
+
+      const res = await fetch(baseUrl(), {
+        redirect: 'manual',
+        headers: { referer },
+      })
+
+      expect(res.status).toEqual(302)
+      expect(res.headers.get('location')).toEqual(referer)
+      await expect(res.text()).resolves.toEqual('"Redirecting to example.com ..."')
+    })
+
+    it('should set redirect header and body to referer when call context.redirect with back and url at the sametime', async () => {
+      const referer = 'homepage.com'
+      testAddress = app.use(ctx => ctx.redirect('back', 'another.com'))
+        .listen().address()
+
+      const res = await fetch(baseUrl(), {
+        redirect: 'manual',
+        headers: { referer },
+      })
+
+      expect(res.status).toEqual(302)
+      expect(res.headers.get('location')).toEqual(referer)
+    })
+
+    it('should set redirect header and body to url when call context.redirect with back and url at the sametime', async () => {
+      const referer = 'homepage.com'
+      testAddress = app.use(ctx => ctx.redirect('back', referer))
+        .listen().address()
+
+      const res = await fetch(baseUrl(), { redirect: 'manual' })
+
+      expect(res.status).toEqual(302)
+      expect(res.headers.get('location')).toEqual(referer)
+    })
+
+    it('should set redirect header and body to url when call context.redirect url', async () => {
+      const referer = 'homepage.com'
+      testAddress = app.use(ctx => ctx.redirect(referer))
+        .listen().address()
+
+      const res = await fetch(baseUrl(), { redirect: 'manual' })
+
+      expect(res.status).toEqual(302)
+      expect(res.headers.get('location')).toEqual(referer)
+    })
+  })
+
   describe('throw', () => {
     it('should not call next middleware and following actions in previous middlewares', async () => {
       testAddress = app

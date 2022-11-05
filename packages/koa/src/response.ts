@@ -1,20 +1,19 @@
-import net from 'node:net'
 import http from 'node:http'
+import net from 'node:net'
 import Application from 'src/application'
 import Context from 'src/context'
 import { HttpStatus } from 'src/enums'
-import { Koa } from 'src/index'
+import { Koa, Request } from 'src/index'
 
 export default class Response {
-  readonly app: Application
-  readonly context: Context
+  readonly app!: Application
+  readonly context!: Context
+  readonly request!: Request
   body: any
 
   #res: http.ServerResponse
 
-  constructor (app: Application, res: http.ServerResponse) {
-    this.app = app
-    this.context = app.context!
+  constructor (res: http.ServerResponse) {
     this.#res = res
   }
 
@@ -63,6 +62,16 @@ export default class Response {
   set type (val: string) {
     // TODO: use `mime-types` package to friendly set content type
     this.set('content-type', `${val}; charset=utf-8`)
+  }
+
+  redirect (action: 'back', referer?: string): void
+  redirect (url: string): void
+  redirect (url: 'back' | string, alt?: string): void {
+    if (url === 'back') url = this.request.get('referer') || alt || '/'
+    this.set('location', encodeURI(url))
+    this.status = HttpStatus.Found
+    this.type = 'text/plain'
+    this.body = `Redirecting to ${url} ...`
   }
 
   toJSON = (): JsonValue => {
