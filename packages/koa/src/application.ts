@@ -5,29 +5,48 @@ import Context from 'src/context'
 import { HttpStatus } from 'src/enums'
 import { AppError, Koa } from 'src/index'
 import { bodyParser } from 'src/middlewares'
-import { deepMerge } from 'src/utils/deep-merge'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
-export default class Application {
+export default class Application implements Koa.Config {
   context: Context | null = null
-  /** App error handler.\nYou can log, send request, write file, trigger event and do anything in here */
-  onError: Koa.ErrorHandler
 
-  readonly config: Koa.Config = {
-    silent: false,
-    proxy: false,
-    proxyIpHeader: 'x-forwarded-for',
-    maxIpsCount: 0,
-  }
+  /**
+   * @description You can log, send request, write file, trigger event and do anything you want.
+   */
+  onError: Koa.ErrorHandler
+  /**
+   * @description Whether print the logs.
+   * @default false
+   */
+  silent: boolean
+  /**
+   * @description Whether there is a proxy such as nginx before application
+   * @default false
+   */
+  proxy: boolean
+  /**
+   * @description If you have proxy, specify the header of the forwarding IPs.
+   * @default x-forwarded-for
+   */
+  proxyIpHeader: string
+  /**
+   * @description If you have proxy, specify how many proxy server you have.
+   * @default 0 (unlimited)
+   */
+  maxIpsCount: number
 
   private httpServer?: HttpServer
   private middlewares: Koa.Middleware[] = []
 
-  constructor (config: Partial<Koa.Config & {onError: Koa.ErrorHandler}> = {}) {
-    const { onError, ...restConfig } = config
-    this.onError = onError || defaultErrorHandler
-    this.config = deepMerge(this.config, restConfig)
+  constructor (config: Partial<Koa.Config> = {}) {
+    const { onError, silent, proxy, proxyIpHeader, maxIpsCount } = config
+    this.onError = onError ?? defaultErrorHandler
+    this.silent = silent ?? false
+    this.proxy = proxy ?? false
+    this.proxyIpHeader = proxyIpHeader || 'x-forwarded-for'
+    this.maxIpsCount = maxIpsCount || 0
+
     this.middlewares.push(bodyParser())
   }
 
@@ -106,7 +125,7 @@ export default class Application {
 }
 
 const defaultErrorHandler = (error: unknown, context: Context): void => {
-  if (context.app.config.silent) return
+  if (context.app.silent) return
   if (error instanceof AppError && error.expose) return
   assert(error instanceof Error)
 

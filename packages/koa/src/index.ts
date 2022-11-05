@@ -28,9 +28,33 @@ declare namespace Koa {
   type ErrorHandler = (error: Error, context: Context) => void | Promise<void>
 
   interface Config {
+    /**
+     * @description You can log, send request, write file, trigger event and do anything you want.
+     */
+    onError: Koa.ErrorHandler
+
+    /**
+     * @description Whether print the logs.
+     * @default false
+     */
     silent: boolean
+
+    /**
+     * @description Whether there is a proxy such as nginx before application
+     * @default false
+     */
     proxy: boolean
+
+    /**
+     * @description If you have proxy, specify the header of the forwarding IPs.
+     * @default x-forwarded-for
+     */
     proxyIpHeader: string
+
+    /**
+     * @description If you have proxy, specify how many proxy server you have.
+     * @default 0 (unlimited)
+     */
     maxIpsCount: number
   }
 

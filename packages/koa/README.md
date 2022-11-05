@@ -43,7 +43,7 @@ Application properties / methods
 - [x] `app.listen(...)`
 - [x] `app.context`
 - [ ] `app.keys=`
-- [ ] ~~`app.on('error', error)`~~
+- [ ] ~~`app.on('error', error)`~~ using `app.onError` instead
 
 Context properties
 
