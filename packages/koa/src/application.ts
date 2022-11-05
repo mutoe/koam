@@ -100,7 +100,10 @@ export default class Application implements Koa.Config {
       }
       // TODO: status message
       if (this.context.body !== undefined && this.context.body !== null) {
-        this.context.res.write(JSON.stringify(this.context.body))
+        const body = this.context.type === 'text/plain'
+          ? this.context.body
+          : JSON.stringify(this.context.body)
+        this.context.res.write(body)
       }
       this.context.res.end()
     }
