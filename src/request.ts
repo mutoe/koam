@@ -43,14 +43,14 @@ export default class Request {
 
   get protocol (): string {
     if ((this.#req.socket as any).encrypted) return 'https'
-    if (!this.app.config.proxy) return 'http'
+    if (!this.app.proxy) return 'http'
     const proto = this.get('x-forwarded-proto') as string | undefined
     return proto?.split(/\s*,\s*/, 1).at(0) || 'http'
   }
 
   get host (): string {
     let host: string | undefined
-    if (this.app.config.proxy) {
+    if (this.app.proxy) {
       host = this.get('x-forwarded-host') as string
     }
     if (!host) {
@@ -60,11 +60,11 @@ export default class Request {
   }
 
   get ips (): string[] {
-    if (!this.app.config.proxy) return []
-    let ips = (this.get(this.app.config.proxyIpHeader) as string | undefined)
+    if (!this.app.proxy) return []
+    let ips = (this.get(this.app.proxyIpHeader) as string | undefined)
       ?.split(/\s*,\s*/) ?? []
-    if (this.app.config.maxIpsCount > 0) {
-      ips = ips.slice(-this.app.config.maxIpsCount)
+    if (this.app.maxIpsCount > 0) {
+      ips = ips.slice(-this.app.maxIpsCount)
     }
     return ips
   }
