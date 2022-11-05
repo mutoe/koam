@@ -120,6 +120,8 @@ describe('# application', () => {
             env: 'test',
             proxy: false,
             silent: false,
+            address: expect.any(String),
+            port: expect.any(Number),
           },
           state: {
             requestDateTime: expect.any(String),

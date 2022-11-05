@@ -361,6 +361,8 @@ describe('# context', () => {
           env: 'test',
           silent: false,
           proxy: false,
+          address: expect.any(String),
+          port: expect.any(Number),
         },
         state: {
           requestDateTime: expect.any(String),

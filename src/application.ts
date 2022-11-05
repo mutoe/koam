@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import http from 'node:http'
-import { ListenOptions } from 'node:net'
+import net, { ListenOptions } from 'node:net'
 import Context from 'src/context'
 import { HttpStatus } from 'src/enums'
 import { AppError, Koa } from 'src/index'
@@ -63,6 +63,28 @@ export default class Application implements Koa.Config {
   get isDevelopment (): boolean { return this.env === 'development' }
   get isProduction (): boolean { return this.env === 'production' }
 
+  /**
+   * Get server listen address
+   *
+   * @example `192.168.1.1:8080`
+   * @example `[::1]:8080`
+   */
+  get address (): string {
+    let address = this.httpServer?.address() ?? ''
+    if (typeof address !== 'string') {
+      address = address.address
+    }
+    return address
+  }
+
+  get port (): number | null {
+    try {
+      return (this.httpServer?.address() as net.AddressInfo).port
+    } catch {
+      return null
+    }
+  }
+
   use (middleware: Koa.Middleware): this {
     this.middlewares.push(middleware)
     return this
@@ -98,14 +120,7 @@ export default class Application implements Koa.Config {
       } catch (error) {
         await Promise.resolve(this.handleError(error)).catch(console.error)
       }
-      this.context.message ||= HttpStatus.getMessage(this.context.status)
-      if (this.context.body !== undefined && this.context.body !== null) {
-        const body = ['text/plain', 'text/html'].includes(this.context.response.type)
-          ? this.context.body
-          : JSON.stringify(this.context.body)
-        this.context.res.write(body)
-      }
-      this.context.res.end()
+      this.respond()
     }
   }
 
@@ -114,7 +129,8 @@ export default class Application implements Koa.Config {
       env: this.env,
       silent: this.silent,
       proxy: this.proxy,
-      // TODO: address
+      address: this.address,
+      port: this.port,
     }
   }
 
@@ -147,6 +163,18 @@ export default class Application implements Koa.Config {
       }
       return dispatch(0)
     }
+  }
+
+  private respond (): void {
+    assert(this.context)
+    this.context.message ||= HttpStatus.getMessage(this.context.status)
+    if (this.context.body !== undefined && this.context.body !== null) {
+      const body = ['text/plain', 'text/html'].includes(this.context.response.type)
+        ? this.context.body
+        : JSON.stringify(this.context.body)
+      this.context.res.write(body)
+    }
+    this.context.res.end()
   }
 }
 
