@@ -49,6 +49,8 @@ Application properties / methods
 - [x] `app.context`
 - [ ] `app.keys=`
 - [ ] ~~`app.on('error', error)`~~ using `app.onError` instead
+- [x] `app.address`
+- [x] `app.port`
 
 Context properties
 
@@ -63,7 +65,7 @@ Context properties
 - [ ] `ctx.cookies.set(name, value [,options])`
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`
 - [x] `ctx.assert(value, [status], [message], [detail])`
-- [ ] `ctx.respond` <!-- support HEAD request -->
+- [x] `ctx.respond` <!-- TODO: support HEAD request -->
 
 Context request
 
