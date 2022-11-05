@@ -100,6 +100,7 @@ export default class Context {
   toJSON = (): JsonValue => {
     return {
       app: this.app.toJSON(),
+      state: JSON.parse(JSON.stringify(this.state)),
       request: this.request.toJSON(),
       response: this.response.toJSON(),
     }

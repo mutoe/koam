@@ -102,13 +102,15 @@ describe('# application', () => {
         await fetch(baseUrl('/foo?bar=1'))
 
         expect(consoleError).toHaveBeenCalledWith(error)
-        expect(consoleDebug.mock.calls[0][0]).toMatchObject({
+        expect(consoleDebug.mock.calls[0][0]).toEqual({
           app: {
             env: 'test',
-            maxIpsCount: 0,
             proxy: false,
-            proxyIpHeader: 'x-forwarded-for',
             silent: false,
+          },
+          state: {
+            requestDateTime: expect.any(String),
+            respondTime: expect.any(Number),
           },
           request: {
             ip: '::1',
@@ -121,14 +123,16 @@ describe('# application', () => {
               'connection': 'keep-alive',
               'host': `localhost:${testAddress.port}`,
               'sec-fetch-mode': 'cors',
-              'user-agent': 'undici',
+              'user-agent': expect.any(String),
             },
             body: undefined,
           },
           response: {
             status: 500,
             message: 'This is error message',
-            headers: {},
+            headers: {
+              'x-response-time': expect.any(String),
+            },
             body: undefined,
           },
         })
