@@ -61,4 +61,14 @@ export default class Response {
     // TODO: use `mime-types` package to friendly set content type
     this.set('content-type', `${val}; charset=utf-8`)
   }
+
+  toJSON = (): JsonValue => {
+    return {
+      status: this.status,
+      message: this.message,
+      headers: this.headers as JsonValue,
+      body: this.body,
+      // TODO: respond time
+    }
+  }
 }

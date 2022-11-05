@@ -8,20 +8,23 @@ import { Koa } from '../index'
  * TODO: support another request body
  */
 export const bodyParser: Koa.MiddlewareGenerator = () => async (ctx, next) => {
-  const chunks: Uint8Array[] = []
   await new Promise<void>(resolve => {
-    ctx.req.on('data', chunk => chunks.push(chunk))
-      .on('end', () => {
-        if (chunks.length === 0) return
-        try {
-          ctx.request.body = JSON.parse(Buffer.concat(chunks).toString())
-        } catch {
-          // TODO; replace to ctx.log method
-          console.info('parse request body failed')
-        } finally {
-          resolve()
-        }
-      })
+    const chunks: Uint8Array[] = []
+    ctx.req.on('readable', () => {
+      let chunk: Uint8Array
+      while ((chunk = ctx.req.read()) !== null) chunks.push(chunk)
+    })
+    ctx.req.on('end', () => {
+      if (chunks.length === 0) return resolve()
+      try {
+        ctx.request.body = JSON.parse(Buffer.concat(chunks).toString())
+      } catch {
+        // TODO; replace to ctx.log method
+        console.info('parse request body failed')
+      } finally {
+        resolve()
+      }
+    })
   })
   await next()
 }

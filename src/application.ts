@@ -92,10 +92,20 @@ export default class Application implements Koa.Config {
       } catch (error) {
         await Promise.resolve(this.handleError(error)).catch(console.error)
       }
+      // TODO: status message
       if (this.context.body !== undefined && this.context.body !== null) {
         this.context.res.write(JSON.stringify(this.context.body))
       }
       this.context.res.end()
+    }
+  }
+
+  toJSON (): JsonValue {
+    return {
+      env: this.env,
+      silent: this.silent,
+      proxy: this.proxy,
+      // TODO: address
     }
   }
 
@@ -136,6 +146,6 @@ const defaultErrorHandler = (error: unknown, context: Context): void => {
   if (error instanceof AppError && error.expose) return
   assert(error instanceof Error)
 
-  console.debug(context)
+  console.debug(context.toJSON())
   console.error(error)
 }
