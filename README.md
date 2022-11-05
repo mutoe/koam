@@ -119,7 +119,7 @@ Context response
 - [x] `response.set(headers)` `ctx.set(headers)`
 - [x] `response.append(header, value)` `ctx.append(header, value)`
 - [x] `response.remove(header)` `ctx.remove(header)`
-- [ ] `response.socket`
+- [x] `response.socket`
 - [x] `response.body` `ctx.body`
 - [x] `response.body=` `ctx.body=` (currently only finished json body)
 - [x] `response.status` `ctx.status`

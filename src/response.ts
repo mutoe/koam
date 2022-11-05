@@ -1,3 +1,4 @@
+import net from 'node:net'
 import http from 'node:http'
 import Application from 'src/application'
 import Context from 'src/context'
@@ -16,6 +17,8 @@ export default class Response {
     this.context = app.context!
     this.#res = res
   }
+
+  get socket (): net.Socket | null { return this.#res.socket }
 
   get status (): HttpStatus { return this.#res.statusCode }
   set status (val: HttpStatus) { this.#res.statusCode = val }
