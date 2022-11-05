@@ -9,9 +9,9 @@ export default class Response {
   readonly app!: Application
   readonly context!: Context
   readonly request!: Request
-  body: any
 
   #res: http.ServerResponse
+  #body: any
 
   constructor (res: http.ServerResponse) {
     this.#res = res
@@ -55,8 +55,20 @@ export default class Response {
     return this
   }
 
+  get body (): any { return this.#body }
+  set body (val: any) {
+    if (typeof val === 'object') {
+      this.type = 'application/json'
+    } else if (typeof val === 'string' && val.startsWith('<')) {
+      this.type = 'text/html'
+    } else {
+      this.type = 'text/plain'
+    }
+    this.#body = val
+  }
+
   get type (): string {
-    return this.get('content-type')?.split(/\s*,\s*/, 1).at(0) || ''
+    return this.get('content-type')?.split(/\s*;\s*/, 1).at(0) || ''
   }
 
   set type (val: string) {

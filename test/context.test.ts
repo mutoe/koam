@@ -195,8 +195,8 @@ describe('# context', () => {
       const response = await fetch(baseUrl())
 
       expect(response.headers.get('content-type')).toEqual('application/json; charset=utf-8')
-      const ctx = cb.mock.calls[0][0]
-      expect(ctx.type).toEqual('application/json; charset=utf-8')
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(ctx.type).toEqual('application/json')
     })
   })
 
@@ -386,7 +386,9 @@ describe('# context', () => {
         response: {
           status: 200,
           message: undefined,
-          headers: {},
+          headers: {
+            'content-type': 'application/json; charset=utf-8',
+          },
           body: {
             foo: 'bar',
           },

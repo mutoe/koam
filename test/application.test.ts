@@ -26,7 +26,7 @@ describe('# application', () => {
 
     const res = await fetch(baseUrl())
 
-    await expect(res.json()).resolves.toEqual('Hello')
+    await expect(res.text()).resolves.toEqual('Hello')
 
     server.close()
   })
@@ -137,6 +137,36 @@ describe('# application', () => {
           },
         })
       })
+    })
+  })
+
+  describe('response body', () => {
+    it('should convert to json string when response type is json format', async () => {
+      testAddress = app.use(ctx => { ctx.body = { hello: 'world' } }).listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.headers.get('content-type')).toEqual('application/json; charset=utf-8')
+      await expect(res.json()).resolves.toEqual({ hello: 'world' })
+    })
+
+    it('should not convert response body when response type is plain text', async () => {
+      testAddress = app.use(ctx => { ctx.body = 'Hello world !' }).listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.headers.get('content-type')).toEqual('text/plain; charset=utf-8')
+      await expect(res.text()).resolves.toEqual('Hello world !')
+    })
+
+    it('should not convert response body when response type is html', async () => {
+      const htmlString = '<h1>Hello world !</h1>'
+      testAddress = app.use(ctx => { ctx.body = htmlString }).listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.headers.get('content-type')).toEqual('text/html; charset=utf-8')
+      await expect(res.text()).resolves.toEqual(htmlString)
     })
   })
 })
