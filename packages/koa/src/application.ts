@@ -4,7 +4,7 @@ import { ListenOptions } from 'node:net'
 import Context from 'src/context'
 import { HttpStatus } from 'src/enums'
 import { AppError, Koa } from 'src/index'
-import { bodyParser } from 'src/middlewares'
+import { bodyParser, responseTime } from 'src/middlewares'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
@@ -54,8 +54,14 @@ export default class Application implements Koa.Config {
     this.proxyIpHeader = proxyIpHeader || 'x-forwarded-for'
     this.maxIpsCount = maxIpsCount || 0
 
-    this.middlewares.push(bodyParser())
+    this.middlewares.push(
+      responseTime(),
+      bodyParser(),
+    )
   }
+
+  get isDevelopment (): boolean { return this.env === 'development' }
+  get isProduction (): boolean { return this.env === 'production' }
 
   use (middleware: Koa.Middleware): this {
     this.middlewares.push(middleware)

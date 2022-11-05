@@ -1,3 +1,4 @@
+import { Context } from 'src'
 import { mockConsole } from 'test/utils/mock-console'
 import Koa from '../src'
 
@@ -48,6 +49,53 @@ describe('# middleware', () => {
       })
 
       expect(cb).toHaveBeenCalledWith({ foo: 'bar' })
+    })
+  })
+
+  describe('response time', () => {
+    it('should set request date time in state', async () => {
+      testAddress = app.use(cb).listen().address()
+
+      await fetch(baseUrl())
+
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(/^\d{4}-\d{2}-\d{2}/.test(ctx.state.requestDateTime!)).toBeTruthy()
+    })
+
+    it('should set response time header when set the config in state', async () => {
+      testAddress = app.use(ctx => { ctx.state.addResponseTimeHeader = true })
+        .listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(/^\d+ms/.test(res.headers.get('x-response-time')!)).toBe(true)
+    })
+
+    it('should not set response time header when set the config in state', async () => {
+      testAddress = app.use(ctx => { ctx.state.addResponseTimeHeader = false })
+        .listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.headers.has('x-response-time')).toBe(false)
+    })
+
+    it('should set response time header when env is not production', async () => {
+      expect(app.env).not.toEqual('production')
+      testAddress = app.listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(/^\d+ms/.test(res.headers.get('x-response-time')!)).toBe(true)
+    })
+
+    it('should not set response time header when env is production', async () => {
+      app.env = 'production'
+      testAddress = app.listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.headers.has('x-response-time')).toBe(false)
     })
   })
 })

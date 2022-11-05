@@ -12,8 +12,9 @@ export { default } from './application'
 
 declare global {
   /** Append properties to this interface */
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  /* eslint-disable @typescript-eslint/no-empty-interface */
   interface KoaState {}
+  /* eslint-enable @typescript-eslint/no-empty-interface */
 
   type JsonValue =
     | string | number | boolean

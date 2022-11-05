@@ -302,11 +302,14 @@ describe('# context', () => {
         body: JSON.stringify({ hello: 'world' }),
       })
 
-      expect(cb).toHaveBeenCalledWith(expect.objectContaining({
+      expect(cb.mock.calls[0][0]).toEqual({
         app: {
           env: 'test',
           silent: false,
           proxy: false,
+        },
+        state: {
+          requestDateTime: expect.any(String),
         },
         request: {
           ip: '::1',
@@ -329,12 +332,13 @@ describe('# context', () => {
         },
         response: {
           status: 200,
+          message: undefined,
           headers: {},
           body: {
             foo: 'bar',
           },
         },
-      }))
+      })
     })
   })
 })
