@@ -29,7 +29,7 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 
 Configuration
 
-- [ ] `app.env`
+- [x] `app.env`
 - [x] `app.proxy`
 - [ ] `app.keys`
 - [x] `app.proxyIpHeader`
