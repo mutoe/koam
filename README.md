@@ -58,7 +58,7 @@ Context properties
 - [ ] `ctx.cookies.set(name, value [,options])`
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`
 - [x] `ctx.assert(value, [status], [message], [detail])`
-- [ ] `ctx.respond`
+- [ ] `ctx.respond` <!-- support HEAD request -->
 
 Context request
 
@@ -81,8 +81,8 @@ Context request
 - [ ] `request.query=` `ctx.query=`
 - [x] `request.querystring` `ctx.querystring`
 - [ ] `request.querystring=` `ctx.querystring=`
-- [x] `request.search`
-- [x] `request.search=`
+- [x] ~~`request.search`~~
+- [x] ~~`request.search=`~~
 - [x] `request.host` `ctx.host`
 - [ ] `request.hostname` `ctx.hostname`
 - [ ] `request.URL`

@@ -75,10 +75,6 @@ export default class Request {
   get querystring (): string { return this.#querystring }
   set querystring (val: string | undefined) { this.#querystring = val?.replace(/^\?/, '') ?? '' }
 
-  /** Get search string. TODO: Same as `request.querystring` but prefix with `?` */
-  get search (): string { return this.querystring }
-  set search (val: string) { this.querystring = val }
-
   get query (): any { return parseQuery(this.#querystring) }
 
   get headers (): http.IncomingHttpHeaders { return this.#req.headers }
