@@ -1,5 +1,8 @@
 # Koa (lite version)
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mutoe/koa/Test?style=for-the-badge)](https://github.com/mutoe/koa/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/mutoe/koa?style=for-the-badge&token=wpwmuKKaJX)](https://app.codecov.io/gh/mutoe/koa)
+
 Implement a simple Koa with zero dependencies from scratch.
 
 THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !  
@@ -7,15 +10,15 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 
 ## Advantage
 
-- Lightweight
-- TypeScript
+- Lightweight (0 dependency)
+- TypeScript friendly
 - Built-in body parser middleware
 - Built-in response time middleware
 
 ## Notes
 
 1. Current only support `application/json` type request and response body
-2. `ctx.assert` must explicit declare `Context` type. See https://github.com/microsoft/TypeScript/issues/34523
+2. `ctx.assert` must explicit declare `Context` type. See [microsoft/Typescript#34523](https://github.com/microsoft/TypeScript/issues/34523)
    ```ts example.ts
    app.use(async (ctx: Context, next) => {
      //                ^^^^^^^
@@ -55,7 +58,7 @@ Context properties
 - [x] `ctx.response`
 - [x] `ctx.state`
 - [x] `ctx.app`
-- [ ] ~~`ctx.app.emit`~~
+- [ ] ~~`ctx.app.emit`~~ using `ctx.throw` instead
 - [ ] `ctx.cookies.get(name, [options])`
 - [ ] `ctx.cookies.set(name, value [,options])`
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`
