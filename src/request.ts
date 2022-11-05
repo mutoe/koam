@@ -1,25 +1,25 @@
 import http from 'node:http'
 import Application from 'src/application'
-import Context from 'src/context'
 import { HttpMethod } from 'src/enums'
+import { Context, Response } from 'src/index'
 import { parseQuery } from 'src/utils'
 
 export default class Request {
+  readonly app!: Application
+  readonly context!: Context
+  readonly response!: Response
+
+  readonly type: string | undefined
+  readonly charset: string | undefined
   path: string
   /** @deprecated Non-standard API */
   bodyChunks?: string
   body?: any
-  readonly app: Application
-  readonly context: Context
-  readonly type: string | undefined
-  readonly charset: string | undefined
 
   #req: http.IncomingMessage
   #querystring: string = ''
 
-  constructor (app: Application, req: http.IncomingMessage) {
-    this.app = app
-    this.context = app.context!
+  constructor (req: http.IncomingMessage) {
     this.#req = req
     const [path, queryString] = req.url?.split('?') ?? []
     this.path = path

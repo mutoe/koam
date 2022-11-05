@@ -6,6 +6,7 @@ import Application, { AppError, Koa } from 'src/index'
 import Request from 'src/request'
 import Response from 'src/response'
 
+// noinspection JSConstantReassignment
 export default class Context {
   readonly app: Application
   /** Nodejs http server vanilla request object  */
@@ -23,8 +24,16 @@ export default class Context {
     this.app = app
     this.req = req
     this.res = res
-    this.request = new Request(app, req)
-    this.response = new Response(app, res)
+    this.request = new Request(req)
+    this.response = new Response(res)
+    // @ts-expect-error lazy init property
+    this.request.response = this.response
+    // @ts-expect-error lazy init property
+    this.response.request = this.request
+    // @ts-expect-error lazy init property
+    this.request.app = this.response.app = this.app
+    // @ts-expect-error lazy init property
+    this.request.context = this.response.context = this
   }
 
   get socket () { return this.request.socket }
@@ -72,6 +81,12 @@ export default class Context {
   remove = (key: Koa.HeaderKey): this => {
     this.response.remove(key)
     return this
+  }
+
+  redirect (action: 'back', referer?: string): void
+  redirect (url: string): void
+  redirect (url: 'back' | string, alt?: string): void {
+    this.response.redirect(url as any, alt)
   }
 
   throw (): never
