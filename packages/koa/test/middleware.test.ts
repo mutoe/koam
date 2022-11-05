@@ -36,4 +36,18 @@ describe('# middleware', () => {
       })
     })
   })
+
+  describe('body parser', () => {
+    it('should set to request body when receive body', async () => {
+      testAddress = app.use(ctx => cb(ctx.request.body))
+        .listen().address()
+
+      await fetch(baseUrl(), {
+        method: 'PATCH',
+        body: JSON.stringify({ foo: 'bar' }),
+      })
+
+      expect(cb).toHaveBeenCalledWith({ foo: 'bar' })
+    })
+  })
 })
