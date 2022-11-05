@@ -10,25 +10,38 @@ describe('# application', () => {
   beforeEach(() => { testAddress = 33_000; app = new Koa() })
   afterEach(() => app.close())
 
-  it('should expose context property', async () => {
-    expect(app.context).toBeNull()
+  describe('hello world', () => {
+    it('should get correct response', async () => {
+      testAddress = app.use(ctx => { ctx.body = 'Hello world!' })
+        .listen().address()
 
-    testAddress = app.listen(0).address()
-    await fetch(baseUrl())
+      const res = await fetch(baseUrl())
 
-    expect(app.context).toBeInstanceOf(Context)
-  })
+      expect(res.status).toEqual(200)
+      expect(res.statusText).toEqual('Ok')
+      await expect(res.text()).resolves.toEqual('Hello world!')
+    })
 
-  it('should as http server handler in native http server', async () => {
-    app.use(ctx => { ctx.body = 'Hello' })
-    const server = http.createServer(app.callback()).listen(0)
-    testAddress = server.address()
+    it('should expose context property', async () => {
+      expect(app.context).toBeNull()
 
-    const res = await fetch(baseUrl())
+      testAddress = app.listen(0).address()
+      await fetch(baseUrl())
 
-    await expect(res.text()).resolves.toEqual('Hello')
+      expect(app.context).toBeInstanceOf(Context)
+    })
 
-    server.close()
+    it('should as http server handler in native http server', async () => {
+      app.use(ctx => { ctx.body = 'Hello' })
+      const server = http.createServer(app.callback()).listen(0)
+      testAddress = server.address()
+
+      const res = await fetch(baseUrl())
+
+      await expect(res.text()).resolves.toEqual('Hello')
+
+      server.close()
+    })
   })
 
   describe('error handing', () => {
