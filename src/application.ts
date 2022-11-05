@@ -98,7 +98,7 @@ export default class Application implements Koa.Config {
       } catch (error) {
         await Promise.resolve(this.handleError(error)).catch(console.error)
       }
-      // TODO: status message
+      this.context.message ||= HttpStatus.getMessage(this.context.status)
       if (this.context.body !== undefined && this.context.body !== null) {
         const body = ['text/plain', 'text/html'].includes(this.context.response.type)
           ? this.context.body

@@ -212,6 +212,7 @@ describe('# context', () => {
       })
 
       expect(res.status).toEqual(302)
+      expect(res.statusText).toEqual('Found')
       expect(res.headers.get('location')).toEqual(referer)
       await expect(res.text()).resolves.toEqual('Redirecting to example.com ...')
     })
