@@ -47,16 +47,22 @@ export default class Context {
   get protocol () { return this.request.protocol }
   get url () { return this.request.url ?? '' }
   get path () { return this.request.path ?? '' }
+
   get query () { return this.request.query }
+  set query (val: QueryObject) { this.request.query = val }
+
   get querystring () { return this.request.querystring }
+  set querystring (val: string) { this.request.querystring = val }
 
   get body () { return this.response.body }
   set body (value: JsonValue | undefined) { this.response.body = value }
 
   get status () { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
+
   get message () { return this.response.message }
   set message (val: string) { this.response.message = val }
+
   get type () { return this.response.type }
   set type (val: string) { this.response.type = val }
 

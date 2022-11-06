@@ -3,6 +3,7 @@ import Application from 'src/application'
 import { HttpMethod } from 'src/enums'
 import { Context, Response } from 'src/index'
 import { parseQuery } from 'src/utils'
+import { stringifyQuery } from 'src/utils/query-string'
 
 export default class Request {
   readonly app!: Application
@@ -74,7 +75,8 @@ export default class Request {
   get querystring (): string { return this.#querystring }
   set querystring (val: string | undefined) { this.#querystring = val?.replace(/^\?/, '') ?? '' }
 
-  get query (): any { return parseQuery(this.#querystring) }
+  get query (): QueryObject { return parseQuery(this.#querystring) }
+  set query (val: QueryObject) { this.#querystring = stringifyQuery(val) }
 
   get headers (): http.IncomingHttpHeaders { return this.#req.headers }
 

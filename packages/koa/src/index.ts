@@ -21,6 +21,8 @@ declare global {
     | { [x: string]: JsonValue }
     | JsonValue[]
     | null
+
+  type QueryObject = Record<string, string | number | boolean | (string | number | boolean)[]>
 }
 
 declare namespace Koa {

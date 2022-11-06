@@ -1,11 +1,9 @@
 /* eslint-disable max-statements-per-line */
 
-type QueryValue = string | boolean | number
-
-export function parseQuery (queryString: string): Record<string, QueryValue | QueryValue[]> {
+export function parseQuery (queryString: string): QueryObject {
   if (!queryString) return {}
   const entries = [...new URLSearchParams(queryString).entries()]
-  const result: Record<string, QueryValue | QueryValue[]> = {}
+  const result: QueryObject = {}
   for (let [k, v] of entries) {
     k = k.replace(/\[.*$/, '')
     if (!k) continue
@@ -20,4 +18,15 @@ export function parseQuery (queryString: string): Record<string, QueryValue | Qu
     }
   }
   return result
+}
+
+export function stringifyQuery (queryObject: QueryObject): string {
+  const result: string[] = []
+  for (const key in queryObject) {
+    let value = queryObject[key]
+    if (value === null || value === undefined || value === '') continue
+    if (!Array.isArray(value)) value = [value]
+    result.push(...value.map(it => `${key}=${it}`))
+  }
+  return result.join('&')
 }
