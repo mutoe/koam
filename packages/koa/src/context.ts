@@ -45,8 +45,12 @@ export default class Context {
 
   get host () { return this.request.host }
   get protocol () { return this.request.protocol }
-  get url () { return this.request.url ?? '' }
-  get path () { return this.request.path ?? '' }
+  get origin () { return this.request.origin }
+  get url () { return this.request.url }
+  get originalUrl () { return this.request.originalUrl }
+
+  get path () { return this.request.path }
+  set path (val: string) { this.request.path = val }
 
   get query () { return this.request.query }
   set query (val: QueryObject) { this.request.query = val }

@@ -37,9 +37,8 @@ export default class Request {
   get method (): HttpMethod { return this.#req.method as HttpMethod || '' }
   set method (val: HttpMethod) { this.#req.method = val }
 
-  // TODO: url is host + path
-  get url (): string { return this.#req.url || '' }
-  // TODO: set url (val: string) { this.#req.url = val }
+  get originalUrl (): string | undefined { return this.#req.url }
+  get url (): string { return [this.path, this.querystring].join('?') }
 
   get protocol (): string {
     if ((this.#req.socket as any).encrypted) return 'https'
@@ -58,6 +57,8 @@ export default class Request {
     }
     return host?.split(/\s*,\s*/, 1).at(0) || ''
   }
+
+  get origin (): string { return `${this.protocol}://${this.host}` }
 
   get ips (): string[] {
     if (!this.app.proxy) return []
