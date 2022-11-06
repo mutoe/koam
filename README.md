@@ -77,28 +77,28 @@ Context request
 - [x] `request.method` `ctx.method`
 - [x] `request.method=` `ctx.method=`
 - [x] `request.length`
+- [x] `request.protocol` `ctx.protocol`
+- [x] `request.host` `ctx.host`
+- [ ] `request.hostname` `ctx.hostname`
 - [x] `request.url` `ctx.url`
-- [ ] `request.url=` `ctx.url=`
-- [ ] `request.originalUrl` `ctx.originalUrl`
-- [ ] `request.origin` `ctx.origin`
+- [ ] ~~`request.url=`~~ ~~`ctx.url=`~~
+- [x] `request.originalUrl` `ctx.originalUrl`
+- [x] `request.origin` `ctx.origin`
+- [ ] `request.URL`
 - [ ] `request.href` `ctx.href`
 - [x] `request.path` `ctx.path`
-- [ ] `request.path=` `ctx.path=`
+- [x] `request.path=` `ctx.path=`
 - [x] `request.query` `ctx.query`
 - [x] `request.query=` `ctx.query=`
 - [x] `request.querystring` `ctx.querystring`
 - [x] `request.querystring=` `ctx.querystring=`
 - [x] ~~`request.search`~~
 - [x] ~~`request.search=`~~
-- [x] `request.host` `ctx.host`
-- [ ] `request.hostname` `ctx.hostname`
-- [ ] `request.URL`
 - [x] `request.type` (get `mime-type` in `Content-Type` header)
 - [x] `request.charset` (get `charset` in `Content-Type` header)
 - [ ] `request.fresh` `ctx.fresh`
 - [x] `request.socket` `ctx.socket`
 - [ ] `request.stale` `ctx.stale`
-- [x] `request.protocol` `ctx.protocol`
 - [ ] `request.secure` `ctx.secure`
 - [x] `request.ip` `ctx.ip`
 - [x] `request.ips` `ctx.ips`
