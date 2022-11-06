@@ -1,23 +1,32 @@
-import { parseQuery } from 'src/utils/query-string'
+import { parseQuery, stringifyQuery } from 'src/utils/query-string'
 
 describe('# query string', () => {
-  describe('parse query', () => {
-    const testcases: {qs: string, expected: any}[] = [
-      { qs: '', expected: {} },
-      { qs: 'foo=bar', expected: { foo: 'bar' } },
-      { qs: 'foo=1&bar=false', expected: { foo: 1, bar: false } },
-      { qs: 'foo=-1&bar=true', expected: { foo: -1, bar: true } },
-      { qs: 'foo=0&bar=', expected: { foo: 0, bar: '' } },
-      { qs: 'foo=0&foo=true&foo=bar', expected: { foo: [0, true, 'bar'] } },
-      { qs: 'foo[]=0&foo[]=true&foo[]=bar', expected: { foo: [0, true, 'bar'] } },
-      { qs: 'foo=0,1,bar', expected: { foo: '0,1,bar' } },
-      { qs: 'foo', expected: { foo: '' } },
-      { qs: '=', expected: {} },
-      { qs: '=a', expected: {} },
-    ]
+  const testcases: {qs: string, qo: any}[] = [
+    { qs: '', qo: {} },
+    { qs: 'foo=bar', qo: { foo: 'bar' } },
+    { qs: 'foo=1&bar=false', qo: { foo: 1, bar: false } },
+    { qs: 'foo=-1&bar=true', qo: { foo: -1, bar: true } },
+    { qs: 'foo=0&foo=true&foo=bar', qo: { foo: [0, true, 'bar'] } },
+    { qs: 'foo=0,1,bar', qo: { foo: '0,1,bar' } },
+  ]
 
-    it.each(testcases)('when passed "$qs"', ({ qs, expected }) => {
-      expect(parseQuery(qs)).toEqual(expected)
+  describe('parse query', () => {
+    const cases = [
+      ...testcases,
+      { qs: 'foo[]=0&foo[]=true&foo[]=bar', qo: { foo: [0, true, 'bar'] } },
+      { qs: 'foo=0&bar=', qo: { foo: 0, bar: '' } },
+      { qs: 'foo', qo: { foo: '' } },
+      { qs: '=', qo: {} },
+      { qs: '=a', qo: {} },
+    ]
+    it.each(cases)('when passed "$qs"', ({ qs, qo }) => {
+      expect(parseQuery(qs)).toEqual(qo)
+    })
+  })
+
+  describe('stringify query', () => {
+    it.each(testcases)('should got \'$qs\'', ({ qs, qo }) => {
+      expect(stringifyQuery(qo)).toEqual(qs)
     })
   })
 })

@@ -85,9 +85,9 @@ Context request
 - [x] `request.path` `ctx.path`
 - [ ] `request.path=` `ctx.path=`
 - [x] `request.query` `ctx.query`
-- [ ] `request.query=` `ctx.query=`
+- [x] `request.query=` `ctx.query=`
 - [x] `request.querystring` `ctx.querystring`
-- [ ] `request.querystring=` `ctx.querystring=`
+- [x] `request.querystring=` `ctx.querystring=`
 - [x] ~~`request.search`~~
 - [x] ~~`request.search=`~~
 - [x] `request.host` `ctx.host`
