@@ -1,0 +1,27 @@
+{
+  "name": "@mutoe/koam-router",
+  "author": "mutoe <imutoe@gmail.com>",
+  "version": "0.1.2",
+  "description": "Simple koa router. Use with @mutoe/koam",
+  "keywords": [
+    "koa",
+    "http-server",
+    "router",
+    "lightweight"
+  ],
+  "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-router",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mutoe/koam.git"
+  },
+  "main": "build/index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "rm -rf ./build && tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit"
+  },
+  "bugs": {
+    "url": "https://github.com/mutoe/koam/issues"
+  }
+}

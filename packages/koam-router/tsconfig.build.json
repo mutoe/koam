@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "**/__test__/**",
+    "test/**"
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+    "sourceMap": true,
+    "inlineSourceMap": false,
+    "removeComments": true,
+    "noEmit": false
+  }
+}
