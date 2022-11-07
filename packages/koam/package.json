@@ -1,0 +1,41 @@
+{
+  "name": "@mutoe/koam",
+  "author": "mutoe <imutoe@gmail.com>",
+  "version": "0.1.0",
+  "description": "Simple version Koa-like http-server",
+  "keywords": [
+    "http-server",
+    "koa"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 14"
+  },
+  "main": "build/index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "rm -rf ./build && tsc -p tsconfig.build.json",
+    "start": "node -r @swc-node/register src/index.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)sx?$": [
+        "@swc-node/jest",
+        {
+          "swc": {
+            "sourceMaps": "inline"
+          }
+        }
+      ]
+    },
+    "clearMocks": true,
+    "moduleNameMapper": {
+      "src/(.*)": "<rootDir>/src/$1",
+      "test/(.*)": "<rootDir>/test/$1"
+    },
+    "collectCoverageFrom": [
+      "src/**"
+    ]
+  }
+}
