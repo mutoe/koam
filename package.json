@@ -1,0 +1,18 @@
+{
+  "name": "koam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "mutoe <imutoe@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^6.0.1"
+  }
+}
