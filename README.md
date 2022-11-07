@@ -1,9 +1,9 @@
-# Koa (lite version)
+# Koam
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mutoe/koa/Test?style=for-the-badge)](https://github.com/mutoe/koa/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/mutoe/koa?style=for-the-badge&token=wpwmuKKaJX)](https://app.codecov.io/gh/mutoe/koa)
 
-Implement a simple Koa with zero dependencies from scratch.
+Implement a simple Koa-like http server with zero dependencies from scratch.
 
 THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !  
 许多功能未经严格测试，请勿用于生产目的！
@@ -31,6 +31,8 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
    ```
 
 ## Roadmap
+
+### Implement Koa interface
 
 Configuration
 
