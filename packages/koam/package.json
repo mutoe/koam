@@ -8,6 +8,9 @@
     "koa"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">= 14"
   },
@@ -37,5 +40,6 @@
     "collectCoverageFrom": [
       "src/**"
     ]
-  }
+  },
+  "gitHead": "11b3c87835445a1073e6636310f647d22d90f595"
 }
