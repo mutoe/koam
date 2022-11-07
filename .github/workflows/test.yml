@@ -41,10 +41,11 @@ jobs:
         run: pnpm install
 
       - name: TypeScript check
-        run: pnpm type-check
+        run: pnpm -r type-check
 
       - name: Eslint check
-        run: pnpm lint
+        run: pnpm eslint
+        continue-on-error: true
 
       - name: Unit test
         run: pnpm -r test

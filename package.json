@@ -11,8 +11,8 @@
   },
   "scripts": {
     "postinstall": "simple-git-hooks",
-    "lint": "eslint",
-    "type-check": "tsc --noEmit",
+    "test": "pnpm --filter=\"...[origin/master]\" --test-pattern=\"test/*\" test",
+    "type-check": "pnpm --filter=\"...[origin/master]\" type-check",
     "release": "lerna publish --conventional-commits"
   },
   "simple-git-hooks": {
