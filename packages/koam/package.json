@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple version Koa-like http-server",
   "keywords": [
     "http-server",
