@@ -9,8 +9,8 @@ on:
       - '**.md'
 
 jobs:
-  test_koam:
-    name: Test Koam
+  test:
+    name: Test ${{ matrix.package }} (Node ${{ matrix.node-version }})
     env:
       CI: true
 
@@ -19,8 +19,10 @@ jobs:
     strategy:
       matrix:
         node-version: [ 18, 19 ]
+        package: ['koam', 'koam-router']
         include:
           - node-version: 18
+            package: koam
             codecov: true
 
     steps:
@@ -41,58 +43,17 @@ jobs:
         run: pnpm install
 
       - name: TypeScript check
-        run: pnpm --filter=koam type-check
+        run: pnpm --filter=${{ matrix.package }} type-check
 
       - name: Eslint check
-        run: pnpm --filter=koam eslint
+        run: pnpm --filter=${{ matrix.package }} eslint
         continue-on-error: true
 
       - name: Unit test
-        run: pnpm --filter=koam test
+        run: pnpm --filter=${{ matrix.package }} test
 
       - name: Update coverage report
         if: ${{ matrix.codecov }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  test_router:
-    name: Test Koam Router
-    env:
-      CI: true
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 18, 19 ]
-        include:
-          - node-version: 18
-            codecov: true
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 7
-          run_install: false
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: TypeScript check
-        run: pnpm --filter=koam-router type-check
-
-      - name: Eslint check
-        run: pnpm --filter=koam-router eslint
-        continue-on-error: true
-
-      - name: Unit test
-        run: pnpm --filter=koam-router test
