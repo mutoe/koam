@@ -1,14 +1,13 @@
-import { Context } from 'src'
-import { mockConsole } from 'test/utils/mock-console'
-import Koa from '../src'
+import Koa, { Context } from '../src'
+import { mockConsole } from './utils/mock-console'
 
 describe('# middleware', () => {
-  let app: Koa
+  let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = () => `http://localhost:${testAddress.port || 33_000}`
   const cb = jest.fn()
 
-  beforeEach(() => { testAddress = 33_000; app = new Koa() })
+  beforeEach(() => { testAddress = {}; app = new Koa() })
   afterEach(() => app.close())
 
   describe('onion model', () => {

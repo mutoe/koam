@@ -1,9 +1,9 @@
 import http from 'node:http'
 import net from 'node:net'
-import Application from 'src/application'
-import Context from 'src/context'
-import { HttpStatus } from 'src/enums'
-import { Koa, Request } from 'src/index'
+import Application from './application'
+import Context from './context'
+import { HttpStatus } from './enums'
+import Koa, { Request } from './index'
 
 export default class Response {
   readonly app!: Application

@@ -1,14 +1,16 @@
 import http from 'node:http'
-import Context from 'src/context'
+import Application from './application'
+import Context from './context'
 
 export * from './enums'
 export * from './middlewares'
 export * from './utils'
+
 export { default as AppError } from './app-error'
+export { default as Application } from './application'
 export { default as Context } from './context'
 export { default as Request } from './request'
 export { default as Response } from './response'
-export { default } from './application'
 
 declare global {
   /** Append properties to this interface */
@@ -25,12 +27,16 @@ declare global {
   type QueryObject = Record<string, string | number | boolean | (string | number | boolean)[]>
 }
 
-declare namespace Koa {
-  type State = KoaState
+const Koa = Application
 
-  type ErrorHandler = (error: Error, context: Context) => void | Promise<void>
+// eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-redeclare
+namespace Koa {
 
-  interface Config {
+  export type State = KoaState
+
+  export type ErrorHandler = (error: Error, context: Context) => void | Promise<void>
+
+  export interface Config {
     /**
      * Env config
      * @description If not set env, will read `process.env.NODE_ENV`.
@@ -41,7 +47,7 @@ declare namespace Koa {
     /**
      * @description You can log, send request, write file, trigger event and do anything you want.
      */
-    onError: Koa.ErrorHandler
+    onError: ErrorHandler
 
     /**
      * @description Whether print the logs.
@@ -68,11 +74,11 @@ declare namespace Koa {
     maxIpsCount: number
   }
 
-  type HeaderKey = keyof http.IncomingHttpHeaders | string
-  type HeaderValue = http.OutgoingHttpHeader
+  export type HeaderKey = keyof http.IncomingHttpHeaders | string
+  export type HeaderValue = http.OutgoingHttpHeader
 
-  type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
-  type MiddlewareGenerator = (...args: any[]) => Middleware
+  export type Middleware = (ctx: Context, next: () => Promise<void>) => Promise<void> | void
+  export type MiddlewareGenerator = (...args: any[]) => Middleware
 }
 
-export { Koa }
+export default Koa

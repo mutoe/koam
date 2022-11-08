@@ -1,5 +1,14 @@
-export default koamRouter
+import Koa from '@mutoe/koam'
 
-function koamRouter (): void {
-  console.log('Hello from koamRouter')
+export default class Router {
+  constructor () {
+    console.log('new Router')
+  }
+
+  routes (): Koa.Middleware {
+    return async (ctx, next) => {
+      console.log(1)
+      await next()
+    }
+  }
 }

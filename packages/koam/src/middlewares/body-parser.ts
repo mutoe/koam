@@ -1,4 +1,4 @@
-import { Koa } from '../index'
+import Koa from '../index'
 
 /**
  * Koa body parser

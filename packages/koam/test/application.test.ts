@@ -1,13 +1,13 @@
 import http from 'node:http'
-import { mockConsole } from 'test/utils/mock-console'
 import Koa, { Context } from '../src'
+import { mockConsole } from './utils/mock-console'
 
 describe('# application', () => {
-  let app: Koa
+  let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
-  beforeEach(() => { testAddress = 33_000; app = new Koa() })
+  beforeEach(() => { testAddress = {}; app = new Koa() })
   afterEach(() => app.close())
 
   describe('hello world', () => {

@@ -1,10 +1,10 @@
 import assert from 'node:assert'
 import http from 'node:http'
 import net, { ListenOptions } from 'node:net'
-import Context from 'src/context'
-import { HttpStatus } from 'src/enums'
-import { AppError, Koa } from 'src/index'
-import { bodyParser, responseTime } from 'src/middlewares'
+import Context from './context'
+import { HttpStatus } from './enums'
+import { bodyParser, responseTime } from './middlewares'
+import Koa, { AppError } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 

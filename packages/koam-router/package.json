@@ -15,13 +15,40 @@
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
   },
+  "bugs": {
+    "url": "https://github.com/mutoe/koam/issues"
+  },
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit"
   },
-  "bugs": {
-    "url": "https://github.com/mutoe/koam/issues"
+  "peerDependencies": {
+    "@mutoe/koam": "workspace:^0.1.2"
+  },
+  "devDependencies": {
+    "@mutoe/koam": "workspace:^0.1.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)sx?$": [
+        "@swc-node/jest",
+        {
+          "swc": {
+            "sourceMaps": "inline"
+          }
+        }
+      ]
+    },
+    "clearMocks": true,
+    "moduleNameMapper": {
+      "src/(.*)": "<rootDir>/src/$1",
+      "test/(.*)": "<rootDir>/test/$1"
+    },
+    "collectCoverageFrom": [
+      "src/**"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-import { HttpStatus } from 'src/enums/http-status'
+import { HttpStatus } from '../http-status'
 
 describe('# HttpStatus', () => {
   describe('call is2xxSuccess', () => {

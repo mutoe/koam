@@ -15,6 +15,7 @@
     "node": ">= 14"
   },
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",

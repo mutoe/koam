@@ -1,4 +1,4 @@
-import { Koa } from 'src'
+import Koa from '../../src'
 
 declare global {
   interface KoaState {

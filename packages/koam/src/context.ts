@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import http from 'node:http'
-import { HttpMethod, HttpStatus } from 'src/enums'
-import Application, { AppError, Koa } from 'src/index'
-import Request from 'src/request'
-import Response from 'src/response'
+import { HttpMethod, HttpStatus } from './enums'
+import Request from './request'
+import Response from './response'
+import Koa, { AppError, Application } from './index'
 
 // noinspection JSConstantReassignment
 export default class Context {

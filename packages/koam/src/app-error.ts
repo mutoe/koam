@@ -1,4 +1,4 @@
-import { HttpStatus } from 'src/enums/http-status'
+import { HttpStatus } from './enums'
 
 export default class AppError extends Error {
   status: HttpStatus

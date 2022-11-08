@@ -1,4 +1,4 @@
-import { parseQuery, stringifyQuery } from 'src/utils/query-string'
+import { parseQuery, stringifyQuery } from '../query-string'
 
 describe('# query string', () => {
   const testcases: {qs: string, qo: any}[] = [

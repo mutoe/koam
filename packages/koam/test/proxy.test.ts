@@ -1,15 +1,15 @@
-import { implementToObject } from 'test/utils/implement-to-object'
 import Koa, { Context } from '../src'
+import { implementToObject } from './utils/implement-to-object'
 
 implementToObject()
 
 describe('# proxy server is available', () => {
-  let app: Koa
+  let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = () => `http://127.0.0.1:${testAddress.port || 33_000}`
   const cb = jest.fn()
 
-  beforeEach(() => { testAddress = 33_000; app = new Koa({ proxy: true }) })
+  beforeEach(() => { testAddress = {}; app = new Koa({ proxy: true }) })
   afterEach(() => app.close())
 
   it('should return forwarded host in request host getter', async () => {

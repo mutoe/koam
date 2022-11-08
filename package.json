@@ -1,7 +1,6 @@
 {
   "private": true,
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "0.1.0",
   "packageManager": "pnpm@7.14.1",
   "workspaces": [
     "packages/*"

@@ -1,9 +1,8 @@
 import http from 'node:http'
-import Application from 'src/application'
-import { HttpMethod } from 'src/enums'
-import { Context, Response } from 'src/index'
-import { parseQuery } from 'src/utils'
-import { stringifyQuery } from 'src/utils/query-string'
+import Application from './application'
+import { HttpMethod } from './enums'
+import { parseQuery, stringifyQuery } from './utils'
+import { Context, Response } from './index'
 
 export default class Request {
   readonly app!: Application

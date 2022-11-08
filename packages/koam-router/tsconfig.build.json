@@ -6,8 +6,10 @@
   ],
   "compilerOptions": {
     "outDir": "./build",
-    "sourceMap": true,
+    "sourceMap": false,
     "inlineSourceMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "removeComments": true,
     "noEmit": false
   }

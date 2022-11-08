@@ -35,6 +35,12 @@ importers:
   packages/koam:
     specifiers: {}
 
+  packages/koam-router:
+    specifiers:
+      '@mutoe/koam': workspace:^0.1.2
+    devDependencies:
+      '@mutoe/koam': link:../koam
+
 packages:
 
   /@ampproject/remapping/2.2.0:

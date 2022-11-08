@@ -1,17 +1,17 @@
-import { implementToObject } from 'test/utils/implement-to-object'
-import { setUserToStateMiddleware } from 'test/utils/middlewares'
-import { mockConsole } from 'test/utils/mock-console'
 import Koa, { AppError, Context, HttpStatus } from '../src'
+import { implementToObject } from './utils/implement-to-object'
+import { setUserToStateMiddleware } from './utils/middlewares'
+import { mockConsole } from './utils/mock-console'
 
 implementToObject()
 
 describe('# context', () => {
-  let app: Koa
+  let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = (url: string = '') => `http://localhost:${testAddress.port || 33_000}${url}`
   const cb = jest.fn()
 
-  beforeEach(() => { testAddress = 33_000; app = new Koa() })
+  beforeEach(() => { testAddress = {}; app = new Koa() })
   afterEach(() => app.close())
 
   describe('context properties', () => {
