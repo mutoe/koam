@@ -22,7 +22,6 @@ jobs:
         package: ['koam', 'koam-router']
         include:
           - node-version: 18
-            package: koam
             codecov: true
 
     steps:
@@ -60,3 +59,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.package }}
