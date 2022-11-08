@@ -49,7 +49,7 @@ jobs:
         run: pnpm --filter=${{ matrix.package }} type-check
 
       - name: Eslint check
-        run: pnpm --filter=${{ matrix.package }} eslint
+        run: pnpm --filter=${{ matrix.package }} exec eslint
         continue-on-error: true
 
       - name: Unit test
