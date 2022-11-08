@@ -1,23 +1,19 @@
-import Koa from '@mutoe/koam'
 import Router from '../src'
 import { mockConsole } from './utils/mock-console'
 
 describe('Koam router', () => {
-  let app = new Koa()
-  let testAddress: any = {}
-  const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
+  // let app = new Koa()
+  // let testAddress: any = {}
+  // const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
-  beforeEach(() => { testAddress = {}; app = new Koa() })
-  afterEach(() => app.close())
+  // beforeEach(() => { testAddress = {}; app = new Koa() })
+  // afterEach(() => app.close())
 
-  it('should', () => {
+  it('should return router instance correctly', () => {
     mockConsole(async ({ consoleLog }) => {
       const router = new Router()
-      app.use(router.routes())
-      testAddress = app.listen().address()
 
-      await fetch(baseUrl())
-
+      expect(router).toBeInstanceOf(Router)
       expect(consoleLog).toHaveBeenCalledTimes(1)
     })
   })
