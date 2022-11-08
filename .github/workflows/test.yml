@@ -9,8 +9,8 @@ on:
       - '**.md'
 
 jobs:
-  test:
-    name: Test
+  test_koam:
+    name: Test Koam
     env:
       CI: true
 
@@ -41,17 +41,58 @@ jobs:
         run: pnpm install
 
       - name: TypeScript check
-        run: pnpm -r type-check
+        run: pnpm --filter=koam type-check
 
       - name: Eslint check
-        run: pnpm eslint
+        run: pnpm --filter=koam eslint
         continue-on-error: true
 
       - name: Unit test
-        run: pnpm -r test
+        run: pnpm --filter=koam test
 
       - name: Update coverage report
         if: ${{ matrix.codecov }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  test_router:
+    name: Test Koam Router
+    env:
+      CI: true
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 18, 19 ]
+        include:
+          - node-version: 18
+            codecov: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
+          run_install: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: TypeScript check
+        run: pnpm --filter=koam-router type-check
+
+      - name: Eslint check
+        run: pnpm --filter=koam-router eslint
+        continue-on-error: true
+
+      - name: Unit test
+        run: pnpm --filter=koam-router test
