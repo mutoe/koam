@@ -9,7 +9,7 @@ describe('Koam router', () => {
   // beforeEach(() => { testAddress = {}; app = new Koa() })
   // afterEach(() => app.close())
 
-  it('should return router instance correctly', () => {
+  it.skip('should return router instance correctly', () => {
     mockConsole(async ({ consoleLog }) => {
       const router = new Router()
 
