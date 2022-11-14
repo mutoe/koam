@@ -2,10 +2,11 @@ import * as assert from 'node:assert'
 import * as http from 'node:http'
 import type { ListenOptions } from 'node:net'
 import * as net from 'node:net'
+import compose from 'src/utils/compose'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
-import Koa, { AppError } from './index'
+import Koa, { AppError, noop } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
@@ -112,12 +113,13 @@ export default class Application implements Koa.Config {
   }
 
   callback (): http.RequestListener {
-    const middleware = this.composeMiddleware()
+    const middleware = compose(this.middlewares)
 
     return async (req, res) => {
       this.context = new Context(this, req, res)
+
       try {
-        await middleware()
+        await middleware(this.context, noop)
       } catch (error) {
         await Promise.resolve(this.handleError(error)).catch(console.error)
       }
@@ -150,20 +152,6 @@ export default class Application implements Koa.Config {
     if (!error.message) error.message = HttpStatus.getMessage(this.context.status)
     this.context.message = error.message
     this.onError(error, this.context)
-  }
-
-  private composeMiddleware (): Koa.MiddlewareGenerator {
-    return () => {
-      let n = -1
-      const dispatch = (i: number): any => {
-        if (n >= i) throw new Error('next() called more than one time in the same middleware function')
-        n = i
-        const fn = this.middlewares[i]
-        if (!fn) return
-        return fn(this.context!, dispatch.bind(undefined, i + 1))
-      }
-      return dispatch(0)
-    }
   }
 
   private respond (): void {
