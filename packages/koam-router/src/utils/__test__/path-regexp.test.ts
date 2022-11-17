@@ -1,4 +1,4 @@
-import { PathRegexp } from '../path-to-regexp'
+import { PathRegexp } from '../path-regexp'
 
 describe('# Path RegExp', () => {
   it('should got regular expression instance', () => {
@@ -127,6 +127,36 @@ describe('# Path RegExp', () => {
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
         const result = new PathRegexp('/:foo/:bar?/baz').exec(s)
+
+        expect(result?.groups).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/:foo/:bar*/baz"', () => {
+      it.each([
+        { s: '/hello/world/baz', expected: { foo: 'hello', bar: 'world' } },
+        { s: '/hello/baz', expected: { foo: 'hello' } },
+        { s: '/hello/type/script/baz', expected: { foo: 'hello', bar: 'type/script' } },
+
+        { s: '/hello/baa', expected: undefined },
+        { s: '/hello/world/abc', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/:foo/:bar*/baz').exec(s)
+
+        expect(result?.groups).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/:foo/:bar+/baz"', () => {
+      it.each([
+        { s: '/hello/world/baz', expected: { foo: 'hello', bar: 'world' } },
+        { s: '/hello/type/script/baz', expected: { foo: 'hello', bar: 'type/script' } },
+
+        { s: '/hello/baz', expected: undefined },
+        { s: '/hello/baa', expected: undefined },
+        { s: '/hello/world/abc', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/:foo/:bar+/baz').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
