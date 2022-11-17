@@ -1,15 +1,22 @@
-export function pathToRegexp (path: string): RegExp {
-  const regexpString = path
-    .split('/')
-    .filter(Boolean)
-    .map(pattern => {
-      pattern = extractNamedParams(pattern)
-      pattern = prefixSlash(pattern)
-      return pattern
-    })
-    .join('')
-    .slice(1)
-  return new RegExp(`^/?${regexpString}/?$`)
+export class PathRegexp extends RegExp {
+  path: string
+
+  constructor (path: string) {
+    const regexpString = path
+      .split('/')
+      .filter(Boolean)
+      .map(pattern => {
+        pattern = extractNamedParams(pattern)
+        pattern = prefixSlash(pattern)
+        return pattern
+      })
+      .join('')
+      .slice(1)
+      .replace(/^(.*)$/, '^/?$1/?$')
+
+    super(regexpString)
+    this.path = path
+  }
 }
 
 function extractNamedParams (s: string): string {

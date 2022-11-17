@@ -1,9 +1,11 @@
-import { pathToRegexp } from '../path-to-regexp'
+import { PathRegexp } from '../path-to-regexp'
 
-describe('# Path to regexp', () => {
-  it('should return regular expression', () => {
-    const result = pathToRegexp('/foo')
+describe('# Path RegExp', () => {
+  it('should got regular expression instance', () => {
+    const result = new PathRegexp('/foo')
     expect(result).toBeInstanceOf(RegExp)
+    expect(result.path).toEqual('/foo')
+    expect(result.source).toEqual('^\\/?foo\\/?$')
   })
 
   describe('path test', () => {
@@ -17,7 +19,7 @@ describe('# Path to regexp', () => {
         { s: '/fo', expected: false },
         { s: '/b', expected: false },
       ])('when test string is "$s" expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/foo').test(s)
+        const result = new PathRegexp('/foo').test(s)
 
         expect(result).toEqual(expected)
       })
@@ -34,7 +36,7 @@ describe('# Path to regexp', () => {
         { s: '/fo/hello', expected: false },
         { s: '/b', expected: false },
       ])('when test string is "$s" expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/foo/:bar').test(s)
+        const result = new PathRegexp('/foo/:bar').test(s)
 
         expect(result).toEqual(expected)
       })
@@ -51,7 +53,7 @@ describe('# Path to regexp', () => {
         { s: '/fo/hello', expected: false },
         { s: '/b', expected: false },
       ])('when test string is "$s" expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/foo/:bar/baz').test(s)
+        const result = new PathRegexp('/foo/:bar/baz').test(s)
 
         expect(result).toEqual(expected)
       })
@@ -66,7 +68,7 @@ describe('# Path to regexp', () => {
         { s: '/hello/', expected: undefined },
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/:foo/:bar').exec(s)
+        const result = new PathRegexp('/:foo/:bar').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
@@ -82,7 +84,7 @@ describe('# Path to regexp', () => {
         { s: '/foo', expected: undefined },
         { s: '/foo-', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/foo-:bar').exec(s)
+        const result = new PathRegexp('/foo-:bar').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
@@ -97,7 +99,7 @@ describe('# Path to regexp', () => {
         { s: '/foo', expected: undefined },
         { s: '/foo-', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/:foo-:bar').exec(s)
+        const result = new PathRegexp('/:foo-:bar').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
@@ -110,7 +112,7 @@ describe('# Path to regexp', () => {
 
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/:foo/:bar?').exec(s)
+        const result = new PathRegexp('/:foo/:bar?').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
@@ -124,7 +126,7 @@ describe('# Path to regexp', () => {
         { s: '/hello/baa', expected: undefined },
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/:foo/:bar?/baz').exec(s)
+        const result = new PathRegexp('/:foo/:bar?/baz').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
