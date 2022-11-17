@@ -121,9 +121,10 @@ describe('# Path to regexp', () => {
         { s: '/hello/world/baz', expected: { foo: 'hello', bar: 'world' } },
         { s: '/hello/baz', expected: { foo: 'hello' } },
 
+        { s: '/hello/baa', expected: undefined },
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
-        const result = pathToRegexp('/:foo/:bar?').exec(s)
+        const result = pathToRegexp('/:foo/:bar?/baz').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })
