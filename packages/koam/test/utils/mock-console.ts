@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals'
+
 interface MockedConsole {
   consoleError: jest.Mock
   consoleInfo: jest.Mock

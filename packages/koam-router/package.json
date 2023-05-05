@@ -21,10 +21,11 @@
   "bugs": {
     "url": "https://github.com/mutoe/koam/issues"
   },
+  "type": "module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit"
   },
@@ -36,22 +37,17 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(t|j)sx?$": [
-        "@swc-node/jest",
-        {
-          "swc": {
-            "sourceMaps": "inline"
-          }
-        }
-      ]
+      "^.+\\.(t|j)sx?$": "@swc-node/jest"
     },
     "clearMocks": true,
+    "testEnvironment": "node",
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1",
       "test/(.*)": "<rootDir>/test/$1"
     },
     "collectCoverageFrom": [
       "src/**"
-    ]
+    ],
+    "extensionsToTreatAsEsm": [".ts", ".tsx"]
   }
 }

@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import Koa, { Context } from '../src'
 import { mockConsole } from './utils/mock-console'
 
@@ -5,7 +6,7 @@ describe('# middleware', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = () => `http://localhost:${testAddress.port || 33_000}`
-  const cb = jest.fn()
+  const cb = jest.fn<any>()
 
   beforeEach(() => { testAddress = {}; app = new Koa() })
   afterEach(() => app.close())

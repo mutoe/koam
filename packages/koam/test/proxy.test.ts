@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import Koa, { Context } from '../src'
 import { implementToObject } from './utils/implement-to-object'
 
@@ -7,7 +8,7 @@ describe('# proxy server is available', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = () => `http://127.0.0.1:${testAddress.port || 33_000}`
-  const cb = jest.fn()
+  const cb = jest.fn<any>()
 
   beforeEach(() => { testAddress = {}; app = new Koa({ proxy: true }) })
   afterEach(() => app.close())

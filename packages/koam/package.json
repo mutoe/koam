@@ -14,36 +14,31 @@
   "engines": {
     "node": ">= 14"
   },
+  "type": "module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
     "build/**/*"
   ],
   "scripts": {
-    "test": "jest --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",
     "start": "node -r @swc-node/register src/index.ts",
     "type-check": "tsc --noEmit"
   },
   "jest": {
     "transform": {
-      "^.+\\.(t|j)sx?$": [
-        "@swc-node/jest",
-        {
-          "swc": {
-            "sourceMaps": "inline"
-          }
-        }
-      ]
+      "^.+\\.(t|j)sx?$": "@swc-node/jest"
     },
     "clearMocks": true,
+    "testEnvironment": "node",
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1",
       "test/(.*)": "<rootDir>/test/$1"
     },
     "collectCoverageFrom": [
       "src/**"
-    ]
-  },
-  "gitHead": "11b3c87835445a1073e6636310f647d22d90f595"
+    ],
+    "extensionsToTreatAsEsm": [".ts", ".tsx"]
+  }
 }

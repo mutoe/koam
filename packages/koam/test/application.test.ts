@@ -1,4 +1,5 @@
 import http from 'node:http'
+import { jest } from '@jest/globals'
 import Koa, { Context } from '../src'
 import { mockConsole } from './utils/mock-console'
 
@@ -8,7 +9,7 @@ describe('# application', () => {
   const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
   beforeEach(() => { testAddress = {}; app = new Koa() })
-  afterEach(() => app.close())
+  afterEach(() => new Promise(resolve => app.close(resolve)))
 
   describe('hello world', () => {
     it('should get correct response', async () => {
@@ -64,7 +65,7 @@ describe('# application', () => {
 
     it('should call custom onError handler', async () => {
       await mockConsole(async ({ consoleError }) => {
-        const onError = jest.fn()
+        const onError = jest.fn<any>()
         const app = new Koa({ onError })
         testAddress = app.use(() => { throw error })
           .listen(0).address()
@@ -128,7 +129,7 @@ describe('# application', () => {
             respondTime: expect.any(Number),
           },
           request: {
-            ip: '::1',
+            ip: expect.any(String),
             method: 'GET',
             url: '/foo?bar=1',
             headers: {

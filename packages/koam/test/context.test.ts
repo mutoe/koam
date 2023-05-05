@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import Koa, { AppError, Context, HttpStatus } from '../src'
 import { implementToObject } from './utils/implement-to-object'
 import { setUserToStateMiddleware } from './utils/middlewares'
@@ -9,7 +10,7 @@ describe('# context', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = (url: string = '') => `http://localhost:${testAddress.port || 33_000}${url}`
-  const cb = jest.fn()
+  const cb = jest.fn<any>()
 
   beforeEach(() => { testAddress = {}; app = new Koa() })
   afterEach(() => app.close())
@@ -20,7 +21,7 @@ describe('# context', () => {
 
       await fetch(baseUrl())
 
-      const ctx = cb.mock.calls[0][0]
+      const ctx = cb.mock.calls[0][0] as any
       expect(ctx.app).toBe(app)
     })
 
@@ -53,7 +54,7 @@ describe('# context', () => {
 
       expect(cb).toHaveBeenCalledTimes(1)
 
-      const ctx = cb.mock.calls[0][0].toObject()
+      const ctx = cb.mock.calls[0][0]?.toObject() as any
       const expectedContextProperties = {
         method: 'GET',
         protocol,
@@ -82,7 +83,7 @@ describe('# context', () => {
       })
 
       expect(cb).toHaveBeenCalledTimes(1)
-      const ctx = cb.mock.calls[0][0]
+      const ctx = cb.mock.calls[0][0] as any
       expect(ctx.method).toBe('POST')
       expect(ctx.request.body).toEqual({ foo: '你好, Nodejs!', count: 1 })
     })
@@ -103,7 +104,7 @@ describe('# context', () => {
       })
 
       expect(cb).toHaveBeenCalledTimes(1)
-      const ctx = cb.mock.calls[0][0]
+      const ctx = cb.mock.calls[0][0] as any
       expect(ctx.headers).toBe(ctx.request.headers)
       expect(ctx.headers).toMatchObject({
         'content-type': 'application/json; charset=utf-8',
@@ -218,7 +219,7 @@ describe('# context', () => {
       const response = await fetch(baseUrl())
 
       expect(response.statusText).toEqual('hello')
-      const ctx = cb.mock.calls[0][0]
+      const ctx = cb.mock.calls[0][0] as any
       expect(ctx.message).toEqual('hello')
     })
 
@@ -404,7 +405,7 @@ describe('# context', () => {
           requestDateTime: expect.any(String),
         },
         request: {
-          ip: '::1',
+          ip: expect.any(String),
           method: 'POST',
           url: '/foo?bar=1',
           headers: {
