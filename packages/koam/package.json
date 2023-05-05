@@ -16,6 +16,9 @@
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "test": "jest --coverage",
     "build": "rm -rf ./build && tsc -p tsconfig.build.json",
