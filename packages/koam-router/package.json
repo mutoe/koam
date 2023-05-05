@@ -11,6 +11,9 @@
   ],
   "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-router",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
@@ -26,7 +29,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@mutoe/koam": "workspace:^0.1.2"
+    "@mutoe/koam": "workspace:^0.1.3"
   },
   "devDependencies": {
     "@mutoe/koam": "workspace:^0.1.3"
