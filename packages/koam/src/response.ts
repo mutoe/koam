@@ -1,5 +1,5 @@
-import http from 'node:http'
-import net from 'node:net'
+import * as http from 'node:http'
+import * as net from 'node:net'
 import Application from './application'
 import Context from './context'
 import { HttpStatus } from './enums'

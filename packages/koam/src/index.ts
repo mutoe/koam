@@ -1,4 +1,4 @@
-import http from 'node:http'
+import * as http from 'node:http'
 import Application from './application'
 import Context from './context'
 
