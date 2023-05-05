@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2](https://github.com/mutoe/koam/compare/v0.2.1...v0.2.2) (2023-05-05)
+
+
+### Bug Fixes
+
+* entrypoint for esm ([da07d83](https://github.com/mutoe/koam/commit/da07d832bb58de824699295aaedb62770f5cabb5))
+
+
+
+
+
 ## [0.2.1](https://github.com/mutoe/koam/compare/v0.2.0...v0.2.1) (2023-05-05)
 
 **Note:** Version bump only for package @mutoe/koam-router
