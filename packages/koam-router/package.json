@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam-router",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Simple koa router. Use with @mutoe/koam",
   "keywords": [
     "koa",
@@ -33,7 +33,7 @@
     "@mutoe/koam": "workspace:^0.1.3"
   },
   "devDependencies": {
-    "@mutoe/koam": "workspace:^0.1.3"
+    "@mutoe/koam": "workspace:^0.2.0"
   },
   "jest": {
     "transform": {
@@ -48,6 +48,9 @@
     "collectCoverageFrom": [
       "src/**"
     ],
-    "extensionsToTreatAsEsm": [".ts", ".tsx"]
+    "extensionsToTreatAsEsm": [
+      ".ts",
+      ".tsx"
+    ]
   }
 }
