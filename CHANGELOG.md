@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/mutoe/koam/compare/v0.2.0...v0.2.1) (2023-05-05)
+
+
+### Bug Fixes
+
+* node module has no default export issue ([b9946c9](https://github.com/mutoe/koam/commit/b9946c9534d307cbb19238fd96c7f50992617e3e))
+
+
+
+
+
 # [0.2.0](https://github.com/mutoe/koam/compare/v0.1.4...v0.2.0) (2023-05-05)
 
 
