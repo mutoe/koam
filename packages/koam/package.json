@@ -15,7 +15,11 @@
     "node": ">= 14"
   },
   "type": "module",
-  "module": "build/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/index.js"
+    }
+  },
   "types": "build/index.d.ts",
   "files": [
     "build/**/*"

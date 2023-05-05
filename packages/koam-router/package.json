@@ -22,7 +22,11 @@
     "url": "https://github.com/mutoe/koam/issues"
   },
   "type": "module",
-  "module": "build/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/index.js"
+    }
+  },
   "types": "build/index.d.ts",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
