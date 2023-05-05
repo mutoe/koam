@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/mutoe/koam/compare/v0.2.3...v0.2.4) (2023-05-05)
+
+
+### Bug Fixes
+
+* entrypoint for esm ([eaaed98](https://github.com/mutoe/koam/commit/eaaed98eff9717cb2d2b462099f5edb233d02a32))
+* entrypoint for esm ([53ef01e](https://github.com/mutoe/koam/commit/53ef01e0d3a4fc091f280d8df5371361b3b01b96))
+
+
+
+
+
 ## [0.2.3](https://github.com/mutoe/koam/compare/v0.2.2...v0.2.3) (2023-05-05)
 
 
