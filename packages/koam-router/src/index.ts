@@ -67,9 +67,9 @@ export default class Router {
   private handleVerb (method: HttpMethod | null, path: RouterPath, ...middlewares: Koa.Middleware[]): this
   private handleVerb (method: HttpMethod | null, ...args: any[]): this {
     let name: string | undefined, path: RouterPath, middlewares: Koa.Middleware[]
-    if (typeof args.at(1) === 'string' ||
-      args.at(1) instanceof RegExp ||
-      Array.isArray(args.at(1))) {
+    if (typeof args.at(1) === 'string'
+      || args.at(1) instanceof RegExp
+      || Array.isArray(args.at(1))) {
       [name, path, ...middlewares] = args
     } else {
       [path, ...middlewares] = args

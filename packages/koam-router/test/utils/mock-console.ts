@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
-
 interface MockedConsole {
   consoleError: jest.Mock
   consoleInfo: jest.Mock
