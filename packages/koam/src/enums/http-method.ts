@@ -1,4 +1,4 @@
-export const enum HttpMethod {
+export enum HttpMethod {
   'ACL' = 'ACL',
   'BIND' = 'BIND',
   'CHECKOUT' = 'CHECKOUT',

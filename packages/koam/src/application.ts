@@ -1,6 +1,7 @@
 import assert from 'node:assert'
 import http from 'node:http'
-import net, { ListenOptions } from 'node:net'
+import type { ListenOptions } from 'node:net'
+import net from 'node:net'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
