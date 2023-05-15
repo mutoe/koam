@@ -1,6 +1,6 @@
 import Koa from '../index'
 
-export function compose (middlewares: Koa.Middleware[]): Koa.Middleware {
+export default function compose (middlewares: Koa.Middleware[]): Koa.Middleware {
   return (context, next) => {
     let n = -1
     const dispatch = (i: number): any => {
