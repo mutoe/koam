@@ -1,19 +1,16 @@
-import { jest } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Koa, { AppError, Context, HttpStatus } from '../src'
-import { implementToObject } from './utils/implement-to-object'
 import { setUserToStateMiddleware } from './utils/middlewares'
 import { mockConsole } from './utils/mock-console'
-
-implementToObject()
 
 describe('# context', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = (url: string = '') => `http://localhost:${testAddress.port || 33_000}${url}`
-  const cb = jest.fn<any>()
+  const cb = vi.fn()
 
   beforeEach(() => { testAddress = {}; app = new Koa() })
-  afterEach(() => app.close())
+  afterEach(() => void app.close())
 
   describe('context properties', () => {
     it('should equal between app and context.app', async () => {

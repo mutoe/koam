@@ -15,37 +15,21 @@
     "node": ">= 14"
   },
   "type": "module",
+  "main": "./build/koam.cjs",
+  "module": "./build/koam.js",
+  "types": "./build/koam.d.ts",
   "exports": {
     ".": {
-      "import": "./build/index.js"
+      "import": "./build/koam.js",
+      "require": "./build/koam.cjs"
     }
   },
-  "types": "build/index.d.ts",
   "files": [
-    "build/**/*"
+    "build"
   ],
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "build": "rm -rf ./build && tsc -p tsconfig.build.json",
-    "start": "node -r @swc-node/register src/index.ts",
+    "test": "vitest run",
+    "build": "vite build",
     "type-check": "tsc --noEmit"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(t|j)sx?$": "@swc-node/jest"
-    },
-    "clearMocks": true,
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/src/$1",
-      "test/(.*)": "<rootDir>/test/$1"
-    },
-    "collectCoverageFrom": [
-      "src/**"
-    ],
-    "extensionsToTreatAsEsm": [
-      ".ts",
-      ".tsx"
-    ]
   }
 }

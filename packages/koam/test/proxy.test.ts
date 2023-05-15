@@ -1,17 +1,14 @@
-import { jest } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Koa, { Context } from '../src'
-import { implementToObject } from './utils/implement-to-object'
-
-implementToObject()
 
 describe('# proxy server is available', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
   const baseUrl = () => `http://127.0.0.1:${testAddress.port || 33_000}`
-  const cb = jest.fn<any>()
+  const cb = vi.fn()
 
   beforeEach(() => { testAddress = {}; app = new Koa({ proxy: true }) })
-  afterEach(() => app.close())
+  afterEach(() => void app.close())
 
   it('should return forwarded host in request host getter', async () => {
     const proxyHeaders = {

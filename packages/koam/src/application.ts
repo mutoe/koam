@@ -1,11 +1,11 @@
-import * as assert from 'node:assert'
-import * as http from 'node:http'
+import assert from 'node:assert'
+import http from 'node:http'
 import type { ListenOptions } from 'node:net'
-import * as net from 'node:net'
+import net from 'node:net'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
-import compose from './utils/compose'
+import { compose } from './utils/compose'
 import Koa, { AppError, noop } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
