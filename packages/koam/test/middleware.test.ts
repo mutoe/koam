@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Koa, { Context } from '../src'
 import { mockConsole } from './utils/mock-console'
 

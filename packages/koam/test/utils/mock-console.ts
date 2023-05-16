@@ -1,5 +1,4 @@
 import type { Mock } from 'vitest'
-import { vi } from 'vitest'
 
 interface MockedConsole {
   consoleError: Mock

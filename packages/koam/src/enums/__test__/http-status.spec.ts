@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest'
 import { HttpStatus } from '../http-status'
 
 describe('# HttpStatus', () => {

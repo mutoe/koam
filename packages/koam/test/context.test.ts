@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Koa, { AppError, Context, HttpStatus } from '../src'
 import { setUserToStateMiddleware } from './utils/middlewares'
 import { mockConsole } from './utils/mock-console'

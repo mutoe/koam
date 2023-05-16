@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest'
 import { parseQuery, stringifyQuery } from '../query-string'
 
 describe('# query string', () => {

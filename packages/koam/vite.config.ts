@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   test: {
+    globals: true,
     setupFiles: [resolve(__dirname, 'test/_setupTest.ts')],
     mockReset: true,
   },
