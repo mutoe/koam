@@ -155,7 +155,7 @@ export default class Application implements Koa.Config {
   }
 
   private respond (): void {
-    assert(this.context)
+    assert.ok(this.context)
     this.context.message ||= HttpStatus.getMessage(this.context.status)
     if (this.context.body !== undefined && this.context.body !== null) {
       const body = ['text/plain', 'text/html'].includes(this.context.response.type)
@@ -170,7 +170,7 @@ export default class Application implements Koa.Config {
 const defaultErrorHandler = (error: unknown, context: Context): void => {
   if (context.app.silent) return
   if (error instanceof AppError && error.expose) return
-  assert(error instanceof Error)
+  assert.ok(error instanceof Error)
 
   console.debug(context.toJSON())
   console.error(error)
