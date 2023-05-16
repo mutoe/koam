@@ -28,7 +28,9 @@
     "lerna": "^6.6.2",
     "lint-staged": "^13.2.2",
     "simple-git-hooks": "^2.8.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vitest": "^0.31.0"
   },
   "changelog": {
     "labels": {
