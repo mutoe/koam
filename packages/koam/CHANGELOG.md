@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/mutoe/koam/compare/v0.2.4...v0.3.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* path issue after upgrade ts and eslint ([06a8c3d](https://github.com/mutoe/koam/commit/06a8c3dc962e66c61ce44f27e8a6129bd9e3e445))
+
+
+
+
+
 ## [0.2.4](https://github.com/mutoe/koam/compare/v0.2.3...v0.2.4) (2023-05-05)
 
 
