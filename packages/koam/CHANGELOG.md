@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/mutoe/koam/compare/v0.3.0...v0.3.1) (2023-05-16)
+
+
+### Bug Fixes
+
+* cannot using external lib issue ([4bd4d03](https://github.com/mutoe/koam/commit/4bd4d032896e9616d6559c3ad5ca50445bf41c8d))
+
+
+
+
+
 # [0.3.0](https://github.com/mutoe/koam/compare/v0.2.4...v0.3.0) (2023-05-16)
 
 

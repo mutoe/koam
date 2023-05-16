@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam-router",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple koa router. Use with @mutoe/koam",
   "keywords": [
     "koa",
@@ -43,6 +43,6 @@
     "@mutoe/koam": "workspace:^0.2.4"
   },
   "devDependencies": {
-    "@mutoe/koam": "workspace:^0.3.0"
+    "@mutoe/koam": "workspace:^0.3.1"
   }
 }
