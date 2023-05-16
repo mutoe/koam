@@ -22,15 +22,21 @@
     "url": "https://github.com/mutoe/koam/issues"
   },
   "type": "module",
+  "main": "./build/index.cjs",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
   "exports": {
     ".": {
-      "import": "./build/index.js"
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
     }
   },
-  "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "build": "rm -rf ./build && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -38,23 +44,5 @@
   },
   "devDependencies": {
     "@mutoe/koam": "workspace:^0.2.4"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(t|j)sx?$": "@swc-node/jest"
-    },
-    "clearMocks": true,
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/src/$1",
-      "test/(.*)": "<rootDir>/test/$1"
-    },
-    "collectCoverageFrom": [
-      "src/**"
-    ],
-    "extensionsToTreatAsEsm": [
-      ".ts",
-      ".tsx"
-    ]
   }
 }

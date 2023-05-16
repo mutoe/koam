@@ -15,13 +15,13 @@
     "node": ">= 14"
   },
   "type": "module",
-  "main": "./build/koam.cjs",
-  "module": "./build/koam.js",
-  "types": "./build/koam.d.ts",
+  "main": "./build/index.cjs",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
   "exports": {
     ".": {
-      "import": "./build/koam.js",
-      "require": "./build/koam.cjs"
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
     }
   },
   "files": [
@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit"
   }
 }

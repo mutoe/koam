@@ -8,6 +8,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es', 'cjs'],
+      fileName: 'index',
     },
   },
   test: {

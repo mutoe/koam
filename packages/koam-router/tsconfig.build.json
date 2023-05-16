@@ -1,16 +1,17 @@
 {
   "extends": "./tsconfig.json",
+  "include": ["src"],
   "exclude": [
-    "**/__test__/**",
-    "test/**",
+    "**/__test__",
+    "**/*.{spec,test}.*",
   ],
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "build",
     "sourceMap": false,
     "inlineSourceMap": false,
     "declaration": true,
-    "declarationMap": true,
-    "removeComments": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
     "noEmit": false,
   },
 }
