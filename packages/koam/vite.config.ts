@@ -10,6 +10,10 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: 'index',
     },
+    minify: false,
+    rollupOptions: {
+      external: [/^node:/],
+    },
   },
   test: {
     globals: true,

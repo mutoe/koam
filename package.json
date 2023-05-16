@@ -45,9 +45,6 @@
   },
   "eslintConfig": {
     "root": true,
-    "settings": {
-      "jest": 29
-    },
     "extends": [
       "@mutoe/eslint-config-preset-ts"
     ],

@@ -1,4 +1,4 @@
-import http from 'node:http'
+import * as http from 'node:http'
 import Application from './application'
 import { HttpMethod } from './enums'
 import { parseQuery, stringifyQuery } from './utils'

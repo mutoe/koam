@@ -1,4 +1,4 @@
-import http from 'node:http'
+import * as http from 'node:http'
 import Koa, { Context } from '../src'
 import { mockConsole } from './utils/mock-console'
 

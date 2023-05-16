@@ -13,7 +13,6 @@
     "strict": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "allowSyntheticDefaultImports": true,
     "types": ["vitest/globals"],
   },
 }
