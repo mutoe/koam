@@ -9,6 +9,7 @@ export class PathRegexp extends RegExp {
       .split('/')
       .filter(Boolean)
       .map(pattern => {
+        pattern = replaceKeyword(pattern)
         pattern = extractNamedParams(pattern)
         pattern = prefixSlash(pattern)
         return pattern
@@ -22,8 +23,14 @@ export class PathRegexp extends RegExp {
   }
 }
 
+function replaceKeyword (s: string): string {
+  return s.replace(/\.(?!\\)/, '\\.')
+}
+
 function extractNamedParams (s: string): string {
-  return s.replace(/:([\w-]+?)(\W|$)/g, '(?<$1>[^/#?]+?)$2')
+  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, m1, m2, m3) => {
+    return `(?<${m1}>${m2 ? `(?:${m2})` : '[^/#?]+?'})${m3}`
+  })
 }
 
 function prefixSlash (s: string): string {

@@ -13,6 +13,7 @@ describe('# Path RegExp', () => {
       it.each([
         { s: '/foo', expected: true },
         { s: 'foo', expected: true },
+
         { s: '//foo', expected: false },
         { s: '/foo-', expected: false },
         { s: '-foo', expected: false },
@@ -20,6 +21,41 @@ describe('# Path RegExp', () => {
         { s: '/b', expected: false },
       ])('when test string is "$s" expect $expected', ({ s, expected }) => {
         const result = new PathRegexp('/foo').test(s)
+
+        expect(result).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo.png"', () => {
+      it.each([
+        { s: '/foo.png', expected: true },
+
+        { s: '/foo-png', expected: false },
+        { s: 'foo', expected: false },
+        { s: '//foo.png', expected: false },
+        { s: '/foo-.png', expected: false },
+        { s: '-foo.png', expected: false },
+        { s: '/fo.png', expected: false },
+        { s: '/b.png', expected: false },
+      ])('when test string is "$s" expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo.png').test(s)
+
+        expect(result).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo-bar"', () => {
+      it.each([
+        { s: '/foo-bar', expected: true },
+        { s: 'foo-bar', expected: true },
+
+        { s: '//foo-bar', expected: false },
+        { s: '/foobar', expected: false },
+        { s: '-foobar', expected: false },
+        { s: '/fobar', expected: false },
+        { s: '/bbar', expected: false },
+      ])('when test string is "$s" expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo-bar').test(s)
 
         expect(result).toEqual(expected)
       })
@@ -157,6 +193,64 @@ describe('# Path RegExp', () => {
         { s: '/hello/world/abc', expected: undefined },
       ])('test string is $s expect $expected', ({ s, expected }) => {
         const result = new PathRegexp('/:foo/:bar+/baz').exec(s)
+
+        expect(result?.groups).toEqual(expected)
+      })
+    })
+  })
+
+  describe('custom match pattern', () => {
+    describe('when path is "/foo/:bar(\\d+)"', () => {
+      it.each([
+        { s: '/foo/123', expected: { bar: '123' } },
+
+        { s: '/foo/', expected: undefined },
+        { s: '/foo/world', expected: undefined },
+        { s: '/foo/123-world', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo/:bar(\\d+)').exec(s)
+
+        expect(result?.groups).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/icon-:id(\\d+).png"', () => {
+      it.each([
+        { s: '/icon-123.png', expected: { id: '123' } },
+
+        { s: '/icon-abc/', expected: undefined },
+        { s: '/icon', expected: undefined },
+        { s: '/icon-123', expected: undefined },
+        { s: '/icon/123.png', expected: undefined },
+        { s: '/icon-123/png', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/icon-:id(\\d+).png').exec(s)
+
+        expect(result?.groups).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo/(bar|baz)"', () => {
+      it.each([
+        { s: '/foo/bar', expected: 'bar' },
+        { s: '/foo/baz', expected: 'baz' },
+        { s: '/foo/', expected: undefined },
+        { s: '/foo/world', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo/(bar|baz)').exec(s)
+
+        expect(result?.at(1)).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo/:name(bar|baz)"', () => {
+      it.each([
+        { s: '/foo/bar', expected: { name: 'bar' } },
+        { s: '/foo/baz', expected: { name: 'baz' } },
+        { s: '/foo/', expected: undefined },
+        { s: '/foo/world', expected: undefined },
+      ])('test string is $s expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo/:name(bar|baz)').exec(s)
 
         expect(result?.groups).toEqual(expected)
       })

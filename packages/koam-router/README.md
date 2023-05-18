@@ -29,6 +29,10 @@ app.use(router.routes())
   - [ ] Match host
   - [x] Multiple middlewares
 - Path matching (lightweight `path-to-regexp`)
+  - [x] named match
+  - [x] unnamed match
+  - [x] custom pattern match
+  - [x] modifiers
 - [ ] `context.params`
 - [x] `router.routes()`
 - Nested routes
