@@ -8,8 +8,10 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 ## Usage
 
 ```ts
+import Koa from '@mutoe/koam'
 import Router from '@mutoe/koam-router'
 
+const app = new Koa()
 const router = new Router()
 
 app.use(router.routes())
@@ -18,24 +20,20 @@ app.use(router.routes())
 
 ## Roadmap
 
-Options
-
-- [ ] `prefix`
-- [ ] `exclusive`
-- [ ] `host`
-
-Router
-
-- [ ] `router.get([name], path, ...middlewares)`
-- [ ] `router.post([name], path, ...middlewares)`
-- [ ] `router.put([name], path, ...middlewares)`
-- [ ] `router.patch([name], path, ...middlewares)`
-- [ ] `router.delete([name], path, ...middlewares)`
-- [ ] `router.all([name], path, ...middlewares)`
+- [x] `new Route([options])`
+  - [ ] `options.prefix`
+  - [ ] `options.exclusive`
+  - [ ] `options.host`
+- [x] `router.<get|post|put|patch|delete|all>(path, ...middlewares)`
+  - [ ] Named routes
+  - [ ] Match host
+  - [x] Multiple middlewares
+- Path matching (lightweight `path-to-regexp`)
 - [ ] `context.params`
-- [ ] `router.routes()`
-- [ ] `router.use([path], middleware)`
-- [ ] `router.use(path, anotherRouter.routes())`
+- [x] `router.routes()`
+- Nested routes
+  - [ ] `router.use([path], ...middlewares)`
+  - [ ] `router.use([path], ...anotherRouter.routes())`
 - [ ] `router.prefix(path)`
 - [ ] `router.allowedMethods([options])`
   - [ ] `options.throw`
