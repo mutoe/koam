@@ -1,4 +1,4 @@
-import Koa, { HttpMethod } from '@mutoe/koam'
+import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 
 declare global {
   interface Context {
@@ -9,9 +9,14 @@ declare global {
 type RouterPath = string | RegExp | (string | RegExp)[]
 
 export default class Router {
+  #routeMap: Map<string, Koa.Middleware> = new Map()
+
   routes (): Koa.Middleware {
     return async (ctx, next) => {
-      await next()
+      const { path, method } = ctx
+      const handler = this.#routeMap.get(`${path}-${method}`)
+      if (handler) return handler(ctx, next)
+      return ctx.throw(HttpStatus.NotFound)
     }
   }
 
@@ -89,8 +94,7 @@ export default class Router {
   }
 
   private register (method: HttpMethod | null, name: string | undefined, path: string | RegExp, middlewares: Koa.Middleware[]): this {
-    console.log({ method, name, path, middlewares })
-    // TODO: implement register router
+    this.#routeMap.set(`${path}-${method}`, compose(middlewares))
     return this
   }
 }
