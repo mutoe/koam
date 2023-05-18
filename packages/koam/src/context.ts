@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import * as http from 'node:http'
+import { Stream } from 'node:stream'
 import { HttpMethod, HttpStatus } from './enums'
 import Request from './request'
 import Response from './response'
@@ -59,7 +60,7 @@ export default class Context {
   set querystring (val: string) { this.request.querystring = val }
 
   get body () { return this.response.body }
-  set body (value: JsonValue | undefined) { this.response.body = value }
+  set body (value: JsonValue | undefined | Stream) { this.response.body = value }
 
   get status () { return this.response.status }
   set status (val: HttpStatus) { this.response.status = val }
@@ -72,6 +73,7 @@ export default class Context {
 
   get headers () { return this.request.headers }
   get headerSent () { return this.response.headerSent }
+  flushHeaders = () => this.res.flushHeaders()
 
   /** Get special request header. */
   get <T extends string>(key: T) { return this.request.get(key) }

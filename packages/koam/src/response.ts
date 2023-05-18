@@ -1,5 +1,6 @@
 import * as http from 'node:http'
 import * as net from 'node:net'
+import { Stream } from 'node:stream'
 import Application from './application'
 import Context from './context'
 import { HttpStatus } from './enums'
@@ -23,6 +24,19 @@ export default class Response {
   set status (val: HttpStatus) { this.#res.statusCode = val }
   get message (): string { return this.#res.statusMessage }
   set message (val: string) { this.#res.statusMessage = val }
+  get length (): number | undefined {
+    if (this.has('Content-Length')) {
+      return Number.parseInt(String(this.get('Content-Length')), 10) || 0
+    }
+
+    const { body } = this
+    if (!body || body instanceof Stream) return undefined
+    if (typeof body === 'string') return Buffer.byteLength(body)
+    if (Buffer.isBuffer(body)) return body.length
+    return Buffer.byteLength(JSON.stringify(body))
+  }
+
+  set length (length: number | undefined) { length !== undefined && this.set('Content-Length', length) }
 
   get headerSent (): boolean { return this.#res.headersSent }
   get headers (): http.OutgoingHttpHeaders { return this.#res.getHeaders() }

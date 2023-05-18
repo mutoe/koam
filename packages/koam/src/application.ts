@@ -2,6 +2,7 @@ import * as assert from 'node:assert'
 import * as http from 'node:http'
 import type { ListenOptions } from 'node:net'
 import * as net from 'node:net'
+import { Stream } from 'node:stream'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
@@ -157,13 +158,20 @@ export default class Application implements Koa.Config {
   private respond (): void {
     assert.ok(this.context)
     this.context.message ||= HttpStatus.getMessage(this.context.status)
-    if (this.context.body !== undefined && this.context.body !== null) {
-      const body = ['text/plain', 'text/html'].includes(this.context.response.type)
-        ? this.context.body
-        : JSON.stringify(this.context.body)
-      this.context.res.write(body)
+    const { body, type, res } = this.context
+
+    if (body === undefined || body === null) return void res.end()
+    if (typeof body === 'string') return void res.end(body)
+    if (Buffer.isBuffer(body)) return void res.end(body)
+    if (body instanceof Stream) return void body.pipe(res)
+    if (body instanceof Object) {
+      if (!type) this.context.type = 'application/json'
+      const jsonBody = JSON.stringify(this.context.body)
+      if (!res.headersSent) this.context.response.length = Buffer.byteLength(jsonBody)
+      this.context.res.end(jsonBody)
+      return
     }
-    this.context.res.end()
+    this.context.res.end(body)
   }
 }
 

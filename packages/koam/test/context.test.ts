@@ -1,4 +1,6 @@
-import Koa, { AppError, Context, HttpStatus } from '../src'
+import { spawn } from 'node:child_process'
+import { Stream } from 'node:stream'
+import Koa, { AppError, Context, HttpStatus, noop } from '../src'
 import { setUserToStateMiddleware } from './utils/middlewares'
 import { mockConsole } from './utils/mock-console'
 
@@ -183,6 +185,33 @@ describe('# context', () => {
 
       expect(cb).toHaveBeenCalledWith({ foo: 'bar' })
       expect(await response.json()).toEqual({ foo: 'bar' })
+    })
+
+    it('should can set stream as response body', async () => {
+      testAddress = app
+        .use(ctx => {
+          const shell = spawn('bash', ['-c', 'for i in {1..3}; do echo $i;sleep 0.001; done'])
+          const stream = new Stream.Readable({ read: noop })
+          ctx.body = stream
+          ctx.flushHeaders()
+          shell.stdout.on('data', chunk => stream.push(chunk))
+          shell.on('close', () => {
+            stream.push(null)
+            ctx.res.end()
+          })
+        })
+        .listen(0).address()
+
+      const fn = vi.fn()
+      const response = await fetch(baseUrl())
+      const reader = response.body!.getReader()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fn(new TextDecoder('utf-8').decode(value))
+      }
+      expect(fn).toHaveBeenCalledTimes(3)
+      expect(fn.mock.calls.map(it => it[0])).toEqual(['1\n', '2\n', '3\n'])
     })
   })
 
