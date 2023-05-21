@@ -71,6 +71,9 @@ export default class Context {
   get type () { return this.response.type }
   set type (val: string) { this.response.type = val }
 
+  get length () { return this.response.length }
+  set length (length: number | undefined) { this.response.length = length }
+
   get headers () { return this.request.headers }
   get headerSent () { return this.response.headerSent }
   flushHeaders = () => this.res.flushHeaders()

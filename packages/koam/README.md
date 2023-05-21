@@ -125,8 +125,8 @@ Context response
 - [x] `response.status=` `ctx.status=`
 - [x] `response.message` `ctx.message`
 - [x] `response.message=` `ctx.message=`
-- [ ] `response.length` `ctx.length`
-- [ ] `response.length=` `ctx.length=`
+- [x] `response.length` `ctx.length`
+- [x] `response.length=` `ctx.length=`
 - [x] `response.type` `ctx.type`
 - [x] `response.type=` `ctx.type=`
 - [ ] `response.is(mimeTypes...)`
