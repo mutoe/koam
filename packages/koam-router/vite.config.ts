@@ -2,6 +2,12 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      src: resolve(__dirname, 'src'),
+      test: resolve(__dirname, 'test'),
+    },
+  },
   build: {
     outDir: 'build',
     emptyOutDir: true,

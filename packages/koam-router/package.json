@@ -22,8 +22,6 @@
     "url": "https://github.com/mutoe/koam/issues"
   },
   "type": "module",
-  "main": "./build/index.cjs",
-  "module": "./build/index.js",
   "types": "./build/index.d.ts",
   "exports": {
     ".": {
@@ -40,7 +38,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@mutoe/koam": "workspace:^0.2.4"
+    "@mutoe/koam": "workspace:^0.3.2"
   },
   "devDependencies": {
     "@mutoe/koam": "workspace:^0.3.2"
