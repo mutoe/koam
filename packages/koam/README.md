@@ -67,9 +67,9 @@ Context properties
 Context request
 
 - [x] `request.headers` `ctx.headers`
-    - [ ] ~~`request.header`~~ ~~`ctx.header`~~
+  - [ ] ~~`request.header`~~ ~~`ctx.header`~~
 - [ ] `request.headers=`
-    - [ ] `request.header=`
+  - [ ] ~~`request.header=`~~
 - [x] `request.get(field)` `ctx.get(field)`
 - [x] `request.method` `ctx.method`
 - [x] `request.method=` `ctx.method=`
@@ -88,9 +88,9 @@ Context request
 - [x] `request.query` `ctx.query`
 - [x] `request.query=` `ctx.query=`
 - [x] `request.querystring` `ctx.querystring`
+  - [x] ~~`request.search`~~
 - [x] `request.querystring=` `ctx.querystring=`
-- [x] ~~`request.search`~~
-- [x] ~~`request.search=`~~
+  - [x] ~~`request.search=`~~
 - [x] `request.type` (get `mime-type` in `Content-Type` header)
 - [x] `request.charset` (get `charset` in `Content-Type` header)
 - [ ] `request.fresh` `ctx.fresh`
@@ -112,7 +112,7 @@ Context response
 - [x] `response.headers`
   - [ ] ~~`response.header`~~
 - [x] `response.headerSent` `ctx.headerSent` <!-- Need tests -->
-- [ ] `response.flushHeaders()` <!-- Need tests -->
+- [x] `response.flushHeaders()`
 - [x] `response.has(header)`
 - [x] `response.get(header)`
 - [x] `response.set(headers)` `ctx.set(headers)`
@@ -120,7 +120,7 @@ Context response
 - [x] `response.remove(header)` `ctx.remove(header)`
 - [x] `response.socket`
 - [x] `response.body` `ctx.body`
-- [x] `response.body=` `ctx.body=` (currently only finished json body)
+- [x] `response.body=` `ctx.body=` (currently only finished json body and stream)
 - [x] `response.status` `ctx.status`
 - [x] `response.status=` `ctx.status=`
 - [x] `response.message` `ctx.message`
