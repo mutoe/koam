@@ -2,9 +2,13 @@
  * @description You can using https://wangwl.net/static/projects/visualRegex to review your regular express source.
  */
 export class PathRegexp extends RegExp {
-  path: string
+  path?: string
 
-  constructor (path: string) {
+  constructor (path: string | RegExp) {
+    if (path instanceof RegExp) {
+      super(path)
+      return
+    }
     const regexpString = path
       .split('/')
       .filter(Boolean)
@@ -24,12 +28,13 @@ export class PathRegexp extends RegExp {
 }
 
 function replaceKeyword (s: string): string {
+  // Replace `.` to `\.` but do not replace `\.` twice
   return s.replace(/\.(?!\\)/, '\\.')
 }
 
 function extractNamedParams (s: string): string {
-  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, m1, m2, m3) => {
-    return `(?<${m1}>${m2 ? `(?:${m2})` : '[^/#?]+?'})${m3}`
+  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, m3) => {
+    return `(?<${name}>${customPattern ? `(?:${customPattern})` : '[^/#?]+?'})${m3}`
   })
 }
 

@@ -1,7 +1,7 @@
 import Koa, { HttpStatus } from '@mutoe/koam'
 import Router from '../src'
 
-describe('Koam router', () => {
+describe('Koam router basic feature', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}

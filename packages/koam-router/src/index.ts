@@ -1,4 +1,6 @@
 import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
+import { intersection } from 'src/utils/intersection'
+import { PathRegexp } from 'src/utils/path-regexp'
 
 declare global {
   interface Context {
@@ -6,18 +8,42 @@ declare global {
   }
 }
 
+interface Route {
+  path: string
+  pathRegexp: PathRegexp
+  /** If methods is null, will match all method */
+  methods: HttpMethod[] | null
+  name?: string
+  middlewares: Koa.Middleware[]
+}
+
 type RouterPath = string | RegExp | (string | RegExp)[]
 
 export default class Router {
-  #routeMap: Map<string, Koa.Middleware> = new Map()
+  #route: Route[] = []
 
   routes (): Koa.Middleware {
-    return async (ctx, next) => {
+    return async (ctx, next): Promise<void> => {
       const { path, method } = ctx
-      const handler = this.#routeMap.get(`${path}-${method}`)
-      if (handler) return handler(ctx, next)
-      return ctx.throw(HttpStatus.NotFound)
+      const route = this.findRoute({ path })
+      if (!route) return ctx.throw(HttpStatus.NotFound)
+      if (route.methods !== null && !route.methods.includes(method)) return ctx.throw(HttpStatus.MethodNotAllowed)
+      return compose(route.middlewares)(ctx, next)
     }
+  }
+
+  route (name: string): Koa.Middleware | undefined {
+    const middlewares = this.findRoute({ name })?.middlewares
+    return middlewares && compose(middlewares)
+  }
+
+  private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'methods'>>) {
+    return this.#route.find(it => {
+      const nameCondition = where.name ? it.name === where.name : true
+      const methodsCondition = it.methods ? where.methods ? intersection(it.methods, where.methods).length > 0 : true : true
+      const pathCondition = where.path ? it.pathRegexp.test(where.path) : true
+      return nameCondition && methodsCondition && pathCondition
+    })
   }
 
   all (name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
@@ -94,7 +120,13 @@ export default class Router {
   }
 
   private register (method: HttpMethod | null, name: string | undefined, path: string | RegExp, middlewares: Koa.Middleware[]): this {
-    this.#routeMap.set(`${path}-${method}`, compose(middlewares))
+    this.#route.push({
+      name,
+      path: typeof path === 'string' ? path : path.source,
+      pathRegexp: new PathRegexp(path),
+      middlewares,
+      methods: method && [method],
+    })
     return this
   }
 }
