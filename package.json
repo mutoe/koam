@@ -24,6 +24,7 @@
   "devDependencies": {
     "@mutoe/eslint-config-preset-ts": "^3.4.1",
     "@types/node": "^14",
+    "@vitest/coverage-c8": "^0.31.1",
     "eslint": "^8.39.0",
     "lerna": "^6.6.2",
     "lint-staged": "^13.2.2",

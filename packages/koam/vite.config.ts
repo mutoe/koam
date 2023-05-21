@@ -19,5 +19,9 @@ export default defineConfig({
     globals: true,
     setupFiles: [resolve(__dirname, 'test/_setupTest.ts')],
     mockReset: true,
+    coverage: {
+      provider: 'c8',
+      reporter: ['json', 'html', 'lcov'],
+    },
   },
 })

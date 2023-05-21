@@ -28,7 +28,7 @@
     "build"
   ],
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "build": "vite build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit"
   }
