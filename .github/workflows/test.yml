@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 18, 19 ]
+        node-version: [ 18, 20 ]
         package: ['koam', 'koam-router']
         include:
           - node-version: 18
