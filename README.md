@@ -1,7 +1,7 @@
 # Koam
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mutoe/koa/test.yml?style=for-the-badge)](https://github.com/mutoe/koa/actions)
-[![Codecov](https://img.shields.io/codecov/c/github/mutoe/koa?style=for-the-badge&token=wpwmuKKaJX)](https://app.codecov.io/gh/mutoe/koa)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mutoe/koam/test.yml?style=for-the-badge)](https://github.com/mutoe/koam/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/mutoe/koam?style=for-the-badge&token=wpwmuKKaJX)](https://app.codecov.io/gh/mutoe/koam)
 
 Implement a simple Koa-like http server with zero dependencies from scratch.
 
