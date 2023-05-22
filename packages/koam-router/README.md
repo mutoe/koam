@@ -46,9 +46,9 @@ app.use(router.routes())
 - [ ] `router.redirect(source, destination, [status])`
 - [x] `router.route(name)`
 - [x] `router.url(name, params, [options])` 
-  - [ ] `router.url(name, ...paramStrings, [options])`
+  - [x] `router.url(name, ...paramStrings, [options])`
   - [x] `options.query`
 - [x] static method `Router.url(path, params, [options])`
-  - [ ] `Router.url(path, ...paramStrings, [options])`
+  - [x] `Router.url(path, ...paramStrings, [options])`
   - [x] `options.query`
 - [ ] `router.param(param, middleware)` 

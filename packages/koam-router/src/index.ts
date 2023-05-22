@@ -13,25 +13,54 @@ interface Route {
 }
 
 type RouterPath = string | RegExp | (string | RegExp)[]
-export type RouterParams = Partial<Record<string, string | number | boolean>>
-// type RouterUrlOptions = {
-//   query: string | RouterParams
-// }
+export type RouterParams = Partial<Record<string, string | number>>
+type RouterUrlOptions = {
+  query?: string | RouterParams
+}
 
 export default class Router {
   #route: Route[] = []
 
-  // url (name: string, ...params: (string | number | boolean)[]): string
-  // url (name: string, ...params: [...(string | number | boolean)[], RouterUrlOptions]): string
-  // url (name: string, params: RouterParams, options?: {query: string | RouterParams}): string
-  url (name: string, params: RouterParams, options?: {query: string | RouterParams}): string {
+  url (name: string, ...params: (string | number)[]): string
+  url (name: string, ...params: [...(string | number)[], RouterUrlOptions]): string
+  url (name: string, params: RouterParams, options?: RouterUrlOptions): string
+  url (name: string, ...paramOrOptions: unknown[]): string {
+    let options: RouterUrlOptions = {}
+    let params: (string | number)[] | RouterParams
+    const first = paramOrOptions.at(0)
+    if (typeof first === 'object') {
+      params = first as RouterParams
+      paramOrOptions.shift()
+    }
+    const last = paramOrOptions.at(-1)
+    if (typeof last === 'object') {
+      options = last as RouterUrlOptions
+      paramOrOptions.pop()
+    }
+    params ||= paramOrOptions as (string | number)[]
     const route = this.findRoute({ name })
     if (!route) throw new Error(`Route "${name}" not found`)
     const url = route.pathRegexp.toPath(params)
     return concatQuery(url, options?.query)
   }
 
-  static url (path: string, params: RouterParams, options?: {query: string | RouterParams}): string {
+  static url (path: string, ...params: (string | number)[]): string
+  static url (path: string, ...params: [...(string | number)[], RouterUrlOptions]): string
+  static url (path: string, params: RouterParams, options?: RouterUrlOptions): string
+  static url (path: string, ...paramOrOptions: unknown[]): string {
+    let options: RouterUrlOptions = {}
+    let params: (string | number)[] | RouterParams
+    const first = paramOrOptions.at(0)
+    if (typeof first === 'object') {
+      params = first as RouterParams
+      paramOrOptions.shift()
+    }
+    const last = paramOrOptions.at(-1)
+    if (typeof last === 'object') {
+      options = last as RouterUrlOptions
+      paramOrOptions.pop()
+    }
+    params ||= paramOrOptions as (string | number)[]
     const url = new PathRegexp(path).toPath(params)
     return concatQuery(url, options?.query)
   }

@@ -27,10 +27,20 @@ describe('# Router', () => {
     it('should match correct route when call url method', () => {
       router.get('user', '/users/:id')
       expect(router.url('user', { id: 3 })).toEqual('/users/3')
+      expect(router.url('user', { id: 3 }, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
+      expect(router.url('user', 3)).toEqual('/users/3')
+      expect(router.url('user', 3, 4)).toEqual('/users/3')
+      expect(router.url('user', 3, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
+      expect(router.url('user', 3, 4, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
     })
 
     it('should match correct route when call static url method', () => {
       expect(Router.url('/users/:id', { id: 3 })).toEqual('/users/3')
+      expect(Router.url('/users/:id', { id: 3 }, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
+      expect(Router.url('/users/:id', 3)).toEqual('/users/3')
+      expect(Router.url('/users/:id', 3, 4)).toEqual('/users/3')
+      expect(Router.url('/users/:id', 3, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
+      expect(Router.url('/users/:id', 3, 4, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
     })
   })
 })

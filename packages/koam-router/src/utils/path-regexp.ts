@@ -28,8 +28,16 @@ export class PathRegexp extends RegExp {
     this.path = path
   }
 
-  toPath (params: RouterParams): string {
+  toPath (params: RouterParams | (string | number)[]): string {
     if (!this.path) throw new Error('Route path not have initial value')
+    if (Array.isArray(params)) {
+      let result = this.path
+      while (params.length) {
+        const value = String(params.shift())
+        result = result.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\))?([-./]|$)/, `${value}$4`)
+      }
+      return result
+    }
     return this.path
       .split('/')
       .map(subpath => {
