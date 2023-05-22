@@ -37,6 +37,20 @@ describe('Path match', () => {
       expect(cb).toBeCalledWith({ foo: 'bar' })
     })
 
+    it('given method is PUT', async () => {
+      const cb = vi.fn()
+      router.put('/hello', ctx => { cb(ctx.request.body); ctx.body = 'world!' })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/hello'), { method: 'PUT', body: JSON.stringify({ foo: 'bar' }) })
+
+      expect(result.ok).toEqual(true)
+      expect(result.status).toEqual(200)
+      await expect(result.text()).resolves.toEqual('world!')
+      expect(cb).toBeCalledWith({ foo: 'bar' })
+    })
+
     it('given method is PATCH', async () => {
       const cb = vi.fn()
       router.patch('/hello', ctx => { cb(ctx.request.body); ctx.body = 'world!' })
