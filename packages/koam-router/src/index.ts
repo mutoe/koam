@@ -2,12 +2,6 @@ import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 import { intersection } from 'src/utils/intersection'
 import { PathRegexp } from 'src/utils/path-regexp'
 
-declare global {
-  interface Context {
-    routes: Record<string, string>
-  }
-}
-
 interface Route {
   path: string
   pathRegexp: PathRegexp
@@ -28,6 +22,7 @@ export default class Router {
       const route = this.findRoute({ path })
       if (!route) return ctx.throw(HttpStatus.NotFound)
       if (route.methods !== null && !route.methods.includes(method)) return ctx.throw(HttpStatus.MethodNotAllowed)
+      ctx.params = path.match(route.pathRegexp)?.groups
       return compose(route.middlewares)(ctx, next)
     }
   }
@@ -37,7 +32,7 @@ export default class Router {
     return middlewares && compose(middlewares)
   }
 
-  private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'methods'>>) {
+  private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'methods'>>): Route | undefined {
     return this.#route.find(it => {
       const nameCondition = where.name ? it.name === where.name : true
       const methodsCondition = it.methods ? where.methods ? intersection(it.methods, where.methods).length > 0 : true : true

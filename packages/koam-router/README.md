@@ -33,7 +33,7 @@ app.use(router.routes())
   - [x] unnamed match
   - [x] custom pattern match
   - [x] modifiers
-- [ ] `context.params`
+- [x] `context.params`
 - [x] `router.routes()`
 - Nested routes
   - [ ] `router.use([path], ...middlewares)`

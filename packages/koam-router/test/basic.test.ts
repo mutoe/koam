@@ -1,4 +1,4 @@
-import Koa, { HttpStatus } from '@mutoe/koam'
+import Koa from '@mutoe/koam'
 import Router from '../src'
 
 describe('Koam router basic feature', () => {
@@ -22,17 +22,41 @@ describe('Koam router basic feature', () => {
     await expect(result.text()).resolves.toEqual('world!')
   })
 
-  it('should return 404 given request url is not match', async () => {
-    router.get('/hello', ctx => {
-      ctx.body = 'world!'
+  describe('Context parameters', () => {
+    it('should return correct context parameters', async () => {
+      const cb = vi.fn()
+      router.get('/:category/:title', ctx => { cb(ctx.params) })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/programming/how-to-node'))
+
+      expect(result.ok).toEqual(true)
+      expect(cb).toBeCalledWith({ category: 'programming', title: 'how-to-node' })
     })
-    testAddress = app.use(router.routes())
-      .listen(0).address()
 
-    const result = await fetch(baseUrl('/'))
+    it('should return correct context parameters given route is "/articles/:aid?/comments/:cid?"', async () => {
+      const cb = vi.fn()
+      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params) })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
 
-    expect(result.ok).toEqual(false)
-    expect(result.status).toEqual(HttpStatus.NotFound)
-    await expect(result.text()).resolves.toBe('')
+      const result = await fetch(baseUrl('/articles/comments/123'))
+
+      expect(result.ok).toEqual(true)
+      expect(cb).toBeCalledWith({ cid: '123', aid: undefined })
+    })
+
+    it('should return undefined when route is unnamed', async () => {
+      const cb = vi.fn()
+      router.get('/id/(\\d+)', ctx => { cb(ctx.params) })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/id/123'))
+
+      expect(result.ok).toEqual(true)
+      expect(cb).toBeCalledWith(undefined)
+    })
   })
 })
