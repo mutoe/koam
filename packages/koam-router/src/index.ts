@@ -1,4 +1,5 @@
 import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
+import { concatQuery } from 'src/utils/concat-query'
 import { intersection } from 'src/utils/intersection'
 import { PathRegexp } from 'src/utils/path-regexp'
 
@@ -26,12 +27,13 @@ export default class Router {
   url (name: string, params: RouterParams, options?: {query: string | RouterParams}): string {
     const route = this.findRoute({ name })
     if (!route) throw new Error(`Route "${name}" not found`)
-    return route.pathRegexp.toPath(params)
-    console.log(options)
+    const url = route.pathRegexp.toPath(params)
+    return concatQuery(url, options?.query)
   }
 
-  static url (path: string, params: RouterParams): string {
-    return new PathRegexp(path).toPath(params)
+  static url (path: string, params: RouterParams, options?: {query: string | RouterParams}): string {
+    const url = new PathRegexp(path).toPath(params)
+    return concatQuery(url, options?.query)
   }
 
   routes (): Koa.Middleware {

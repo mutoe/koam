@@ -47,8 +47,8 @@ app.use(router.routes())
 - [x] `router.route(name)`
 - [x] `router.url(name, params, [options])` 
   - [ ] `router.url(name, ...paramStrings, [options])`
-  - [ ] `options.query`
+  - [x] `options.query`
 - [x] static method `Router.url(path, params, [options])`
   - [ ] `Router.url(path, ...paramStrings, [options])`
-  - [ ] `options.query`
+  - [x] `options.query`
 - [ ] `router.param(param, middleware)` 
