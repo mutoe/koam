@@ -25,7 +25,7 @@ app.use(router.routes())
   - [ ] `options.exclusive`
   - [ ] `options.host`
 - [x] `router.<get|post|put|patch|delete|all>(path, ...middlewares)`
-  - [ ] Named routes
+  - [x] Named routes
   - [ ] Match host
   - [x] Multiple middlewares
 - Path matching (lightweight `path-to-regexp`)
@@ -44,11 +44,11 @@ app.use(router.routes())
   - [ ] `options.notImplemented`
   - [ ] `options.methodNotAllowed`
 - [ ] `router.redirect(source, destination, [status])`
-- [ ] `router.route(name)`
-- [ ] `router.url(name, params, [options])`
+- [x] `router.route(name)`
+- [x] `router.url(name, params, [options])` 
+  - [ ] `router.url(name, ...paramStrings, [options])`
   - [ ] `options.query`
-- [ ] `router.param(param, middleware)`
-
-Static methods
-
-- [ ] `Router.url(path, params)`
+- [x] static method `Router.url(path, params, [options])`
+  - [ ] `Router.url(path, ...paramStrings, [options])`
+  - [ ] `options.query`
+- [ ] `router.param(param, middleware)` 

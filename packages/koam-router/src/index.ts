@@ -12,9 +12,27 @@ interface Route {
 }
 
 type RouterPath = string | RegExp | (string | RegExp)[]
+export type RouterParams = Partial<Record<string, string | number | boolean>>
+// type RouterUrlOptions = {
+//   query: string | RouterParams
+// }
 
 export default class Router {
   #route: Route[] = []
+
+  // url (name: string, ...params: (string | number | boolean)[]): string
+  // url (name: string, ...params: [...(string | number | boolean)[], RouterUrlOptions]): string
+  // url (name: string, params: RouterParams, options?: {query: string | RouterParams}): string
+  url (name: string, params: RouterParams, options?: {query: string | RouterParams}): string {
+    const route = this.findRoute({ name })
+    if (!route) throw new Error(`Route "${name}" not found`)
+    return route.pathRegexp.toPath(params)
+    console.log(options)
+  }
+
+  static url (path: string, params: RouterParams): string {
+    return new PathRegexp(path).toPath(params)
+  }
 
   routes (): Koa.Middleware {
     return async (ctx, next): Promise<void> => {

@@ -1,3 +1,5 @@
+import type { RouterParams } from '../index'
+
 /**
  * @description You can using https://wangwl.net/static/projects/visualRegex to review your regular express source.
  */
@@ -25,6 +27,24 @@ export class PathRegexp extends RegExp {
     super(regexpString)
     this.path = path
   }
+
+  toPath (params: RouterParams): string {
+    if (!this.path) throw new Error('Route path not have initial value')
+    return this.path
+      .split('/')
+      .map(subpath => {
+        subpath = subpath.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
+          const value = params[name]
+          if (!(name in params) || value === undefined) return substring
+          if (customPattern && !RegExp(customPattern).test(String(value))) return substring
+          return String(value) + modifier
+        })
+        subpath = prefixSlash(subpath)
+        return subpath
+      })
+      .join('')
+      .slice(1)
+  }
 }
 
 function replaceKeyword (s: string): string {
@@ -33,8 +53,8 @@ function replaceKeyword (s: string): string {
 }
 
 function extractNamedParams (s: string): string {
-  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, m3) => {
-    return `(?<${name}>${customPattern ? `(?:${customPattern})` : '[^/#?]+?'})${m3}`
+  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
+    return `(?<${name}>${customPattern ? `(?:${customPattern})` : '[^/#?]+?'})${modifier}`
   })
 }
 

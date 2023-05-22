@@ -256,4 +256,24 @@ describe('# Path RegExp', () => {
       })
     })
   })
+
+  describe('toPath', () => {
+    const cases = [
+      { s: '/:foo/:bar', params: { foo: 'a' }, expected: '/a/:bar' },
+      { s: '/:foo/:bar', params: { foo: 'a', bar: undefined }, expected: '/a/:bar' },
+      { s: '/:foo/:bar', params: { foo: 'a', bar: 'b' }, expected: '/a/b' },
+      { s: '/:foo-:bar', params: { foo: 'a', bar: 'b' }, expected: '/a-b' },
+      { s: '/:foo/:bar', params: { baz: 'a', bar: 'b' }, expected: '/:foo/b' },
+      { s: '/:foo/:bar.png', params: { baz: 'a', bar: 'b' }, expected: '/:foo/b.png' },
+      { s: '/a/:bar', params: { bar: 'b' }, expected: '/a/b' },
+      { s: '/:foo(\\d+)/:bar', params: { foo: 123 }, expected: '/123/:bar' },
+      { s: '/:foo(\\d+)/:bar', params: { foo: 'abc' }, expected: '/:foo(\\d+)/:bar' },
+      { s: '/:foo(abc|def)/:bar', params: { foo: 'abc' }, expected: '/abc/:bar' },
+      { s: '/:foo(abc|def)/:bar', params: { foo: 'abd' }, expected: '/:foo(abc|def)/:bar' },
+    ]
+    it.each(cases)('test string is $s expect $expected', ({ s, params, expected }) => {
+      const result = new PathRegexp(s)
+      expect(result?.toPath(params)).toEqual(expected)
+    })
+  })
 })
