@@ -15,6 +15,24 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 - Built-in body parser middleware
 - Built-in response time middleware
 
+# Usage
+
+```ts
+import Koa from '@mutoe/koam'
+import Router from '@mutoe/koam-router'
+
+const app = new Koa()
+const router = new Router()
+
+router.post('/hello/:name', ctx => {
+  console.log(ctx.request.body) // You can get json request body directly
+  ctx.body = `Hello ${ctx.params.name}!`
+})
+
+app.use(router.routes())
+app.listen(3000, () => console.log(`server is started at 3000...`))
+```
+
 ## Notes
 
 1. Current only support `application/json` type request and response body
