@@ -21,8 +21,7 @@ export class PathRegexp extends RegExp {
         return pattern
       })
       .join('')
-      .slice(1)
-      .replace(/^(.*)$/, '^/?$1/?$')
+      .replace(/^(\/)?(.*)$/, '^/?$2/?$')
 
     super(regexpString)
     this.path = path
@@ -68,7 +67,9 @@ function extractNamedParams (s: string): string {
 
 function prefixSlash (s: string): string {
   if (s.endsWith('?')) return `(?:/${s.slice(0, -1)})?`
+  if (s.endsWith('+') && !s.startsWith('(')) return s.replace(/^(.*?)\+$/, '(?:/$1)+')
   if (s.endsWith('+')) return `/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)}`
+  if (s.endsWith('*') && !s.startsWith('(')) return s.replace(/^(.*?)\*$/, '(?:/$1)*')
   if (s.endsWith('*')) return `(?:/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)})?`
   return `/${s}`
 }

@@ -94,6 +94,59 @@ describe('# Path RegExp', () => {
         expect(result).toEqual(expected)
       })
     })
+
+    describe('when path is "/foo?/bar"', () => {
+      it.each([
+        { s: '/foo/bar', expected: true },
+        { s: '/bar', expected: true },
+
+        { s: '/ba', expected: false },
+        { s: '/foo', expected: false },
+        { s: '/f/bar', expected: false },
+        { s: '/fo/bar', expected: false },
+        { s: '/b', expected: false },
+      ])('when test string is "$s" expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo?/bar').test(s)
+
+        expect(result).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo+/bar"', () => {
+      it.each([
+        { s: '/foo/bar', expected: true },
+        { s: '/foo/foo/bar', expected: true },
+
+        { s: '/bar', expected: false },
+        { s: '/ba', expected: false },
+        { s: '/foo', expected: false },
+        { s: '/f/bar', expected: false },
+        { s: '/fo/bar', expected: false },
+        { s: '/b', expected: false },
+      ])('when test string is "$s" expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo+/bar').test(s)
+
+        expect(result).toEqual(expected)
+      })
+    })
+
+    describe('when path is "/foo*/bar"', () => {
+      it.each([
+        { s: '/bar', expected: true },
+        { s: '/foo/bar', expected: true },
+        { s: '/foo/foo/bar', expected: true },
+
+        { s: '/ba', expected: false },
+        { s: '/foo', expected: false },
+        { s: '/f/bar', expected: false },
+        { s: '/fo/bar', expected: false },
+        { s: '/b', expected: false },
+      ])('when test string is "$s" expect $expected', ({ s, expected }) => {
+        const result = new PathRegexp('/foo*/bar').test(s)
+
+        expect(result).toEqual(expected)
+      })
+    })
   })
 
   describe('named group', () => {
