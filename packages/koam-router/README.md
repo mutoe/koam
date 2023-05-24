@@ -36,7 +36,7 @@ app.use(router.routes())
 - [x] `context.params`
 - [x] `router.routes()`
 - Nested routes
-  - [ ] `router.use([path], ...middlewares)`
+  - [x] `router.use([path], ...middlewares)`
   - [ ] `router.use([path], ...anotherRouter.routes())`
 - [x] `router.prefix(path)`
 - [ ] `router.allowedMethods([options])`

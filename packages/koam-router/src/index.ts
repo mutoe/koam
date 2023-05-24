@@ -1,4 +1,4 @@
-import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
+import Koa, { Context, HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 import { concatQuery } from 'src/utils/concat-query'
 import { PathRegexp } from 'src/utils/path-regexp'
 
@@ -23,6 +23,7 @@ interface RouterOptions {
 export default class Router {
   #routes: Route[] = []
   #prefix: string = ''
+  #middlewares: Koa.Middleware[] = []
 
   constructor (options: RouterOptions = {}) {
     this.#prefix = options.prefix ?? ''
@@ -84,7 +85,7 @@ export default class Router {
       const route = routes.find(it => it.method === method)
       if (!route) return ctx.throw(HttpStatus.MethodNotAllowed)
       ctx.params = path.match(route.pathRegexp)?.groups
-      return compose(route.middlewares)(ctx, next)
+      return compose([...this.#middlewares, ...route.middlewares])(ctx, next)
     }
   }
 
@@ -100,6 +101,36 @@ export default class Router {
       const pathCondition = where.path ? it.pathRegexp.test(where.path) : true
       return nameCondition && methodsCondition && pathCondition
     })
+  }
+
+  use (path: string, ...middlewares: Koa.Middleware[]): this
+  use (...middlewares: Koa.Middleware[]): this
+  use (...args: unknown[]): this {
+    let path: string | undefined
+    let middlewares: Koa.Middleware[]
+    const first = args.at(0)
+    if (typeof first === 'string') {
+      path = first
+      middlewares = args.slice(1) as Koa.Middleware[]
+    } else {
+      middlewares = args.slice() as Koa.Middleware[]
+    }
+
+    if (!path) {
+      this.#middlewares.push(...middlewares)
+      return this
+    }
+
+    this.#middlewares.push(async (ctx: Context, next) => {
+      ctx.assert(path)
+      const matched = new PathRegexp(path).test(ctx.path)
+      if (matched) {
+        return compose(middlewares)(ctx, next)
+      } else {
+        return next()
+      }
+    })
+    return this
   }
 
   all (name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
