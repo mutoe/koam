@@ -1,5 +1,4 @@
 import Koa from '@mutoe/koam'
-import { beforeEach } from 'vitest'
 import Router from '../index'
 
 describe('# Router', () => {
@@ -41,6 +40,14 @@ describe('# Router', () => {
       expect(Router.url('/users/:id', 3, 4)).toEqual('/users/3')
       expect(Router.url('/users/:id', 3, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
       expect(Router.url('/users/:id', 3, 4, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
+    })
+  })
+
+  describe('Constructor prefix argument', () => {
+    it('should generate correct url with prefix', () => {
+      router = new Router({ prefix: '/api' })
+      router.get('hello', '/hello/:name')
+      expect(router.url('hello', { name: 'world' })).toEqual('/api/hello/world')
     })
   })
 })

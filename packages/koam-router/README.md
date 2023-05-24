@@ -21,7 +21,7 @@ app.use(router.routes())
 ## Roadmap
 
 - [x] `new Route([options])`
-  - [ ] `options.prefix`
+  - [x] `options.prefix`
   - [ ] `options.exclusive`
   - [ ] `options.host`
 - [x] `router.<get|post|put|patch|delete|all>(path, ...middlewares)`

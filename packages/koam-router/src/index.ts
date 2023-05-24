@@ -18,8 +18,17 @@ type RouterUrlOptions = {
   query?: string | RouterParams
 }
 
+interface RouterOptions {
+  prefix?: string
+}
+
 export default class Router {
   #route: Route[] = []
+  #prefix: string = ''
+
+  constructor (options: RouterOptions = {}) {
+    this.#prefix = options.prefix ?? ''
+  }
 
   url (name: string, ...params: (string | number)[]): string
   url (name: string, ...params: [...(string | number)[], RouterUrlOptions]): string
@@ -164,10 +173,15 @@ export default class Router {
   }
 
   private register (method: HttpMethod | null, name: string | undefined, path: string | RegExp, middlewares: Koa.Middleware[]): this {
+    const pathRegexp = typeof path === 'string'
+      ? new PathRegexp(this.#prefix + path)
+      : path.source.startsWith('^')
+        ? new PathRegexp(`^${this.#prefix}${path.source.slice(1)}`)
+        : new PathRegexp(path)
     this.#route.push({
       name,
-      path: typeof path === 'string' ? path : path.source,
-      pathRegexp: new PathRegexp(path),
+      path: this.#prefix + (typeof path === 'string' ? path : path.source),
+      pathRegexp,
       middlewares,
       methods: method && [method],
     })
