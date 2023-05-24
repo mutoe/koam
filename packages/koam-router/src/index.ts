@@ -178,6 +178,10 @@ export default class Router {
       : path.source.startsWith('^')
         ? new PathRegexp(`^${this.#prefix}${path.source.slice(1)}`)
         : new PathRegexp(path)
+    if (name) {
+      const existingRoute = this.#route.findIndex(it => it.name === name)
+      existingRoute >= -1 && this.#route.splice(existingRoute, 1)
+    }
     this.#route.push({
       name,
       path: this.#prefix + (typeof path === 'string' ? path : path.source),

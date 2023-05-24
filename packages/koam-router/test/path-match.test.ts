@@ -1,5 +1,5 @@
 import Koa, { HttpStatus } from '@mutoe/koam'
-import { beforeEach } from 'vitest'
+import { beforeEach, describe } from 'vitest'
 import Router from '../src'
 
 describe('Path match', () => {
@@ -132,6 +132,22 @@ describe('Path match', () => {
       expect(result.status).toEqual(200)
       await expect(result.text()).resolves.toEqual('world!')
       expect(cb).toBeCalledWith({ foo: 'bar' })
+    })
+  })
+
+  describe('multiple declare route', () => {
+    it('should rewrite the previous route when using named routes', async () => {
+      router.get('hello', '/hello')
+      router.get('hello', '/new-hello')
+      app.use(router.routes())
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      let result = await fetch(baseUrl('/hello'))
+      expect(result.ok).toBe(false)
+
+      result = await fetch(baseUrl('/new-hello'))
+      expect(result.ok).toBe(true)
     })
   })
 
