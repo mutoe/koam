@@ -1,7 +1,7 @@
 import Koa, { HttpStatus } from '@mutoe/koam'
 import Router from 'src'
 
-describe('Koam router nested routes', () => {
+describe('Nested routes', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
@@ -31,6 +31,22 @@ describe('Koam router nested routes', () => {
       const result = await fetch(baseUrl('/hello'))
       expect(result.ok).toEqual(false)
       expect(result.status).toEqual(HttpStatus.NotFound)
+    })
+  })
+
+  describe('router.prefix(path)', () => {
+    it('should append the new prefix to route', async () => {
+      router = new Router({ prefix: '/api' })
+      router.get('/hello')
+      router.prefix('/apiv2')
+      router.get('/hello')
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      let result = await fetch(baseUrl('/api/hello'))
+      expect(result.ok).toEqual(true)
+      result = await fetch(baseUrl('/apiv2/hello'))
+      expect(result.ok).toEqual(true)
     })
   })
 })

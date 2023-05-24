@@ -21,11 +21,15 @@ interface RouterOptions {
 }
 
 export default class Router {
-  #route: Route[] = []
+  #routes: Route[] = []
   #prefix: string = ''
 
   constructor (options: RouterOptions = {}) {
     this.#prefix = options.prefix ?? ''
+  }
+
+  prefix (prefix: string): void {
+    this.#prefix = prefix
   }
 
   url (name: string, ...params: (string | number)[]): string
@@ -90,7 +94,7 @@ export default class Router {
   }
 
   private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'method'>>): Route[] {
-    return this.#route.filter(it => {
+    return this.#routes.filter(it => {
       const nameCondition = where.name ? it.name === where.name : true
       const methodsCondition = where.method ? it.method === where.method : true
       const pathCondition = where.path ? it.pathRegexp.test(where.path) : true
@@ -190,10 +194,10 @@ export default class Router {
         ? new PathRegexp(`^${this.#prefix}${path.source.slice(1)}`)
         : new PathRegexp(path)
     if (name) {
-      const existingRoute = this.#route.findIndex(it => it.name === name)
-      existingRoute >= -1 && this.#route.splice(existingRoute, 1)
+      const existingRoute = this.#routes.findIndex(it => it.name === name)
+      existingRoute >= -1 && this.#routes.splice(existingRoute, 1)
     }
-    this.#route.push({
+    this.#routes.push({
       name,
       path: this.#prefix + (typeof path === 'string' ? path : path.source),
       pathRegexp,
