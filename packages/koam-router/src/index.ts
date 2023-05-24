@@ -1,13 +1,11 @@
 import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 import { concatQuery } from 'src/utils/concat-query'
-import { intersection } from 'src/utils/intersection'
 import { PathRegexp } from 'src/utils/path-regexp'
 
 interface Route {
   path: string
   pathRegexp: PathRegexp
-  /** If methods is null, will match all method */
-  methods: HttpMethod[] | null
+  method: HttpMethod
   name?: string
   middlewares: Koa.Middleware[]
 }
@@ -47,7 +45,7 @@ export default class Router {
       paramOrOptions.pop()
     }
     params ||= paramOrOptions as (string | number)[]
-    const route = this.findRoute({ name })
+    const route = this.findRoute({ name }).at(0)
     if (!route) throw new Error(`Route "${name}" not found`)
     const url = route.pathRegexp.toPath(params)
     return concatQuery(url, options?.query)
@@ -77,23 +75,24 @@ export default class Router {
   routes (): Koa.Middleware {
     return async (ctx, next): Promise<void> => {
       const { path, method } = ctx
-      const route = this.findRoute({ path })
-      if (!route) return ctx.throw(HttpStatus.NotFound)
-      if (route.methods !== null && !route.methods.includes(method)) return ctx.throw(HttpStatus.MethodNotAllowed)
+      const routes = this.findRoute({ path })
+      if (!routes.length) return ctx.throw(HttpStatus.NotFound)
+      const route = routes.find(it => it.method === method)
+      if (!route) return ctx.throw(HttpStatus.MethodNotAllowed)
       ctx.params = path.match(route.pathRegexp)?.groups
       return compose(route.middlewares)(ctx, next)
     }
   }
 
   route (name: string): Koa.Middleware | undefined {
-    const middlewares = this.findRoute({ name })?.middlewares
+    const middlewares = this.findRoute({ name }).at(0)?.middlewares
     return middlewares && compose(middlewares)
   }
 
-  private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'methods'>>): Route | undefined {
-    return this.#route.find(it => {
+  private findRoute (where: Partial<Pick<Route, 'path' | 'name' | 'method'>>): Route[] {
+    return this.#route.filter(it => {
       const nameCondition = where.name ? it.name === where.name : true
-      const methodsCondition = it.methods ? where.methods ? intersection(it.methods, where.methods).length > 0 : true : true
+      const methodsCondition = where.method ? it.method === where.method : true
       const pathCondition = where.path ? it.pathRegexp.test(where.path) : true
       return nameCondition && methodsCondition && pathCondition
     })
@@ -102,7 +101,19 @@ export default class Router {
   all (name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
   all (path: RouterPath, ...middlewares: Koa.Middleware[]): this
   all (pathOrName: string, ...args: any[]): this {
-    return this.handleVerb(null, pathOrName, ...args)
+    const allMethods = [
+      HttpMethod.GET,
+      HttpMethod.POST,
+      HttpMethod.PUT,
+      HttpMethod.PATCH,
+      HttpMethod.DELETE,
+      HttpMethod.OPTIONS,
+      HttpMethod.HEAD,
+    ]
+    for (const httpMethod of allMethods) {
+      this.handleVerb(httpMethod, pathOrName, ...args)
+    }
+    return this
   }
 
   head (name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
@@ -147,9 +158,9 @@ export default class Router {
     return this.handleVerb(HttpMethod.DELETE, pathOrName, ...args)
   }
 
-  private handleVerb (method: HttpMethod | null, name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
-  private handleVerb (method: HttpMethod | null, path: RouterPath, ...middlewares: Koa.Middleware[]): this
-  private handleVerb (method: HttpMethod | null, ...args: any[]): this {
+  private handleVerb (method: HttpMethod, name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
+  private handleVerb (method: HttpMethod, path: RouterPath, ...middlewares: Koa.Middleware[]): this
+  private handleVerb (method: HttpMethod, ...args: any[]): this {
     let name: string | undefined, path: RouterPath, middlewares: Koa.Middleware[]
     if (typeof args.at(1) === 'string'
       || args.at(1) instanceof RegExp
@@ -172,7 +183,7 @@ export default class Router {
     return this.register(method, name, path, middlewares)
   }
 
-  private register (method: HttpMethod | null, name: string | undefined, path: string | RegExp, middlewares: Koa.Middleware[]): this {
+  private register (method: HttpMethod, name: string | undefined, path: string | RegExp, middlewares: Koa.Middleware[]): this {
     const pathRegexp = typeof path === 'string'
       ? new PathRegexp(this.#prefix + path)
       : path.source.startsWith('^')
@@ -187,7 +198,7 @@ export default class Router {
       path: this.#prefix + (typeof path === 'string' ? path : path.source),
       pathRegexp,
       middlewares,
-      methods: method && [method],
+      method,
     })
     return this
   }

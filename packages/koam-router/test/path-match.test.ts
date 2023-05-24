@@ -80,7 +80,7 @@ describe('Path match', () => {
     })
   })
 
-  describe('route method given null', () => {
+  describe('route method given all', () => {
     it('given method is GET', async () => {
       router.all('/hello', ctx => { ctx.body = 'world!' })
       testAddress = app.use(router.routes())
@@ -148,6 +148,23 @@ describe('Path match', () => {
 
       result = await fetch(baseUrl('/new-hello'))
       expect(result.ok).toBe(true)
+    })
+
+    it('should match correct request method when multiple declare route', async () => {
+      router.get('/hello', ctx => { ctx.body = '1' })
+      router.post('/hello', ctx => { ctx.body = '2' })
+
+      app.use(router.routes())
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      let result = await fetch(baseUrl('/hello'))
+      expect(result.status).toBe(HttpStatus.Ok)
+      expect(await result.text()).toEqual('1')
+
+      result = await fetch(baseUrl('/hello'), { method: 'POST' })
+      expect(result.status).toBe(HttpStatus.Ok)
+      expect(await result.text()).toEqual('2')
     })
   })
 
