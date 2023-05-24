@@ -1,8 +1,13 @@
 import { spawn } from 'node:child_process'
 import { Stream } from 'node:stream'
 import Koa, { AppError, Context, HttpStatus, noop } from '../src'
-import { setUserToStateMiddleware } from './utils/middlewares'
 import { mockConsole } from './utils/mock-console'
+
+declare global {
+  interface KoaState {
+    userId?: string
+  }
+}
 
 describe('# context', () => {
   let app: InstanceType<typeof Koa>
@@ -25,14 +30,16 @@ describe('# context', () => {
 
     it('should can be expanded when add properties to state', async () => {
       testAddress = app
-        .use(setUserToStateMiddleware('abc'))
-        .use(cb)
+        .use((ctx, next) => {
+          ctx.state.userId = 'abc'
+          return next()
+        })
+        .use(ctx => { cb(ctx.state.userId) })
         .listen(0).address()
 
       await fetch(baseUrl())
 
-      const ctx = cb.mock.calls[0][0] as Context
-      expect(ctx.state.userId).toEqual('abc')
+      expect(cb).toBeCalledWith('abc')
     })
   })
 
