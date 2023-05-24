@@ -66,6 +66,8 @@ function extractNamedParams (s: string): string {
 }
 
 function prefixSlash (s: string): string {
+  if (s === '*') return '.*'
+  if (s === '+') return '.+'
   if (s.endsWith('?')) return `(?:/${s.slice(0, -1)})?`
   if (s.endsWith('+') && !s.startsWith('(')) return s.replace(/^(.*?)\+$/, '(?:/$1)+')
   if (s.endsWith('+')) return `/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)}`

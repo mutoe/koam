@@ -252,6 +252,61 @@ describe('# Path RegExp', () => {
     })
   })
 
+  describe('modifier only', () => {
+    it.each([
+      { s: '/foo', expected: true },
+      { s: '/foo/bar', expected: true },
+      { s: '/foo/foo', expected: true },
+      { s: '/foo/bar/baz', expected: true },
+
+      { s: '/bar', expected: false },
+      { s: '/f', expected: false },
+      { s: '/fo', expected: false },
+    ])('should return $expected when path is $s with pattern "/foo/*"', ({ s, expected }) => {
+      expect(new PathRegexp('/foo/*').test(s)).toEqual(expected)
+    })
+
+    it.each([
+      { s: '/foo/bar', expected: true },
+      { s: '/foo/foo/bar', expected: true },
+
+      { s: '/foo/bar/baz', expected: false },
+      { s: '/foo', expected: false },
+      { s: '/bar', expected: false },
+      { s: '/f', expected: false },
+      { s: '/fo', expected: false },
+    ])('should return $expected when path is $s with pattern "/foo/*/bar"', ({ s, expected }) => {
+      expect(new PathRegexp('/foo/*/bar').test(s)).toEqual(expected)
+    })
+
+    it.each([
+      { s: '/foo/bar', expected: true },
+      { s: '/foo/foo', expected: true },
+      { s: '/foo/bar/baz', expected: true },
+
+      { s: '/foo', expected: false },
+      { s: '/bar', expected: false },
+      { s: '/f', expected: false },
+      { s: '/fo', expected: false },
+    ])('should return $expected when path is $s with pattern "/foo/+"', ({ s, expected }) => {
+      expect(new PathRegexp('/foo/+').test(s)).toEqual(expected)
+    })
+
+    it.each([
+      { s: '/foo/foo/bar', expected: true },
+      { s: '/foo/foo/bar/bar', expected: true },
+
+      { s: '/foo/bar', expected: false },
+      { s: '/foo/foo', expected: false },
+      { s: '/foo', expected: false },
+      { s: '/bar', expected: false },
+      { s: '/f', expected: false },
+      { s: '/fo', expected: false },
+    ])('should return $expected when path is $s with pattern "/foo/+/bar"', ({ s, expected }) => {
+      expect(new PathRegexp('/foo/+/bar').test(s)).toEqual(expected)
+    })
+  })
+
   describe('custom match pattern', () => {
     describe('when path is "/foo/:bar(\\d+)"', () => {
       it.each([
