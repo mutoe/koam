@@ -113,4 +113,47 @@ describe('Koam router basic feature', () => {
       expect(result.status).toEqual(HttpStatus.Ok)
     })
   })
+
+  describe('redirect', () => {
+    it('should set response header to destination url', async () => {
+      router.redirect('/login', '/sign-in')
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const response = await fetch(baseUrl('/login'), {
+        redirect: 'manual',
+      })
+      expect(response.ok).toBe(false)
+      expect(response.status).toEqual(HttpStatus.MovedPermanently)
+      expect(response.headers.get('Location')).toEqual('/sign-in')
+    })
+
+    it('should set response header to destination named route path', async () => {
+      router.post('sign-in', '/sign-in-url')
+      router.redirect('/login', 'sign-in')
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const response = await fetch(baseUrl('/login'), {
+        method: 'POST',
+        redirect: 'manual',
+      })
+      expect(response.ok).toBe(false)
+      expect(response.status).toEqual(HttpStatus.MovedPermanently)
+      expect(response.headers.get('Location')).toEqual('/sign-in-url')
+    })
+
+    it('should set response status to special assigned', async () => {
+      router.redirect('/login', '/sign-in', HttpStatus.PermanentRedirect)
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const response = await fetch(baseUrl('/login'), {
+        redirect: 'manual',
+      })
+      expect(response.ok).toBe(false)
+      expect(response.status).toEqual(HttpStatus.PermanentRedirect)
+      expect(response.headers.get('Location')).toEqual('/sign-in')
+    })
+  })
 })

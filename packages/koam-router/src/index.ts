@@ -150,6 +150,15 @@ export default class Router {
     return this
   }
 
+  redirect (path: string, destination: string, status: HttpStatus.Redirect = HttpStatus.MovedPermanently): this {
+    return this.all(path, (ctx, next) => {
+      const target = this.findRoute({ name: destination })?.at(0)?.path ?? destination
+      ctx.status = status
+      ctx.redirect(target)
+      return next()
+    })
+  }
+
   all (name: string, path: RouterPath, ...middlewares: Koa.Middleware[]): this
   all (path: RouterPath, ...middlewares: Koa.Middleware[]): this
   all (pathOrName: string, ...args: any[]): this {

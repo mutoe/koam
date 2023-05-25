@@ -43,7 +43,7 @@ app.use(router.routes())
   - [ ] `options.throw`
   - [ ] `options.notImplemented`
   - [ ] `options.methodNotAllowed`
-- [ ] `router.redirect(source, destination, [status])`
+- [x] `router.redirect(source, destination, [status])`
 - [x] `router.route(name)`
 - [x] `router.url(name, params, [options])` 
   - [x] `router.url(name, ...paramStrings, [options])`
