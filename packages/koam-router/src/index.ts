@@ -150,6 +150,20 @@ export default class Router {
     return this
   }
 
+  /**
+   * You can get the parameter value from `ctx.params.paramName`
+   */
+  param (paramName: string, ...middlewares: Koa.Middleware[]): this {
+    this.#middlewares.push(async (ctx, next) => {
+      if (paramName in (ctx.params || {})) {
+        return compose(middlewares)(ctx, next)
+      } else {
+        return next()
+      }
+    })
+    return this
+  }
+
   redirect (path: string, destination: string, status: HttpStatus.Redirect = HttpStatus.MovedPermanently): this {
     return this.all(path, (ctx, next) => {
       const target = this.findRoute({ name: destination })?.at(0)?.path ?? destination

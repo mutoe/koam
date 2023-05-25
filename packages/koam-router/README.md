@@ -51,4 +51,4 @@ app.use(router.routes())
 - [x] static method `Router.url(path, params, [options])`
   - [x] `Router.url(path, ...paramStrings, [options])`
   - [x] `options.query`
-- [ ] `router.param(param, middleware)` 
+- [x] `router.param(param, ...middlewares)` 
