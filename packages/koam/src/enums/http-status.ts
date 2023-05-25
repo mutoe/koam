@@ -13,6 +13,9 @@ export enum HttpStatus {
   Found = 302,
   SeeOther = 303,
   NotModified = 304,
+  UseProxy = 305,
+  TemporaryRedirect = 307,
+  PermanentRedirect = 308,
 
   BadRequest = 400,
   Unauthorized = 401,
@@ -36,6 +39,11 @@ export enum HttpStatus {
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace HttpStatus {
+  export type Redirect =
+      | HttpStatus.MultipleChoices | HttpStatus.SeeOther
+      | HttpStatus.Found | HttpStatus.MovedPermanently
+      | HttpStatus.TemporaryRedirect | HttpStatus.PermanentRedirect
+
   export function is2xxSuccess (status: HttpStatus): boolean {
     return status >= 200 && status < 300
   }
