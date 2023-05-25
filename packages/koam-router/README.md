@@ -39,7 +39,7 @@ app.use(router.routes())
   - [x] `router.use([path], ...middlewares)`
   - [ ] `router.use([path], ...anotherRouter.routes())`
 - [x] `router.prefix(path)`
-- [ ] `router.allowedMethods([options])`
+- [x] `router.allowedMethods([options])`
   - [ ] `options.throw`
   - [ ] `options.notImplemented`
   - [ ] `options.methodNotAllowed`

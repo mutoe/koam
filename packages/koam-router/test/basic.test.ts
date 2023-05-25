@@ -1,5 +1,5 @@
-import Koa from '@mutoe/koam'
-import Router from '../src'
+import Koa, { HttpStatus } from '@mutoe/koam'
+import Router from 'src'
 
 describe('Koam router basic feature', () => {
   let app = new Koa()
@@ -57,6 +57,60 @@ describe('Koam router basic feature', () => {
 
       expect(result.ok).toEqual(true)
       expect(cb).toBeCalledWith(undefined)
+    })
+  })
+
+  describe('Allowed methods', () => {
+    it('should return 404 when method not matched', async () => {
+      router.post('/hello', ctx => { ctx.body = 'world!' })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/hello'))
+
+      expect(result.status).toEqual(HttpStatus.NotFound)
+      expect(result.headers.get('Allow')).toBeNull()
+    })
+
+    it('should return 405 when method not matched', async () => {
+      router.post('/hello', ctx => { ctx.body = 'world!' })
+      router.patch('/hello', ctx => { ctx.body = 'world!' })
+      testAddress = app
+        .use(router.routes())
+        .use(router.allowedMethods())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/hello'))
+
+      expect(result.status).toEqual(HttpStatus.MethodNotAllowed)
+      expect(result.headers.get('Allow')).toEqual('POST, PATCH')
+    })
+
+    it('should return 405 when method not matched and allowedMethods before using routes', async () => {
+      router.post('/hello', ctx => { ctx.body = 'world!' })
+      router.patch('/hello', ctx => { ctx.body = 'world!' })
+      testAddress = app
+        .use(router.allowedMethods())
+        .use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/hello'))
+
+      expect(result.status).toEqual(HttpStatus.MethodNotAllowed)
+      expect(result.headers.get('Allow')).toEqual('POST, PATCH')
+    })
+
+    it('should return 200 when method matched', async () => {
+      router.get('/hello', ctx => { ctx.body = 'world!' })
+      router.patch('/hello', ctx => { ctx.body = 'world!' })
+      testAddress = app
+        .use(router.routes())
+        .use(router.allowedMethods())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/hello'))
+
+      expect(result.status).toEqual(HttpStatus.Ok)
     })
   })
 })

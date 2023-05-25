@@ -2,7 +2,7 @@ import Koa, { Context, HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 import { concatQuery } from 'src/utils/concat-query'
 import { PathRegexp } from 'src/utils/path-regexp'
 
-interface Route {
+export interface Route {
   path: string
   pathRegexp: PathRegexp
   method: HttpMethod
@@ -24,6 +24,7 @@ export default class Router {
   #routes: Route[] = []
   #prefix: string = ''
   #middlewares: Koa.Middleware[] = []
+  #allowedMethods = false
 
   constructor (options: RouterOptions = {}) {
     this.#prefix = options.prefix ?? ''
@@ -80,12 +81,21 @@ export default class Router {
   routes (): Koa.Middleware {
     return async (ctx, next): Promise<void> => {
       const { path, method } = ctx
-      const routes = this.findRoute({ path })
-      if (!routes.length) return ctx.throw(HttpStatus.NotFound)
+      const routes: Route[] = this.findRoute({ path })
       const route = routes.find(it => it.method === method)
-      if (!route) return ctx.throw(HttpStatus.MethodNotAllowed)
-      ctx.params = path.match(route.pathRegexp)?.groups
-      return compose([...this.#middlewares, ...route.middlewares])(ctx, next)
+      if (route) {
+        ctx.params = path.match(route.pathRegexp)?.groups
+        return compose([...this.#middlewares, ...route.middlewares])(ctx, next)
+      }
+
+      await next()
+
+      if (!HttpStatus.isError(ctx.status)) {
+        if (!routes.length || !this.#allowedMethods) return ctx.throw(HttpStatus.NotFound)
+        const allowed = routes.map(it => it.method)
+        ctx.set('Allow', allowed.join(', '))
+        ctx.throw(HttpStatus.MethodNotAllowed)
+      }
     }
   }
 
@@ -101,6 +111,13 @@ export default class Router {
       const pathCondition = where.path ? it.pathRegexp.test(where.path) : true
       return nameCondition && methodsCondition && pathCondition
     })
+  }
+
+  allowedMethods (): Koa.Middleware {
+    return async (ctx, next) => {
+      this.#allowedMethods = true
+      return next()
+    }
   }
 
   use (path: string, ...middlewares: Koa.Middleware[]): this
