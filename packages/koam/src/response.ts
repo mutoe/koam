@@ -95,7 +95,7 @@ export default class Response {
   redirect (url: 'back' | string, alt?: string): void {
     if (url === 'back') url = this.request.get('referer') || alt || '/'
     this.set('location', encodeURI(url))
-    this.status = HttpStatus.Found
+    if (this.status < 300 || this.status >= 400) this.status = HttpStatus.Found
     this.type = 'text/plain'
     this.body = `Redirecting to ${url} ...`
   }

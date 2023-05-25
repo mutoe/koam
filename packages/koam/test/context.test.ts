@@ -321,6 +321,30 @@ describe('# context', () => {
       expect(res.status).toEqual(302)
       expect(res.headers.get('location')).toEqual(referer)
     })
+
+    it('should not override redirect status before manual set status', async () => {
+      testAddress = app
+        .use((ctx, next) => { ctx.status = HttpStatus.MovedPermanently; return next() })
+        .use(ctx => ctx.redirect('/foo'))
+        .listen().address()
+
+      const res = await fetch(baseUrl(), { redirect: 'manual' })
+
+      expect(res.status).toEqual(HttpStatus.MovedPermanently)
+      expect(res.headers.get('location')).toEqual('/foo')
+    })
+
+    it('should not override redirect status after manual set status', async () => {
+      testAddress = app
+        .use((ctx, next) => { ctx.redirect('/foo'); return next() })
+        .use((ctx, next) => { ctx.status = HttpStatus.MovedPermanently; return next() })
+        .listen().address()
+
+      const res = await fetch(baseUrl(), { redirect: 'manual' })
+
+      expect(res.status).toEqual(HttpStatus.MovedPermanently)
+      expect(res.headers.get('location')).toEqual('/foo')
+    })
   })
 
   describe('throw', () => {
