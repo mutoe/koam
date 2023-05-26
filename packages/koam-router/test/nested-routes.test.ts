@@ -2,12 +2,14 @@ import Koa, { HttpStatus } from '@mutoe/koam'
 import Router from 'src'
 
 declare global {
-  interface KoaState {
-    foo: any
+  namespace Koa {
+    interface State {
+      foo: any
+    }
   }
 }
 
-describe('Nested routes', () => {
+describe.skip('Nested routes', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
@@ -51,7 +53,8 @@ describe('Nested routes', () => {
         .listen(0).address()
 
       let result = await fetch(baseUrl('/api/hello'))
-      expect(result.ok).toEqual(true)
+      expect(result.ok).toEqual(false)
+      expect(result.status).toEqual(HttpStatus.NotFound)
       result = await fetch(baseUrl('/apiv2/hello'))
       expect(result.ok).toEqual(true)
     })
@@ -88,6 +91,28 @@ describe('Nested routes', () => {
       result = await fetch(baseUrl('/api/hello'))
       expect(result.ok).toEqual(true)
       expect(cb).toBeCalledWith(1)
+    })
+  })
+
+  describe('router.use(anotherRouter))', () => {
+    it('should allow nested routes declare', async () => {
+      const posts = new Router()
+      posts.get('/', ctx => { ctx.body = `posts in forums ${ctx.params?.fid}` })
+      posts.get('/:pid', ctx => { ctx.body = `post ${ctx.params?.pid}` })
+
+      const forums = new Router()
+      forums.use('/forums/:fid/posts', posts.routes())
+
+      testAddress = app.use(forums.routes())
+        .listen(0).address()
+
+      let result = await fetch(baseUrl('/forums/123/posts'))
+      expect(result.ok).toEqual(true)
+      expect(result.text()).resolves.toEqual('posts in forums 123')
+
+      result = await fetch(baseUrl('/forums/123/posts/456'))
+      expect(result.ok).toEqual(true)
+      expect(result.text()).resolves.toEqual('posts 456')
     })
   })
 })

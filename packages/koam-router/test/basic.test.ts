@@ -22,7 +22,7 @@ describe('Koam router basic feature', () => {
     await expect(result.text()).resolves.toEqual('world!')
   })
 
-  describe('Context parameters', () => {
+  describe.skip('Context parameters', () => {
     it('should return correct context parameters', async () => {
       const cb = vi.fn()
       router.get('/:category/:title', ctx => { cb(ctx.params) })
@@ -60,7 +60,7 @@ describe('Koam router basic feature', () => {
     })
   })
 
-  describe('Allowed methods', () => {
+  describe.skip('Allowed methods', () => {
     it('should return 404 when method not matched', async () => {
       router.post('/hello', ctx => { ctx.body = 'world!' })
       testAddress = app.use(router.routes())

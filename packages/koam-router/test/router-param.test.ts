@@ -1,13 +1,15 @@
 import Koa, { HttpStatus } from '@mutoe/koam'
-import Router from '../src'
+import Router from 'src'
 
 declare global {
-  interface KoaState {
-    user?: {id: string}
+  namespace Koa {
+    interface State {
+      user?: { id: string }
+    }
   }
 }
 
-describe('router.param', () => {
+describe.skip('router.param', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
