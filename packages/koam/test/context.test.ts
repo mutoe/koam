@@ -4,8 +4,10 @@ import Koa, { AppError, Context, HttpStatus, noop } from '../src'
 import { mockConsole } from './utils/mock-console'
 
 declare global {
-  interface KoaState {
-    userId?: string
+  namespace Koa {
+    interface State {
+      userId?: string
+    }
   }
 }
 

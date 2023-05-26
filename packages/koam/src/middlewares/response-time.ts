@@ -1,20 +1,25 @@
 import Koa from '../index'
 
 declare global {
-  interface KoaState {
-    /**
-     * The time when the program received the client request.
-     * @format ISO-8601
-     */
-    requestDateTime?: string
+  namespace Koa {
+    interface State {
+      /**
+       * The time when the program received the client request.
+       * @format ISO-8601
+       */
+      requestDateTime?: string
 
-    addResponseTimeHeader?: boolean
+      /**
+       * Determine add `X-Response-Time` in response header
+       */
+      addResponseTimeHeader?: boolean
 
-    /**
-     * Indicates how long the program takes to process the request.
-     * @format milliseconds
-     */
-    respondTime?: number
+      /**
+       * Indicates how long the program takes to process the request.
+       * @format milliseconds
+       */
+      respondTime?: number
+    }
   }
 }
 

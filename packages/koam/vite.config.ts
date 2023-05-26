@@ -19,6 +19,9 @@ export default defineConfig({
     minify: false,
     rollupOptions: {
       external: [/^node:/],
+      output: {
+        exports: 'named',
+      },
     },
   },
   test: {
