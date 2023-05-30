@@ -22,7 +22,7 @@ describe('Koam router basic feature', () => {
     await expect(result.text()).resolves.toEqual('world!')
   })
 
-  describe.skip('Context parameters', () => {
+  describe('Context parameters', () => {
     it('should return correct context parameters', async () => {
       const cb = vi.fn()
       router.get('/:category/:title', ctx => { cb(ctx.params) })
@@ -47,7 +47,19 @@ describe('Koam router basic feature', () => {
       expect(cb).toBeCalledWith({ cid: '123', aid: undefined })
     })
 
-    it('should return undefined when route is unnamed', async () => {
+    it('should decode URI string in params result', async () => {
+      const cb = vi.fn()
+      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params) })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/articles/comments/test%3F'))
+
+      expect(result.ok).toEqual(true)
+      expect(cb).toBeCalledWith({ cid: 'test?', aid: undefined })
+    })
+
+    it('should return empty object when route is unnamed', async () => {
       const cb = vi.fn()
       router.get('/id/(\\d+)', ctx => { cb(ctx.params) })
       testAddress = app.use(router.routes())
@@ -56,7 +68,7 @@ describe('Koam router basic feature', () => {
       const result = await fetch(baseUrl('/id/123'))
 
       expect(result.ok).toEqual(true)
-      expect(cb).toBeCalledWith(undefined)
+      expect(cb).toBeCalledWith({})
     })
   })
 

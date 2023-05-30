@@ -5,10 +5,13 @@ import type { RouterParams } from '../index'
  */
 export class PathRegexp extends RegExp {
   path?: string
+  paramNames: string[]
 
   constructor (path: string | RegExp) {
+    const paramNames: string[] = []
     if (path instanceof RegExp) {
       super(path)
+      this.paramNames = []
       return
     }
     const regexpString = path
@@ -16,7 +19,7 @@ export class PathRegexp extends RegExp {
       .filter(Boolean)
       .map(pattern => {
         pattern = replaceKeyword(pattern)
-        pattern = extractNamedParams(pattern)
+        pattern = extractNamedParams(pattern, paramNames)
         pattern = prefixSlash(pattern)
         return pattern
       })
@@ -24,6 +27,7 @@ export class PathRegexp extends RegExp {
       .replace(/^(\/)?(.*)$/, '^/?$2/?$')
 
     super(regexpString)
+    this.paramNames = paramNames
     this.path = path
   }
 
@@ -59,12 +63,12 @@ function replaceKeyword (s: string): string {
   return s.replace(/\.(?!\\)/, '\\.')
 }
 
-function extractNamedParams (s: string): string {
+function extractNamedParams (s: string, paramNames: string[] = []): string {
   return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
+    paramNames.push(name)
     return `(?<${name}>${customPattern ? `(?:${customPattern})` : '[^/#?]+?'})${modifier}`
   })
 }
-
 function prefixSlash (s: string): string {
   if (s === '*') return '.*'
   if (s === '+') return '.+'

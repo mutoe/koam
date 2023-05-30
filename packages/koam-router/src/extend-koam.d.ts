@@ -5,10 +5,17 @@ import Router from './router'
 
 declare module '@mutoe/koam' {
   interface Context {
+    /** Alias for context.request.params */
     params?: Record<string, string>
+    /** captured named route names */
+    captures?: string[]
     router?: Router
     /** Only path matched routes */
     routes?: Route[]
+  }
+
+  interface Request {
+    params?: Record<string, string>
   }
 }
 

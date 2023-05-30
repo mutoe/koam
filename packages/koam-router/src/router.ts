@@ -96,10 +96,26 @@ export default class Router {
       if (!matched.hit) return next()
 
       const matchedRoutes = matched.pathAndMethod
-      const mostSpecificRoute = matchedRoutes.at(-1)!
+      // const mostSpecificRoute = matchedRoutes.at(-1)!
 
-      // ctx.params = path.match(matchedRoutes.pathRegexp)?.groups
-      return compose([...this.#middlewares, ...mostSpecificRoute.middlewares])(ctx, next)
+      // eslint-disable-next-line unicorn/no-array-reduce
+      const routerMiddlewares = matchedRoutes.reduce<Koa.Middleware[]>((middlewares, route) => {
+        middlewares.push((ctx, next) => {
+          ctx.captures = route.captures(path, ctx.captures)
+          ctx.params = ctx.request.params = route.params(path, ctx.captures, ctx.params)
+          // ctx.routerPath = route.path
+          // ctx.routerName = route.name
+          // ctx._matchedRoute = route.path
+          // if (route.name) {
+          //   ctx._matchedRouteName = route.name
+          // }
+          return next()
+        })
+
+        return middlewares.concat(route.middlewares)
+      }, [])
+
+      return compose(routerMiddlewares)(ctx, next)
     }
     dispatch.router = this
     return dispatch
