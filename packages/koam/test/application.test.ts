@@ -1,5 +1,5 @@
 import * as http from 'node:http'
-import Koa, { Context } from '../src'
+import Koa, { Context, HttpStatus } from '../src'
 import { mockConsole } from './utils/mock-console'
 
 describe('# application', () => {
@@ -41,6 +41,37 @@ describe('# application', () => {
       await expect(res.text()).resolves.toEqual('Hello')
 
       server.close()
+    })
+  })
+
+  describe('default status', () => {
+    it('should get NotFound when no body set', async () => {
+      testAddress = app
+        .use(ctx => console.log(ctx.body))
+        .listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.ok).toBe(false)
+      expect(res.status).toEqual(HttpStatus.NotFound)
+    })
+
+    it.each([
+      { body: undefined, status: HttpStatus.NoContent },
+      { body: null, status: HttpStatus.NoContent },
+      { body: '', status: HttpStatus.Ok },
+      { body: false, status: HttpStatus.Ok },
+      { body: 'Hello', status: HttpStatus.Ok },
+      { body: { foo: 'bar' }, status: HttpStatus.Ok },
+    ])('should get $status when body set to "$body"', async ({ body, status }) => {
+      testAddress = app
+        .use(ctx => { ctx.body = body })
+        .listen().address()
+
+      const res = await fetch(baseUrl())
+
+      expect(res.ok).toBe(true)
+      expect(res.status).toEqual(status)
     })
   })
 

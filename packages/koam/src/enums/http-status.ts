@@ -7,13 +7,14 @@ export enum HttpStatus {
   Ok = 200,
   Created = 201,
   Accepted = 202,
+  NonAuthoritativeInformation = 203,
+  NoContent = 204,
 
   MultipleChoices = 300,
   MovedPermanently = 301,
   Found = 302,
   SeeOther = 303,
   NotModified = 304,
-  UseProxy = 305,
   TemporaryRedirect = 307,
   PermanentRedirect = 308,
 

@@ -11,6 +11,7 @@ export default class Response {
   readonly context!: Context
   readonly request!: Request
 
+  #explicitStatus = false
   #res: http.ServerResponse
   #body: any
 
@@ -21,7 +22,13 @@ export default class Response {
   get socket (): net.Socket | null { return this.#res.socket }
 
   get status (): HttpStatus { return this.#res.statusCode }
-  set status (val: HttpStatus) { this.#res.statusCode = val }
+  set status (val: HttpStatus) {
+    if (this.headerSent) return
+
+    this.#explicitStatus = true
+    this.#res.statusCode = val
+  }
+
   get message (): string { return this.#res.statusMessage }
   set message (val: string) { this.#res.statusMessage = val }
   get length (): number | undefined {
@@ -70,15 +77,19 @@ export default class Response {
   }
 
   get body (): any { return this.#body }
-  set body (val: any) {
-    if (typeof val === 'object') {
+  set body (body: any) {
+    if (typeof body === 'object') {
       this.type = 'application/json'
-    } else if (typeof val === 'string' && val.startsWith('<')) {
+    } else if (typeof body === 'string' && body.startsWith('<')) {
       this.type = 'text/html'
     } else {
       this.type = 'text/plain'
     }
-    this.#body = val
+    this.#body = body
+    if (!this.#explicitStatus) {
+      if (body === null || body === undefined) this.#res.statusCode = HttpStatus.NoContent
+      else this.#res.statusCode = HttpStatus.Ok
+    }
   }
 
   get type (): string {

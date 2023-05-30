@@ -146,7 +146,7 @@ export default class Application implements Koa.Config {
     } else if (!(error instanceof Error)) {
       error = new Error(error?.toString())
     }
-    if (!HttpStatus.isError(this.context.status)) {
+    if (!HttpStatus.isError(this.context.status) || this.context?.status === HttpStatus.NotFound) {
       this.context.status = HttpStatus.InternalServerError
     }
     assert.ok(error instanceof Error)

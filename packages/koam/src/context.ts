@@ -35,6 +35,8 @@ export default class Context {
     this.request.app = this.response.app = this.app
     // @ts-expect-error lazy init property
     this.request.context = this.response.context = this
+
+    this.res.statusCode = HttpStatus.NotFound
   }
 
   get socket () { return this.request.socket }
