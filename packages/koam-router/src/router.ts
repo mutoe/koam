@@ -96,25 +96,18 @@ export default class Router {
       const matched = this.match(path, method)
       ctx.pathMatchedRoutes ||= []
       ctx.pathMatchedRoutes.push(...matched.path)
-      // ctx.routes = [...ctx.routes || [], ...matched.path]
-      // ctx.router = this
+      ctx.routes = [...ctx.routes || [], ...matched.path]
+      ctx.router = this
 
       if (!matched.hit) return next()
 
       const matchedRoutes = matched.pathAndMethod
-      // const mostSpecificRoute = matchedRoutes.at(-1)!
 
       // eslint-disable-next-line unicorn/no-array-reduce
       const routerMiddlewares = matchedRoutes.reduce<Koa.Middleware[]>((middlewares, route) => {
         middlewares.push((ctx, next) => {
           ctx.captures = route.captures(path, ctx.captures)
           ctx.params = ctx.request.params = route.params(path, ctx.captures, ctx.params)
-          // ctx.routerPath = route.path
-          // ctx.routerName = route.name
-          // ctx._matchedRoute = route.path
-          // if (route.name) {
-          //   ctx._matchedRouteName = route.name
-          // }
           return next()
         })
 
@@ -173,13 +166,20 @@ export default class Router {
     }
   }
 
-  // TODO support array as path
+  use (path: string[], ...middlewares: Koa.Middleware[]): this
   use (path: string, ...middlewares: Koa.Middleware[]): this
   use (...middlewares: Koa.Middleware[]): this
+  // eslint-disable-next-line max-statements
   use (...args: unknown[]): this {
     let path: string | undefined
     let middlewares: Koa.Middleware[]
     const first = args.at(0)
+    if (Array.isArray(first) && typeof first.at(0) === 'string') {
+      for (const path of first) {
+        this.use(path, ...args.slice(1) as Koa.Middleware[])
+      }
+      return this
+    }
     if (typeof first === 'string') {
       path = first
       middlewares = args.slice(1) as Koa.Middleware[]

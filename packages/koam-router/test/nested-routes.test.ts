@@ -108,6 +108,17 @@ describe('Nested routes', () => {
       expect(result.ok).toEqual(true)
       expect(cb).toBeCalledWith(2)
     })
+
+    it('should support array as path passed in use method', async () => {
+      router.get('/foo', (ctx, next) => { ctx.body = 'foo'; return next() })
+      router.use(['/foo', '/bar'], (ctx) => { ctx.body = 'bar' })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      const result = await fetch(baseUrl('/foo'))
+      expect(result.ok).toEqual(true)
+      await expect(result.text()).resolves.toEqual('bar')
+    })
   })
 
   describe('router.use(anotherRouter))', () => {
