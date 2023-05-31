@@ -17,7 +17,6 @@ interface RouterOptions {
 
 export default class Router {
   #routes: Route[] = []
-  // #prefix: string = ''
   #middlewares: Koa.Middleware[] = []
   #params: Record<string, Koa.Middleware> = {}
 
@@ -35,12 +34,15 @@ export default class Router {
 
   constructor (options: RouterOptions = {}) {
     this.options = options
-    // this.#prefix = options.prefix ?? ''
   }
 
-  prefix (prefix: string): void {
-    console.log(prefix)
-    // this.#prefix = prefix
+  prefix (prefix: string): this {
+    prefix = prefix.replace(/\/$/, '')
+    this.options.prefix = prefix
+    for (const route of this.#routes) {
+      route.setPrefix(prefix)
+    }
+    return this
   }
 
   url (name: string, ...params: (string | number)[]): string
@@ -262,12 +264,12 @@ export default class Router {
       return this
     }
 
-    const route = new Route(
-      typeof path === 'string' ? path : path.source,
-      methods,
-      middlewares,
-      { name },
-    )
+    const pathString = typeof path === 'string' ? path : path.source
+    const route = new Route(pathString, methods, middlewares, {
+      name,
+      prefix: this.options.prefix || '',
+    })
+
     for (const [paramName, middleware] of Object.entries(this.#params)) {
       route.param(paramName, middleware)
     }

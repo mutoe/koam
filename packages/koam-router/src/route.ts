@@ -4,6 +4,7 @@ import { safeDecodeURIComponent } from './utils/safe-decode-uri-component'
 
 interface RouteOptions {
   name?: string
+  prefix: string
 }
 
 export default class Route {
@@ -17,14 +18,15 @@ export default class Route {
 
   constructor (path: string, methods: HttpMethod[], middleware: Koa.Middleware, options?: RouteOptions)
   constructor (path: string, methods: HttpMethod[], middlewares: Koa.Middleware[], options?: RouteOptions)
-  constructor (path: string, methods: HttpMethod[], middlewares: Koa.Middleware | Koa.Middleware[], options: RouteOptions = {}) {
-    this.options = options
+  constructor (path: string, methods: HttpMethod[], middlewares: Koa.Middleware | Koa.Middleware[], options?: RouteOptions) {
+    this.options = options || { prefix: '' }
     this.path = path
-    this.name = options.name
+    this.name = this.options.name
     this.pathRegexp = new PathRegexp(path)
     this.paramNames = this.pathRegexp.paramNames
     this.methods = methods
     this.middlewares = Array.isArray(middlewares) ? middlewares : [middlewares]
+    this.options.prefix && this.setPrefix(this.options.prefix)
   }
 
   match (path: string): boolean {
@@ -63,6 +65,15 @@ export default class Route {
         }
         return false
       })
+    }
+    return this
+  }
+
+  setPrefix (prefix: string): this {
+    if (this.path) {
+      this.path = this.path === '/' ? prefix : `${prefix}${this.path}`
+      this.pathRegexp = new PathRegexp(this.path)
+      this.paramNames = this.pathRegexp.paramNames
     }
     return this
   }

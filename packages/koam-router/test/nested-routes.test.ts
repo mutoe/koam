@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-describe.skip('Nested routes', () => {
+describe('Nested routes', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
@@ -44,23 +44,36 @@ describe.skip('Nested routes', () => {
   })
 
   describe('router.prefix(path)', () => {
-    it('should append the new prefix to route', async () => {
-      router = new Router({ prefix: '/api' })
-      router.get('/hello')
-      router.prefix('/apiv2')
-      router.get('/hello')
+    it('should prepend the new prefix when call prefix after define route', async () => {
+      router = new Router({ prefix: '/v1' })
+      router.get('/hello', ctx => { ctx.body = '' })
+      router.prefix('/v2')
       testAddress = app.use(router.routes())
         .listen(0).address()
 
-      let result = await fetch(baseUrl('/api/hello'))
+      let result = await fetch(baseUrl('/v1/hello'))
       expect(result.ok).toEqual(false)
       expect(result.status).toEqual(HttpStatus.NotFound)
-      result = await fetch(baseUrl('/apiv2/hello'))
+      result = await fetch(baseUrl('/v2/v1/hello'))
+      expect(result.ok).toEqual(true)
+    })
+
+    it('should replace to the new prefix when call prefix after define route', async () => {
+      router = new Router({ prefix: '/v1' })
+      router.prefix('/v2')
+      router.get('/hello', ctx => { ctx.body = '' })
+      testAddress = app.use(router.routes())
+        .listen(0).address()
+
+      let result = await fetch(baseUrl('/v1/hello'))
+      expect(result.ok).toEqual(false)
+      expect(result.status).toEqual(HttpStatus.NotFound)
+      result = await fetch(baseUrl('/v2/hello'))
       expect(result.ok).toEqual(true)
     })
   })
 
-  describe('router.use()', () => {
+  describe.skip('router.use()', () => {
     it('should combine app middleware and router middleware', async () => {
       app.use((ctx, next) => { ctx.state.foo = 1; return next() })
       router.get('/api/hello')
@@ -94,7 +107,7 @@ describe.skip('Nested routes', () => {
     })
   })
 
-  describe('router.use(anotherRouter))', () => {
+  describe.skip('router.use(anotherRouter))', () => {
     it('should allow nested routes declare', async () => {
       const posts = new Router()
       posts.get('/', ctx => { ctx.body = `posts in forums ${ctx.params?.fid}` })

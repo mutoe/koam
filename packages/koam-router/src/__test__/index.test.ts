@@ -43,12 +43,4 @@ describe('# Router', () => {
       expect(Router.url('/users/:id', 3, 4, { query: { foo: 1 } })).toEqual('/users/3?foo=1')
     })
   })
-
-  describe.skip('Constructor prefix argument', () => {
-    it('should generate correct url with prefix', () => {
-      router = new Router({ prefix: '/api' })
-      router.get('hello', '/hello/:name')
-      expect(router.url('hello', { name: 'world' })).toEqual('/api/hello/world')
-    })
-  })
 })
