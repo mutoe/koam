@@ -93,6 +93,8 @@ export default class Router {
     const dispatch: Koa.Middleware = async (ctx, next): Promise<void> => {
       const { path, method } = ctx
       const matched = this.match(path, method)
+      ctx.pathMatchedRoutes ||= []
+      ctx.pathMatchedRoutes.push(...matched.path)
       // ctx.routes = [...ctx.routes || [], ...matched.path]
       // ctx.router = this
 
@@ -143,8 +145,30 @@ export default class Router {
   }
 
   allowedMethods (): Koa.Middleware {
+    const implemented = this.methods
+
     return async (ctx, next) => {
-      return next()
+      await next()
+      if (ctx.status && ctx.status !== HttpStatus.NotFound) return
+
+      const allowed = Array.from(new Set(ctx.pathMatchedRoutes?.flatMap(route => route.methods) ?? []))
+
+      if (!implemented.includes(ctx.method)) {
+        ctx.set('Allow', allowed.join(', '))
+        return ctx.throw(HttpStatus.NotImplemented)
+      }
+
+      if (!allowed.length) return
+
+      ctx.set('Allow', allowed.join(', '))
+
+      if (ctx.method === HttpMethod.OPTIONS) {
+        ctx.status = HttpStatus.Ok
+        ctx.body = ''
+        return
+      }
+
+      ctx.throw(HttpStatus.MethodNotAllowed)
     }
   }
 

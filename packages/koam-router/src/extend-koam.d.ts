@@ -12,6 +12,7 @@ declare module '@mutoe/koam' {
     router?: Router
     /** Only path matched routes */
     routes?: Route[]
+    pathMatchedRoutes?: Route[]
   }
 
   interface Request {

@@ -72,7 +72,7 @@ describe('Koam router basic feature', () => {
     })
   })
 
-  describe.skip('Allowed methods', () => {
+  describe('Allowed methods', () => {
     it('should return 404 when method not matched', async () => {
       router.post('/hello', ctx => { ctx.body = 'world!' })
       testAddress = app.use(router.routes())
