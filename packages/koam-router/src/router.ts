@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam'
 import { concatQuery } from 'src/utils/concat-query'
 import { PathRegexp } from 'src/utils/path-regexp'
@@ -16,9 +17,9 @@ interface RouterOptions {
 }
 
 export default class Router {
-  #routes: Route[] = []
-  #middlewares: Koa.Middleware[] = []
-  #params: Record<string, Koa.Middleware> = {}
+  _routes: Route[] = []
+  middlewares: Koa.Middleware[] = []
+  params: Record<string, Koa.Middleware> = {}
 
   options: RouterOptions = {}
 
@@ -39,7 +40,7 @@ export default class Router {
   prefix (prefix: string): this {
     prefix = prefix.replace(/\/$/, '')
     this.options.prefix = prefix
-    for (const route of this.#routes) {
+    for (const route of this._routes) {
       route.setPrefix(prefix)
     }
     return this
@@ -127,12 +128,12 @@ export default class Router {
   }
 
   route (name: string): Route | undefined {
-    return this.#routes.find(route => route.name === name)
+    return this._routes.find(route => route.name === name)
   }
 
   private match (path: string, method?: HttpMethod): Matched {
     const matched = new Matched()
-    for (const route of this.#routes) {
+    for (const route of this._routes) {
       if (route.match(path)) {
         matched.path.push(route)
         if (route.methods.length === 0 || (method && route.methods.includes(method))) {
@@ -187,8 +188,27 @@ export default class Router {
     }
 
     for (const middleware of middlewares) {
-      // TODO: support router as middleware
-      this.register([], undefined, path || /([\S\s]*)/, [middleware])
+      if (!middleware.router) {
+        this.register([], undefined, path || /([\S\s]*)/, [middleware])
+        continue
+      }
+
+      const clonedRouter: Router = Object.assign(Object.create(Router.prototype), middleware.router)
+      clonedRouter._routes = clonedRouter._routes.map(route => {
+        const clonedRoute: Route = Object.assign(Object.create(Route.prototype), route)
+        clonedRoute.middlewares = [...route.middlewares]
+
+        if (path) clonedRoute.setPrefix(path)
+        if (this.options.prefix) clonedRoute.setPrefix(this.options.prefix)
+        this._routes.push(clonedRoute)
+
+        return clonedRoute
+      })
+      if (this.params) {
+        for (const [paramName, middleware] of Object.entries(this.params)) {
+          clonedRouter.param(paramName, middleware)
+        }
+      }
     }
     return this
   }
@@ -198,8 +218,8 @@ export default class Router {
    */
   param (paramName: string, ...middlewares: Koa.Middleware[]): this {
     const middleware = compose(middlewares)
-    this.#params[paramName] = middleware
-    for (const route of this.#routes) {
+    this.params[paramName] = middleware
+    for (const route of this._routes) {
       route.param(paramName, middleware)
     }
     return this
@@ -284,10 +304,10 @@ export default class Router {
       prefix: this.options.prefix || '',
     })
 
-    for (const [paramName, middleware] of Object.entries(this.#params)) {
+    for (const [paramName, middleware] of Object.entries(this.params)) {
       route.param(paramName, middleware)
     }
-    this.#routes.push(route)
+    this._routes.push(route)
     return this
   }
 }

@@ -110,7 +110,7 @@ describe('Nested routes', () => {
     })
   })
 
-  describe.skip('router.use(anotherRouter))', () => {
+  describe('router.use(anotherRouter))', () => {
     it('should allow nested routes declare', async () => {
       const posts = new Router()
       posts.get('/', ctx => { ctx.body = `posts in forums ${ctx.params?.fid}` })
@@ -128,7 +128,7 @@ describe('Nested routes', () => {
 
       result = await fetch(baseUrl('/forums/123/posts/456'))
       expect(result.ok).toEqual(true)
-      expect(result.text()).resolves.toEqual('posts 456')
+      expect(result.text()).resolves.toEqual('post 456')
     })
   })
 })
