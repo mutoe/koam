@@ -25,7 +25,7 @@ describe('Koam router basic feature', () => {
   describe('Context parameters', () => {
     it('should return correct context parameters', async () => {
       const cb = vi.fn()
-      router.get('/:category/:title', ctx => { cb(ctx.params) })
+      router.get('/:category/:title', ctx => { cb(ctx.params); ctx.body = null })
       testAddress = app.use(router.routes())
         .listen(0).address()
 
@@ -37,7 +37,7 @@ describe('Koam router basic feature', () => {
 
     it('should return correct context parameters given route is "/articles/:aid?/comments/:cid?"', async () => {
       const cb = vi.fn()
-      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params) })
+      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params); ctx.body = null })
       testAddress = app.use(router.routes())
         .listen(0).address()
 
@@ -49,7 +49,7 @@ describe('Koam router basic feature', () => {
 
     it('should decode URI string in params result', async () => {
       const cb = vi.fn()
-      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params) })
+      router.get('/articles/:aid?/comments/:cid?', ctx => { cb(ctx.params); ctx.body = null })
       testAddress = app.use(router.routes())
         .listen(0).address()
 
@@ -61,7 +61,7 @@ describe('Koam router basic feature', () => {
 
     it('should return empty object when route is unnamed', async () => {
       const cb = vi.fn()
-      router.get('/id/(\\d+)', ctx => { cb(ctx.params) })
+      router.get('/id/(\\d+)', ctx => { cb(ctx.params); ctx.body = null })
       testAddress = app.use(router.routes())
         .listen(0).address()
 

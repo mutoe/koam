@@ -167,7 +167,7 @@ describe('Path match', () => {
     })
   })
 
-  describe.skip('url not match', () => {
+  describe('url not match', () => {
     it('should return 404 given request url is not match', async () => {
       router.get('/hello', ctx => {
         ctx.body = 'world!'
