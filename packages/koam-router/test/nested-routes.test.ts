@@ -73,10 +73,10 @@ describe('Nested routes', () => {
     })
   })
 
-  describe.skip('router.use()', () => {
+  describe('router.use()', () => {
     it('should combine app middleware and router middleware', async () => {
       app.use((ctx, next) => { ctx.state.foo = 1; return next() })
-      router.get('/api/hello')
+      router.get('/api/hello', (ctx, next) => { ctx.body = ''; return next() })
       router.use(
         (ctx, next) => { cb(ctx.state.foo); ctx.state.foo += 1; return next() },
         ctx => { cb(ctx.state.foo) },
@@ -92,7 +92,7 @@ describe('Nested routes', () => {
 
     it('should combine app middleware and router middleware on special path', async () => {
       app.use((ctx, next) => { ctx.state.foo = 1; return next() })
-      router.get('/api?/hello', (ctx, next) => { ctx.state.foo = 2; return next() })
+      router.get('/api?/hello', (ctx, next) => { ctx.state.foo = 2; ctx.body = ''; return next() })
       router.use('/api/*', (ctx, next) => { cb(ctx.state.foo); return next() })
       testAddress = app.use(router.routes())
         .listen(0).address()
@@ -101,9 +101,12 @@ describe('Nested routes', () => {
       expect(result.ok).toEqual(true)
       expect(cb).not.toBeCalled()
 
+      result = await fetch(baseUrl('/api/foo'))
+      expect(result.ok).toEqual(false)
+
       result = await fetch(baseUrl('/api/hello'))
       expect(result.ok).toEqual(true)
-      expect(cb).toBeCalledWith(1)
+      expect(cb).toBeCalledWith(2)
     })
   })
 

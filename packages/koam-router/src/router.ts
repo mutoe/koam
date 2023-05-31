@@ -117,7 +117,7 @@ export default class Router {
           return next()
         })
 
-        return middlewares.concat(route.middlewares)
+        return [...middlewares, ...route.middlewares]
       }, [])
 
       return compose(routerMiddlewares)(ctx, next)
@@ -135,7 +135,7 @@ export default class Router {
     for (const route of this.#routes) {
       if (route.match(path)) {
         matched.path.push(route)
-        if (method && route.methods.includes(method)) {
+        if (route.methods.length === 0 || (method && route.methods.includes(method))) {
           matched.pathAndMethod.push(route)
           if (route.methods.length) matched.hit = true
         }
@@ -172,34 +172,24 @@ export default class Router {
     }
   }
 
+  // TODO support array as path
   use (path: string, ...middlewares: Koa.Middleware[]): this
   use (...middlewares: Koa.Middleware[]): this
   use (...args: unknown[]): this {
-    console.log(args)
-    // let path: string | undefined
-    // let middlewares: Koa.Middleware[]
-    // const first = args.at(0)
-    // if (typeof first === 'string') {
-    //   path = first
-    //   middlewares = args.slice(1) as Koa.Middleware[]
-    // } else {
-    //   middlewares = args.slice() as Koa.Middleware[]
-    // }
+    let path: string | undefined
+    let middlewares: Koa.Middleware[]
+    const first = args.at(0)
+    if (typeof first === 'string') {
+      path = first
+      middlewares = args.slice(1) as Koa.Middleware[]
+    } else {
+      middlewares = args.slice() as Koa.Middleware[]
+    }
 
-    // if (!path) {
-    //   this.#middlewares.push(...middlewares)
-    //   return this
-    // }
-    //
-    // this.#middlewares.push(async (ctx: Context, next) => {
-    //   ctx.assert(path)
-    //   const matched = new PathRegexp(path).test(ctx.path)
-    //   if (matched) {
-    //     return compose(middlewares)(ctx, next)
-    //   } else {
-    //     return next()
-    //   }
-    // })
+    for (const middleware of middlewares) {
+      // TODO: support router as middleware
+      this.register([], undefined, path || /([\S\s]*)/, [middleware])
+    }
     return this
   }
 
