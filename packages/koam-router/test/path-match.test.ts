@@ -135,18 +135,20 @@ describe('Path match', () => {
     })
   })
 
-  describe.skip('multiple declare route', () => {
-    it('should rewrite the previous route when using named routes', async () => {
-      router.get('hello', '/hello')
-      router.get('hello', '/new-hello')
+  describe('multiple declare route', () => {
+    it('should not rewrite the previous route when using named routes', async () => {
+      router.get('hello', '/hello', ctx => { ctx.body = 'hello' })
+      router.get('hello', '/new-hello', ctx => { ctx.body = 'new hello' })
       testAddress = app.use(router.routes())
         .listen(0).address()
 
       let result = await fetch(baseUrl('/hello'))
-      expect(result.ok).toBe(false)
+      expect(result.ok).toBe(true)
+      await expect(result.text()).resolves.toEqual('hello')
 
       result = await fetch(baseUrl('/new-hello'))
       expect(result.ok).toBe(true)
+      await expect(result.text()).resolves.toEqual('new hello')
     })
 
     it('should match correct request method when multiple declare route', async () => {
