@@ -23,6 +23,7 @@ declare global {
   namespace Koa {
     export interface Middleware {
       router?: Router
+      param?: string
     }
   }
 }

@@ -19,6 +19,7 @@ export default class Router {
   #routes: Route[] = []
   // #prefix: string = ''
   #middlewares: Koa.Middleware[] = []
+  #params: Record<string, Koa.Middleware> = {}
 
   options: RouterOptions = {}
 
@@ -180,13 +181,11 @@ export default class Router {
    * You can get the parameter value from `ctx.params.paramName`
    */
   param (paramName: string, ...middlewares: Koa.Middleware[]): this {
-    this.#middlewares.push(async (ctx, next) => {
-      if (paramName in (ctx.params || {})) {
-        return compose(middlewares)(ctx, next)
-      } else {
-        return next()
-      }
-    })
+    const middleware = compose(middlewares)
+    this.#params[paramName] = middleware
+    for (const route of this.#routes) {
+      route.param(paramName, middleware)
+    }
     return this
   }
 
@@ -263,12 +262,16 @@ export default class Router {
       return this
     }
 
-    this.#routes.push(new Route(
+    const route = new Route(
       typeof path === 'string' ? path : path.source,
       methods,
       middlewares,
       { name },
-    ))
+    )
+    for (const [paramName, middleware] of Object.entries(this.#params)) {
+      route.param(paramName, middleware)
+    }
+    this.#routes.push(route)
     return this
   }
 }

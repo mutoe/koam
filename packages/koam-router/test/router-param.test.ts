@@ -1,4 +1,4 @@
-import Koa, { HttpStatus } from '@mutoe/koam'
+import Koa, { Context, HttpStatus } from '@mutoe/koam'
 import Router from 'src'
 
 declare global {
@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-describe.skip('router.param', () => {
+describe('router.param', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
@@ -26,12 +26,17 @@ describe.skip('router.param', () => {
       ctx.state.user = { id: userId }
       return next()
     })
-      .get('/users/:user', ctx => { cb(ctx.state.user?.id) })
+      .get('/users/:user', (ctx: Context) => {
+        ctx.body = ctx.state.user?.id
+        ctx.assert(ctx.body)
+        cb(ctx.body)
+      })
     testAddress = app.use(router.routes())
       .listen(0).address()
 
     let response = await fetch(baseUrl('/users/1'))
     expect(response.ok).toEqual(true)
+    expect(response.status).toEqual(HttpStatus.Ok)
     expect(cb).toBeCalledTimes(1)
     expect(cb).toBeCalledWith('1')
 

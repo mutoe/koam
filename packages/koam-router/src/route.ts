@@ -50,4 +50,20 @@ export default class Route {
 
     return params
   }
+
+  param (paramName: string, fn: Koa.Middleware): this {
+    const middleware: Koa.Middleware = (ctx, next) => fn.call(this, ctx, next)
+    middleware.param = paramName
+    const x = this.paramNames.indexOf(paramName)
+    if (x > -1) {
+      this.middlewares.some((m, i) => {
+        if (!m.param || this.paramNames.indexOf(m.param) > x) {
+          this.middlewares.splice(i, 0, middleware)
+          return true
+        }
+        return false
+      })
+    }
+    return this
+  }
 }
