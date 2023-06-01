@@ -131,7 +131,7 @@ Context response
 - [x] `response.type=` `ctx.type=`
 - [ ] `response.is(mimeTypes...)`
 - [x] `response.redirect(url, [alt])` `ctx.redirect(url, [alt])`
-- [ ] `response.attachment([filename], [options])` `ctx.attachment([filename], [options])`
+- [x] `response.attachment([filename])` `ctx.attachment([filename])`
 - [ ] `response.lastModified=` `ctx.lastModified=`
 - [ ] `response.etag=` `ctx.etag=`
 - [ ] `response.vary(field)`

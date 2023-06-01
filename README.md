@@ -35,8 +35,7 @@ app.listen(3000, () => console.log(`server is started at 3000...`))
 
 ## Notes
 
-1. Current only support `application/json` type request and response body
-2. `ctx.assert` must explicit declare `Context` type. See [microsoft/Typescript#34523](https://github.com/microsoft/TypeScript/issues/34523)
+1. `ctx.assert` must explicit declare `Context` type. See [microsoft/Typescript#34523](https://github.com/microsoft/TypeScript/issues/34523)
    ```ts example.ts
    app.use(async (ctx: Context, next) => {
      //                ^^^^^^^

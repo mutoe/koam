@@ -271,6 +271,19 @@ describe('# context', () => {
     })
   })
 
+  describe('response attachment', () => {
+    it('should set content-disposition header when call ctx.attachment method', async () => {
+      testAddress = app
+        .use(ctx => { ctx.attachment('favicon.ico'); ctx.body = '' })
+        .listen(0).address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.ok).toEqual(true)
+      expect(response.headers.get('content-disposition')).toEqual('attachment; filename="favicon.ico"')
+    })
+  })
+
   describe('redirect', () => {
     it('should set redirect header with referer and body when call context.redirect with back', async () => {
       const referer = 'example.com'

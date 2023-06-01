@@ -120,4 +120,10 @@ export default class Response {
       // TODO: respond time
     }
   }
+
+  attachment (filename?: string): void {
+    const strings = ['attachment']
+    if (filename) strings.push(`filename="${filename}"`)
+    this.set('content-disposition', strings.join('; '))
+  }
 }

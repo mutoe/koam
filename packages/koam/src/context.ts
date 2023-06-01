@@ -137,4 +137,9 @@ export default class Context {
       response: this.response.toJSON(),
     }
   }
+
+  attachment (filename?: string): this {
+    this.response.attachment(filename)
+    return this
+  }
 }
