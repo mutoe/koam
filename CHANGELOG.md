@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/mutoe/koam/compare/v1.0.0...v1.0.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* **router:** mark peer dependency koam require ^1.0.0 ([8216bf9](https://github.com/mutoe/koam/commit/8216bf991d5f251c785463d05a7ba3df3314ec96))
+
+
+
+
+
 # [1.0.0](https://github.com/mutoe/koam/compare/v0.3.2...v1.0.0) (2023-06-01)
 
 

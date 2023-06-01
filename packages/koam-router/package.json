@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam-router",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple koa router. Use with @mutoe/koam",
   "keywords": [
     "koa",
