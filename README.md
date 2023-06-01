@@ -46,6 +46,29 @@ app.listen(3000, () => console.log(`server is started at 3000...`))
      //          ^^^ now val is number type
    })
    ```
+   
+2. If you want to extend some property or method on the context or it's state, you can write the following code to extend it
+
+   ```ts 
+   // extend.d.ts
+   import User from './src/user'
+   declare global {
+      namespace Koa {
+         export interface State {
+            user?: User
+         }
+      }
+   } 
+   export {}
+   
+   // your-code.ts
+   app.use(ctx => {
+     console.log(ctx.state.user.name)
+   })
+   ```
+
+   > You can refer the [koam-router `extend-koam.d.ts`](https://github.com/mutoe/koam/blob/main/packages/koam-router/src/extend-koam.d.ts) for more example.
+   
 
 ## Roadmap
 
