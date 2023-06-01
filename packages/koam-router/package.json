@@ -38,7 +38,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@mutoe/koam": "workspace:^0.3.2"
+    "@mutoe/koam": "workspace:^1.0.0"
   },
   "devDependencies": {
     "@mutoe/koam": "workspace:^1.0.0"
