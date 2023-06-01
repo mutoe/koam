@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/mutoe/koam/compare/v0.3.2...v1.0.0) (2023-06-01)
+
+
+### Bug Fixes
+
+* **koam:** do not update response status after manual assigned when redirect ([ad95673](https://github.com/mutoe/koam/commit/ad9567327a23a28f4c27bc4b916bd75cc51e8b2f))
+* **koam:** fix useless state property ([99ef7a5](https://github.com/mutoe/koam/commit/99ef7a5c6c9827b034a84ce40bcf9b4e9f211503))
+* **koam:** should return correct status when body is different ([59782c2](https://github.com/mutoe/koam/commit/59782c2ecfa9c437fd0905ec6f0ab1c7dfc0992a))
+* path resolve issue ([949a18e](https://github.com/mutoe/koam/commit/949a18e55aa120af1593546c451f0953462e39a0))
+
+
+### Features
+
+* **koam:** add more 3xx http status ([90b4349](https://github.com/mutoe/koam/commit/90b434909648ed3e934b8b5f92ad4695e034a893))
+* **koam:** export Koa namespace to override ([31f3c62](https://github.com/mutoe/koam/commit/31f3c62810dfad4f75d6d7d9386a43d743980198))
+* **koam:** support ctx.attachment method ([6eec41c](https://github.com/mutoe/koam/commit/6eec41cd5c7b56feef2a5d4453b49eeaccb0f3bb))
+* support context.length ([2a420a1](https://github.com/mutoe/koam/commit/2a420a14d7ee6f706efcd2f5ccaf70801b425b68))
+* support stream as response body ([4a62eca](https://github.com/mutoe/koam/commit/4a62eca39d7e467c22fd8cf5ec31cac1273d3d16))
+
+
+
+
+
 ## [0.3.2](https://github.com/mutoe/koam/compare/v0.3.1...v0.3.2) (2023-05-17)
 
 

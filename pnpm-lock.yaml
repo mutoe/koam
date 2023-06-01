@@ -40,7 +40,7 @@ importers:
   packages/koam-router:
     devDependencies:
       '@mutoe/koam':
-        specifier: workspace:^0.3.2
+        specifier: workspace:^1.0.0
         version: link:../koam
 
 packages:
