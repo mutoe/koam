@@ -1,4 +1,5 @@
-import Koa, { Context } from '../src'
+import type { ConnectMiddleware } from '../src'
+import Koa, { Context, HttpStatus, connect } from '../src'
 import { mockConsole } from './utils/mock-console'
 
 describe('# middleware', () => {
@@ -52,7 +53,7 @@ describe('# middleware', () => {
   })
 
   describe('response time', () => {
-    it.skip('should set request date time in state', async () => {
+    it('should set request date time in state', async () => {
       testAddress = app.use(cb).listen().address()
 
       await fetch(baseUrl())
@@ -95,6 +96,61 @@ describe('# middleware', () => {
       const res = await fetch(baseUrl())
 
       expect(res.headers.has('x-response-time')).toBe(false)
+    })
+  })
+
+  describe('connect', () => {
+    const cb = vi.fn()
+
+    it('should convert no callback express middleware to koa middleware', async () => {
+      const expressMiddleware: ConnectMiddleware = (req, res) => {
+        cb(req.method)
+        res.statusCode = HttpStatus.Unauthorized
+      }
+      testAddress = app.use(connect(expressMiddleware)).listen().address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.status).toEqual(HttpStatus.Unauthorized)
+      expect(cb).toBeCalledWith('GET')
+    })
+
+    it('should convert callback express middleware to koa middleware', async () => {
+      const expressMiddleware: ConnectMiddleware = (req, res, next) => {
+        cb(req.method)
+        res.statusCode = HttpStatus.Unauthorized
+        next()
+      }
+      testAddress = app
+        .use(connect(expressMiddleware))
+        .use(ctx => { cb(ctx.status) })
+        .listen().address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.status).toEqual(HttpStatus.Unauthorized)
+      expect(cb).toHaveBeenNthCalledWith(1, 'GET')
+      expect(cb).toHaveBeenNthCalledWith(2, HttpStatus.Unauthorized)
+    })
+
+    it('should convert callback express middleware to koa middleware with error', async () => {
+      const onError = vi.fn()
+      app = new Koa({ onError })
+      const error = new Error('some error')
+      const expressMiddleware: ConnectMiddleware = (req, res, next) => {
+        res.statusCode = HttpStatus.InternalServerError
+        next(error)
+      }
+      testAddress = app
+        .use(connect(expressMiddleware))
+        .use(() => { cb() })
+        .listen().address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.status).toEqual(HttpStatus.InternalServerError)
+      expect(onError).toBeCalledWith(error, app.context)
+      expect(cb).not.toBeCalled()
     })
   })
 })
