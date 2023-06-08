@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/mutoe/koam/compare/v1.1.0...v1.1.1) (2023-06-08)
+
+
+### Bug Fixes
+
+* **koam:** should not rewrite response content type when set body ([b0e4bf7](https://github.com/mutoe/koam/commit/b0e4bf73bbc8091ba104c51bd7ff4cd6079091b4))
+
+
+
+
+
 # [1.1.0](https://github.com/mutoe/koam/compare/v1.0.1...v1.1.0) (2023-06-08)
 
 
