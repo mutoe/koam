@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/mutoe/koam/compare/v1.0.1...v1.1.0) (2023-06-08)
+
+
+### Features
+
+* **koam:** inside koa connect middleware ([b42121c](https://github.com/mutoe/koam/commit/b42121cb46936e602a869295b2ab8ada0182533c))
+
+
+
+
+
 ## [1.0.1](https://github.com/mutoe/koam/compare/v1.0.0...v1.0.1) (2023-06-01)
 
 

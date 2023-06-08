@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -40,7 +44,7 @@ importers:
   packages/koam-router:
     devDependencies:
       '@mutoe/koam':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^1.1.0
         version: link:../koam
 
 packages:
