@@ -214,5 +214,17 @@ describe('# application', () => {
       expect(res.headers.get('content-type')).toEqual('text/html; charset=utf-8')
       await expect(res.text()).resolves.toEqual(htmlString)
     })
+
+    it('should not rewrite the content type when set body', async () => {
+      testAddress = app.use(ctx => {
+        ctx.type = 'application/json'
+        ctx.body = '{"foo": "bar"}'
+      }).listen().address()
+
+      const response = await fetch(baseUrl())
+
+      expect(response.headers.get('Content-Type')).toContain('application/json')
+      await expect(response.json()).resolves.toEqual({ foo: 'bar' })
+    })
   })
 })

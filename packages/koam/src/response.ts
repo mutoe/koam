@@ -79,11 +79,11 @@ export default class Response {
   get body (): any { return this.#body }
   set body (body: any) {
     if (typeof body === 'object') {
-      this.type = 'application/json'
+      this.type ??= 'application/json'
     } else if (typeof body === 'string' && body.startsWith('<')) {
-      this.type = 'text/html'
+      this.type ??= 'text/html'
     } else {
-      this.type = 'text/plain'
+      this.type ??= 'text/plain'
     }
     this.#body = body
     if (!this.#explicitStatus) {
