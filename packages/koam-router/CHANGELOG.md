@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/mutoe/koam/compare/v2.0.0...v2.0.1) (2023-06-09)
+
+
+### Bug Fixes
+
+* **router:** fix peer dependency issue ([50886b8](https://github.com/mutoe/koam/commit/50886b887aa3519c67c7d0f7935aa30403379e85))
+
+
+
+
+
 # [2.0.0-alpha.0](https://github.com/mutoe/koam/compare/v1.1.1...v2.0.0-alpha.0) (2023-06-09)
 
 **Note:** Version bump only for package @mutoe/koam-router
