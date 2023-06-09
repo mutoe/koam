@@ -1,12 +1,11 @@
 {
-  "name": "@mutoe/koam",
+  "name": "@mutoe/koam-core",
   "author": "mutoe <imutoe@gmail.com>",
   "version": "1.1.1",
   "description": "Simple version Koa-like http-server",
   "keywords": [
     "http-server",
-    "koa",
-    "koa-router"
+    "koa"
   ],
   "license": "MIT",
   "publishConfig": {
@@ -16,18 +15,19 @@
     "node": ">= 14"
   },
   "type": "module",
-  "types": "./index.d.ts",
+  "types": "./build/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
     }
   },
   "files": [
-    "*"
+    "build"
   ],
-  "dependencies": {
-    "@mutoe/koam-core": "workspace:^",
-    "@mutoe/koam-router": "workspace:^"
+  "scripts": {
+    "test": "vitest run --coverage",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit"
   }
 }

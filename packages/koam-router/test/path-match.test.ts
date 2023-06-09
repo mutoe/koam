@@ -1,4 +1,4 @@
-import Koa, { HttpStatus } from '@mutoe/koam'
+import Koa, { HttpStatus } from '@mutoe/koam-core'
 import Router from 'src'
 import { beforeEach, describe } from 'vitest'
 

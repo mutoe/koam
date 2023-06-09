@@ -39,13 +39,22 @@ importers:
         specifier: ^0.31.0
         version: 0.31.0
 
-  packages/koam: {}
+  packages/koam:
+    dependencies:
+      '@mutoe/koam-core':
+        specifier: workspace:^
+        version: link:../koam-core
+      '@mutoe/koam-router':
+        specifier: workspace:^
+        version: link:../koam-router
+
+  packages/koam-core: {}
 
   packages/koam-router:
     devDependencies:
-      '@mutoe/koam':
+      '@mutoe/koam-core':
         specifier: workspace:^1.1.1
-        version: link:../koam
+        version: link:../koam-core
 
 packages:
 

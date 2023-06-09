@@ -1,4 +1,4 @@
-import Koa from '@mutoe/koam'
+import Koa from '@mutoe/koam-core'
 import Router from '../router'
 
 describe('# Router', () => {

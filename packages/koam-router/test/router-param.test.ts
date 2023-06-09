@@ -1,4 +1,4 @@
-import Koa, { Context, HttpStatus } from '@mutoe/koam'
+import Koa, { Context, HttpStatus } from '@mutoe/koam-core'
 import Router from 'src'
 
 declare global {

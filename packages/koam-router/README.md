@@ -8,7 +8,7 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 ## Usage
 
 ```ts
-import Koa from '@mutoe/koam'
+import Koa from '@mutoe/koam-core'
 import Router from '@mutoe/koam-router'
 
 const app = new Koa()

@@ -1,9 +1,9 @@
-import '@mutoe/koam'
+import '@mutoe/koam-core'
 
 import type Route from './route'
 import Router from './router'
 
-declare module '@mutoe/koam' {
+declare module '@mutoe/koam-core' {
   interface Context {
     /** Alias for context.request.params */
     params?: Record<string, string>

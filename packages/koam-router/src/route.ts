@@ -1,4 +1,4 @@
-import { HttpMethod } from '@mutoe/koam'
+import { HttpMethod } from '@mutoe/koam-core'
 import { PathRegexp } from './utils/path-regexp'
 import { safeDecodeURIComponent } from './utils/safe-decode-uri-component'
 
