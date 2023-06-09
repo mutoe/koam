@@ -13,13 +13,14 @@ export { default as Request } from './request'
 export { default as Response } from './response'
 
 declare global {
+  type JsonObject = {[x: string]: JsonValue}
+  type JsonArray = JsonValue[]
   type JsonValue =
-    | string | number | boolean
-    | { [x: string]: JsonValue }
-    | JsonValue[]
-    | null
+    | string | number | boolean | null
+    | JsonObject
+    | JsonArray
 
-  type QueryObject = Record<string, string | number | boolean | (string | number | boolean)[]>
+  type QueryObject = Record<string, string | number | (string | number)[]>
 
   namespace Koa {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
