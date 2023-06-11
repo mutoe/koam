@@ -35,40 +35,93 @@ app.listen(3000, () => console.log(`server is started at 3000...`))
 
 ## Notes
 
-1. `ctx.assert` must explicit declare `Context` type. See [microsoft/Typescript#34523](https://github.com/microsoft/TypeScript/issues/34523)
-   ```ts example.ts
-   app.use(async (ctx: Context, next) => {
-     //                ^^^^^^^
-     const val: unknown = 1.2345
-     //         ^^^^^^^
-     ctx.assert(typeof val === 'number', 500)
-     console.log(val.toFixed(2))
-     //          ^^^ now val is number type
-   })
-   ```
+### 1. `ctx.assert` mast explicit declare `context` type
+See [microsoft/Typescript#34523](https://github.com/microsoft/TypeScript/issues/34523)
+```ts example.ts
+app.use(async (ctx: Context, next) => {
+  //                ^^^^^^^
+  const val: unknown = 1.2345
+  //         ^^^^^^^
+  ctx.assert(typeof val === 'number', 500)
+  console.log(val.toFixed(2))
+  //          ^^^ now val is number type
+})
+```
    
-2. If you want to extend some property or method on the context or it's state, you can write the following code to extend it
+### 2. Extend type
 
-   ```ts 
-   // extend.d.ts
-   import User from './src/user'
-   declare global {
-      namespace Koa {
-         export interface State {
-            user?: User
-         }
+If you want to extend some property or method on the context or it's state, you can write the following code to extend it
+
+```ts 
+// extend.d.ts
+import User from './src/user'
+declare global {
+   namespace Koa {
+      export interface State {
+         user?: User
       }
-   } 
-   export {}
+   }
+} 
+export {}
+
+// your-code.ts
+app.use(ctx => {
+  console.log(ctx.state.user.name)
+})
+```
+
+> You can refer the [koam-router `extend-koam.d.ts`](https://github.com/mutoe/koam/blob/main/packages/koam-router/src/extend-koam.d.ts) for more example.
+
+### 3. Cookie
+
+In order to reduce the package size, I don't have built-in cookie-related handling, as this is not required by all apps.
+
+If you want to handle cookies, you can extend the middleware yourself, here is the [cookies](https://www.npmjs.com/package/cookies) example steps:
+
+1. install the `cookies` and `@types/cookies` npm package
+2. add `koam.d.ts` in your app 
+
+    ```ts koam.d.ts
+    import '@mutoe/koam'
+    import type Cookies from 'cookies'
+
+    declare module '@mutoe/koam' {
+       interface Context {
+          cookies: Cookies
+       }
+    }
+
+    declare global {
+       namespace Koa {
+          // Others if you want extend
+          interface State {
+             user?: {id: number, email: string}
+          }
+       }
+
+    }
+
+    // Don't forgot this line
+    export {} 
+    ```
+
+3. register the cookies in your app
+
+   ```ts
+   const app = new Koa()
+   // init cookies before your middleware
+   app.use((ctx, next) => {
+       ctx.cookies = new Cookies(ctx.req, ctx.res, { secure: true })
+       return next()
+   })
    
-   // your-code.ts
+   // your middlewares
    app.use(ctx => {
-     console.log(ctx.state.user.name)
+       ctx.cookies.set('key', 'value')
+       ctx.cookies.get('key')
    })
    ```
 
-   > You can refer the [koam-router `extend-koam.d.ts`](https://github.com/mutoe/koam/blob/main/packages/koam-router/src/extend-koam.d.ts) for more example.
-   
 
 ## Roadmap
 

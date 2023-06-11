@@ -33,7 +33,7 @@ Configuration
 
 - [x] `app.env`
 - [x] `app.proxy`
-- [ ] `app.keys`
+- [ ] ~~`app.keys`~~ see https://github.com/mutoe/koam#3-cookie
 - [x] `app.proxyIpHeader`
 - [x] `app.maxIpsCount`
 - [x] `app.onError(error, ctx)`
@@ -58,8 +58,7 @@ Context properties
 - [x] `ctx.state`
 - [x] `ctx.app`
 - [ ] ~~`ctx.app.emit`~~ using `ctx.throw` instead
-- [ ] `ctx.cookies.get(name, [options])`
-- [ ] `ctx.cookies.set(name, value [,options])`
+- [ ] ~~`ctx.cookies`~~ see https://github.com/mutoe/koam#3-cookie
 - [x] `ctx.throw([status], [message], [detail])` `ctx.throw(appError)`
 - [x] `ctx.assert(value, [status], [message], [detail])`
 - [x] `ctx.respond` <!-- TODO: support HEAD request -->
