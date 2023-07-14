@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         node-version: [ 18, 20 ]
-        package: ['koam', 'koam-router']
+        package: ['koam-core', 'koam-router']
         include:
           - node-version: 18
             codecov: true
