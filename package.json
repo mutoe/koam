@@ -19,7 +19,7 @@
     "pre-push": "pnpm type-check && pnpm test"
   },
   "lint-staged": {
-    "*.{ts,js,json,yml,yaml,snap}": "eslint --fix"
+    "*.{ts,js,json,snap}": "eslint --fix"
   },
   "devDependencies": {
     "@mutoe/eslint-config-preset-ts": "^3.4.1",
