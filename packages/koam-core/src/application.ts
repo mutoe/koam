@@ -6,14 +6,12 @@ import { Stream } from 'node:stream'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
-import { compose } from './utils/compose'
+import { compose } from './utils'
 import Koa, { AppError, noop } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
 export default class Application implements Koa.Config {
-  context: Context | null = null
-
   /**
    * Env config
    * @description If not set env, will read `process.env.NODE_ENV`.
@@ -108,7 +106,6 @@ export default class Application implements Koa.Config {
   }
 
   close (callback?: (error?: Error) => void): HttpServer | undefined {
-    this.context = null!
     this.middlewares = null!
     return this.httpServer?.close(callback)
   }
@@ -117,14 +114,14 @@ export default class Application implements Koa.Config {
     const middleware = compose(this.middlewares)
 
     return async (req, res) => {
-      this.context = new Context(this, req, res)
+      const context = new Context(this, req, res)
 
       try {
-        await middleware(this.context, noop)
+        await middleware(context, noop)
       } catch (error) {
-        await Promise.resolve(this.handleError(error)).catch(console.error)
+        await Promise.resolve(this.handleError(context, error)).catch(console.error)
       }
-      this.respond()
+      this.respond(context)
     }
   }
 
@@ -138,40 +135,38 @@ export default class Application implements Koa.Config {
     }
   }
 
-  private handleError (error: unknown): void | Promise<void> {
-    assert.ok(this.context, 'Context not exist!')
+  private handleError (context: Context, error: unknown): void | Promise<void> {
     if (error instanceof AppError) {
-      this.context.status = error.status
-      this.context.body = error.expose ? error.detail : null
+      context.status = error.status
+      context.body = error.expose ? error.detail : null
     } else if (!(error instanceof Error)) {
       error = new Error(error?.toString())
     }
-    if (!HttpStatus.isError(this.context.status) || this.context?.status === HttpStatus.NotFound) {
-      this.context.status = HttpStatus.InternalServerError
+    if (!HttpStatus.isError(context.status) || context?.status === HttpStatus.NotFound) {
+      context.status = HttpStatus.InternalServerError
     }
     assert.ok(error instanceof Error)
-    if (!error.message) error.message = HttpStatus.getMessage(this.context.status)
-    this.context.message = error.message
-    this.onError(error, this.context)
+    if (!error.message) error.message = HttpStatus.getMessage(context.status)
+    context.message = error.message
+    this.onError(error, context)
   }
 
-  private respond (): void {
-    assert.ok(this.context)
-    this.context.message ||= HttpStatus.getMessage(this.context.status)
-    const { body, type, res } = this.context
+  private respond (context: Context): void {
+    context.message ||= HttpStatus.getMessage(context.status)
+    const { body, type, res } = context
 
     if (body === undefined || body === null) return void res.end()
     if (typeof body === 'string') return void res.end(body)
     if (Buffer.isBuffer(body)) return void res.end(body)
     if (body instanceof Stream) return void body.pipe(res)
     if (body instanceof Object) {
-      if (!type) this.context.type = 'application/json'
-      const jsonBody = JSON.stringify(this.context.body)
-      if (!res.headersSent) this.context.response.length = Buffer.byteLength(jsonBody)
-      this.context.res.end(jsonBody)
+      if (!type) context.type = 'application/json'
+      const jsonBody = JSON.stringify(context.body)
+      if (!res.headersSent) context.response.length = Buffer.byteLength(jsonBody)
+      context.res.end(jsonBody)
       return
     }
-    this.context.res.end(body)
+    context.res.end(body)
   }
 }
 

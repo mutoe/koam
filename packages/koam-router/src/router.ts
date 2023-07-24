@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import Koa, { HttpMethod, HttpStatus, compose } from '@mutoe/koam-core'
+import { HttpMethod, HttpStatus, compose } from '@mutoe/koam-core'
 import { concatQuery } from 'src/utils/concat-query'
 import { PathRegexp } from 'src/utils/path-regexp'
 import Matched from './matched'

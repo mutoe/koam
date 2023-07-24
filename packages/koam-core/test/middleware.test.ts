@@ -149,7 +149,8 @@ describe('# middleware', () => {
       const response = await fetch(baseUrl())
 
       expect(response.status).toEqual(HttpStatus.InternalServerError)
-      expect(onError).toBeCalledWith(error, app.context)
+      expect(onError).toBeCalledWith(error, expect.any(Object))
+      expect(onError.mock.calls[0][1].response.message).toEqual('some error')
       expect(cb).not.toBeCalled()
     })
   })

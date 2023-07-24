@@ -1,14 +1,18 @@
 import * as http from 'node:http'
-import Koa, { Context, HttpStatus } from '../src'
+import Koa, { HttpStatus } from '../src'
 import { mockConsole } from './utils/mock-console'
 
 describe('# application', () => {
   let app: InstanceType<typeof Koa>
   let testAddress: any = {}
+  const errorMessage = 'This is error message'
   const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
   beforeEach(() => { testAddress = {}; app = new Koa() })
-  afterEach(() => void new Promise(resolve => app.close(resolve)))
+  afterEach(() => {
+    vi.useRealTimers()
+    return void new Promise(resolve => app.close(resolve))
+  })
 
   describe('hello world', () => {
     it('should get correct response', async () => {
@@ -20,15 +24,6 @@ describe('# application', () => {
       expect(res.status).toEqual(200)
       expect(res.statusText).toEqual('Ok')
       await expect(res.text()).resolves.toEqual('Hello world!')
-    })
-
-    it('should expose context property', async () => {
-      expect(app.context).toBeNull()
-
-      testAddress = app.listen(0).address()
-      await fetch(baseUrl())
-
-      expect(app.context).toBeInstanceOf(Context)
     })
 
     it('should as http server handler in native http server', async () => {
@@ -76,7 +71,7 @@ describe('# application', () => {
   })
 
   describe('error handing', () => {
-    const error = new Error('This is error message')
+    const error = new Error(errorMessage)
 
     it('should return Internal Server Error status', async () => {
       await mockConsole(async ({ consoleError }) => {
@@ -87,7 +82,7 @@ describe('# application', () => {
 
         expect(result.ok).toEqual(false)
         expect(result.status).toEqual(500)
-        expect(result.statusText).toEqual('This is error message')
+        expect(result.statusText).toEqual(errorMessage)
         await expect(result.text()).resolves.toBe('')
         expect(consoleError).toHaveBeenCalledWith(error)
       })
@@ -102,7 +97,9 @@ describe('# application', () => {
 
         await fetch(baseUrl())
 
-        expect(onError).toHaveBeenCalledWith(error, app.context)
+        expect(onError).toHaveBeenCalledWith(error, expect.any(Object))
+        expect(onError.mock.calls[0][1].response.status).toEqual(HttpStatus.InternalServerError)
+        expect(onError.mock.calls[0][1].response.message).toEqual(errorMessage)
         expect(consoleError).toHaveBeenCalledTimes(0)
 
         app.close()
@@ -111,7 +108,7 @@ describe('# application', () => {
   })
 
   describe('default error handling', () => {
-    const error = new Error('This is error message')
+    const error = new Error(errorMessage)
 
     it('should not console anything when silent is true', async () => {
       await mockConsole(async ({ consoleError }) => {
@@ -175,7 +172,7 @@ describe('# application', () => {
           },
           response: {
             status: 500,
-            message: 'This is error message',
+            message: errorMessage,
             headers: {
               'x-response-time': expect.any(String),
             },
@@ -225,6 +222,29 @@ describe('# application', () => {
 
       expect(response.headers.get('Content-Type')).toContain('application/json')
       await expect(response.json()).resolves.toEqual({ foo: 'bar' })
+    })
+  })
+
+  describe('concurrently', () => {
+    it('should can process multiple request at the same time', async () => {
+      vi.useFakeTimers()
+      testAddress = app
+        .use(async ctx => {
+          const timeout = Number(ctx.query.timeout) || 0
+          if (timeout) await new Promise(resolve => setTimeout(resolve, timeout))
+          ctx.body = `T ${timeout}`
+        })
+        .listen()
+        .address()
+
+      const firstRequestPromise = fetch(baseUrl('/?timeout=10000'))
+      const secondRequestResponse = await fetch(baseUrl('/?timeout=0'))
+      await expect(secondRequestResponse.text()).resolves.toEqual('T 0')
+      expect(firstRequestPromise).toBeInstanceOf(Promise)
+
+      vi.runOnlyPendingTimers()
+      const firstRequestResponse = await firstRequestPromise
+      await expect(firstRequestResponse.text()).resolves.toEqual('T 10000')
     })
   })
 })
