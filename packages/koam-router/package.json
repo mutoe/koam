@@ -11,9 +11,6 @@
   ],
   "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-router",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
@@ -21,17 +18,20 @@
   "bugs": {
     "url": "https://github.com/mutoe/koam/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "exports": {
     ".": {
       "import": "./build/index.js",
       "require": "./build/index.cjs"
     }
   },
-  "files": [
-    "build"
-  ],
   "scripts": {
     "test": "vitest run --coverage",
     "build": "vite build && tsc -p tsconfig.build.json",

@@ -16,15 +16,15 @@
   },
   "type": "module",
   "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "exports": {
     ".": {
       "import": "./build/index.js",
       "require": "./build/index.cjs"
     }
   },
-  "files": [
-    "build"
-  ],
   "scripts": {
     "test": "vitest run --coverage",
     "build": "vite build && tsc -p tsconfig.build.json",

@@ -1,6 +1,6 @@
 {
-  "private": true,
   "author": "mutoe <imutoe@gmail.com>",
+  "private": true,
   "packageManager": "pnpm@7.14.1",
   "workspaces": [
     "packages/*"
@@ -22,16 +22,16 @@
     "*.{ts,js,json,snap}": "eslint --fix"
   },
   "devDependencies": {
-    "@mutoe/eslint-config-preset-ts": "^3.4.1",
+    "@mutoe/eslint-config-preset-ts": "^3.5.3",
     "@types/node": "^14",
-    "@vitest/coverage-c8": "^0.31.1",
-    "eslint": "^8.39.0",
-    "lerna": "^6.6.2",
-    "lint-staged": "^13.2.2",
-    "simple-git-hooks": "^2.8.1",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5",
-    "vitest": "^0.31.0"
+    "@vitest/coverage-c8": "^0.33.0",
+    "eslint": "^8.45.0",
+    "lerna": "^7.1.3",
+    "lint-staged": "^13.2.3",
+    "simple-git-hooks": "^2.9.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7",
+    "vitest": "^0.33.0"
   },
   "changelog": {
     "labels": {
