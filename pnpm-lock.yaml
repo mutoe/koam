@@ -27,14 +27,14 @@ importers:
         specifier: ^13.2.3
         version: 13.2.3
       simple-git-hooks:
-        specifier: ^2.8.1
-        version: 2.8.1
+        specifier: ^2.9.0
+        version: 2.9.0
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
       vite:
-        specifier: ^4.4.3
-        version: 4.4.3(@types/node@14.18.33)
+        specifier: ^4.4.7
+        version: 4.4.7(@types/node@14.18.33)
       vitest:
         specifier: ^0.33.0
         version: 0.33.0
@@ -5215,8 +5215,8 @@ packages:
       - supports-color
     dev: true
 
-  /simple-git-hooks@2.8.1:
-    resolution: {integrity: sha512-DYpcVR1AGtSfFUNzlBdHrQGPsOhuuEJ/FkmPOOlFysP60AHd3nsEpkGq/QEOdtUyT1Qhk7w9oLmFoMG+75BDog==}
+  /simple-git-hooks@2.9.0:
+    resolution: {integrity: sha512-waSQ5paUQtyGC0ZxlHmcMmD9I1rRXauikBwX31bX58l5vTOhCEcBC5Bi+ZDkPXTjDnZAF8TbCqKBY+9+sVPScw==}
     hasBin: true
     requiresBuild: true
     dev: true
@@ -5812,7 +5812,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.3(@types/node@14.18.33)
+      vite: 4.4.7(@types/node@14.18.33)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5824,8 +5824,8 @@ packages:
       - terser
     dev: true
 
-  /vite@4.4.3(@types/node@14.18.33):
-    resolution: {integrity: sha512-IMnXQXXWgLi5brBQx/4WzDxdzW0X3pjO4nqFJAuNvwKtxzAmPzFE1wszW3VDpAGQJm3RZkm/brzRdyGsnwgJIA==}
+  /vite@4.4.7(@types/node@14.18.33):
+    resolution: {integrity: sha512-6pYf9QJ1mHylfVh39HpuSfMPojPSKVxZvnclX1K1FyZ1PXDOcLBibdq5t1qxJSnL63ca8Wf4zts6mD8u8oc9Fw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -5912,7 +5912,7 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.6.0
-      vite: 4.4.3(@types/node@14.18.33)
+      vite: 4.4.7(@types/node@14.18.33)
       vite-node: 0.33.0(@types/node@14.18.33)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:

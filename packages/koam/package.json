@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Simple version Koa-like http-server",
   "keywords": [
     "http-server",
@@ -17,15 +17,15 @@
   },
   "type": "module",
   "types": "./index.d.ts",
+  "files": [
+    "*"
+  ],
   "exports": {
     ".": {
       "import": "./index.js",
       "require": "./index.cjs"
     }
   },
-  "files": [
-    "*"
-  ],
   "dependencies": {
     "@mutoe/koam-core": "workspace:^",
     "@mutoe/koam-router": "workspace:^"

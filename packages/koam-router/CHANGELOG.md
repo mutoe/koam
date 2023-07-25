@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/mutoe/koam/compare/v2.0.1...v2.0.2) (2023-07-25)
+
+
+### Bug Fixes
+
+* cannot process multiple request at the same time issue ([acf97fb](https://github.com/mutoe/koam/commit/acf97fbdeb7a18184a5ad98b2bf47b6a08b46524))
+
+
+
+
+
 ## [2.0.1](https://github.com/mutoe/koam/compare/v2.0.0...v2.0.1) (2023-06-09)
 
 
