@@ -50,8 +50,14 @@ importers:
 
   packages/koam-core: {}
 
+  packages/koam-logger:
+    dependencies:
+      '@mutoe/koam-core':
+        specifier: workspace:^
+        version: link:../koam-core
+
   packages/koam-router:
-    devDependencies:
+    dependencies:
       '@mutoe/koam-core':
         specifier: workspace:^
         version: link:../koam-core

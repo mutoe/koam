@@ -1,0 +1,43 @@
+{
+  "name": "@mutoe/koam-logger",
+  "author": "mutoe <imutoe@gmail.com>",
+  "version": "2.1.0",
+  "description": "Logger middleware for Koam",
+  "keywords": [
+    "koa",
+    "koam",
+    "http-server",
+    "logger"
+  ],
+  "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-logger",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mutoe/koam.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest run --coverage",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@mutoe/koam-core": "workspace:^"
+  }
+}
