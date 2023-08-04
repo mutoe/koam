@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process'
 import { Stream } from 'node:stream'
+import { mockConsole } from '../../../test-utils/mock-console'
 import Koa, { AppError, Context, HttpStatus, noop } from '../src'
-import { mockConsole } from './utils/mock-console'
 
 declare global {
   namespace Koa {

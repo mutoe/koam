@@ -23,7 +23,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    setupFiles: [resolve(__dirname, 'test/_setupTest.ts')],
+    setupFiles: [resolve(__dirname, '../../test-utils/setup-test.ts')],
     mockReset: true,
     coverage: {
       provider: 'c8',

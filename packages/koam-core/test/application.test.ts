@@ -1,6 +1,6 @@
 import * as http from 'node:http'
+import { mockConsole } from '../../../test-utils/mock-console'
 import Koa, { HttpStatus } from '../src'
-import { mockConsole } from './utils/mock-console'
 
 describe('# application', () => {
   let app: InstanceType<typeof Koa>

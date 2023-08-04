@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import * as http from 'node:http'
 import { HttpMethod, HttpStatus } from './enums'
 import Request from './request'

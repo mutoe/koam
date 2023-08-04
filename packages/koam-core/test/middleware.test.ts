@@ -1,6 +1,6 @@
+import { mockConsole } from '../../../test-utils/mock-console'
 import type { ConnectMiddleware } from '../src'
 import Koa, { Context, HttpStatus, connect } from '../src'
-import { mockConsole } from './utils/mock-console'
 
 describe('# middleware', () => {
   let app: InstanceType<typeof Koa>
