@@ -2,21 +2,18 @@
   "name": "@mutoe/koam-router",
   "author": "mutoe <imutoe@gmail.com>",
   "version": "2.0.2",
-  "description": "Simple koa router. Use with @mutoe/koam",
+  "description": "A lightweight router for Koam.",
   "keywords": [
     "koa",
+    "koam",
     "http-server",
-    "router",
-    "lightweight"
+    "router"
   ],
   "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-router",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mutoe/koam/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -38,9 +35,6 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@mutoe/koam-core": "*"
-  },
-  "devDependencies": {
     "@mutoe/koam-core": "workspace:^"
   }
 }

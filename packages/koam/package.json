@@ -4,11 +4,16 @@
   "version": "2.0.2",
   "description": "Simple version Koa-like http-server",
   "keywords": [
-    "http-server",
     "koa",
-    "koa-router"
+    "koam",
+    "http-server"
   ],
+  "homepage": "https://github.com/mutoe/koam",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mutoe/koam.git"
+  },
   "publishConfig": {
     "access": "public"
   },
