@@ -23,7 +23,7 @@ declare global {
   type QueryObject = Record<string, string | number | (string | number)[]>
 
   namespace Koa {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
     export interface State {}
 
     export type ErrorHandler = (error: Error, context: Context) => void | Promise<void>
@@ -72,7 +72,7 @@ declare global {
     export interface Middleware {
       (ctx: Context, next: () => Promise<void>): Promise<void> | void
     }
-    export type MiddlewareGenerator = (...args: any[]) => Middleware
+    export type MiddlewareGenerator<T extends any[] = any[]> = (...args: T) => Middleware
   }
 }
 

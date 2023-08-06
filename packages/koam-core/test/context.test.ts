@@ -78,6 +78,17 @@ describe('# context', () => {
       })
     })
 
+    it('should can get request url when path is empty', async () => {
+      testAddress = app.use(cb).listen(0).address()
+
+      await fetch(baseUrl(), { method: 'GET' })
+
+      expect(cb).toHaveBeenCalledTimes(1)
+
+      const ctx = cb.mock.calls[0][0]?.toObject() as any
+      expect(ctx.url).toEqual('/')
+    })
+
     it('should parse json response correctly', async () => {
       testAddress = app.use(cb).listen(0).address()
 

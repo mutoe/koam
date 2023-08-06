@@ -37,7 +37,7 @@ export default class Request {
   set method (val: HttpMethod) { this.#req.method = val }
 
   get originalUrl (): string | undefined { return this.#req.url }
-  get url (): string { return [this.path, this.querystring].join('?') }
+  get url (): string { return [this.path, this.querystring].join('?').replace(/\?$/, '') }
 
   get protocol (): string {
     if ((this.#req.socket as any).encrypted) return 'https'
