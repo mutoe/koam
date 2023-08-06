@@ -131,11 +131,11 @@ describe('# Logger', () => {
   })
 
   it('should write file when drive set to file', async () => {
-    const dir = '/tmp/koam-test-log'
-    if (existsSync(`${dir}/output.log`)) rmSync(dir, { recursive: true })
+    const dir = '/tmp/koam-logger-unit-test'
+    if (existsSync(dir)) rmSync(dir, { recursive: true })
     vi.useFakeTimers({ now: new Date('2023-08-05T01:22:15.123+0800'), toFake: ['Date'] })
 
-    const logger = new Logger('Koam Logger test', {
+    const logger = new Logger('Koam Logger Test', {
       level: 'debug',
       drivers: [{ type: 'file', dir }],
     })
@@ -146,16 +146,16 @@ describe('# Logger', () => {
     logger.warn('warn message')
     logger.error('error message')
 
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await new Promise(resolve => setTimeout(resolve, 200))
 
     expect(existsSync(`${dir}/output.log`)).toBe(true)
 
     const result = readFileSync(`${dir}/output.log`, 'utf-8')
-    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [DEBUG] [Koam Logger test] debug message')
-    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [INFO] [Koam Logger test] info message')
-    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [LOG] [Koam Logger test] log message')
-    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [WARN] [Koam Logger test] warn message')
-    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [ERROR] [Koam Logger test] error message')
+    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [DEBUG] [Koam Logger Test] debug message')
+    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [INFO] [Koam Logger Test] info message')
+    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [LOG] [Koam Logger Test] log message')
+    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [WARN] [Koam Logger Test] warn message')
+    expect(result).toContain('2023-08-05T01:22:15.123+08:00 [ERROR] [Koam Logger Test] error message')
 
     vi.useRealTimers()
   })

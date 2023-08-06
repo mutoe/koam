@@ -34,7 +34,7 @@ interface FileDriver {
 
 type LogDriver = ConsoleDriver | FileDriver
 
-interface LoggerOptions {
+export interface LoggerOptions {
   level?: LogLevel
   moduleName?: string
   drivers?: LogDriver[]
