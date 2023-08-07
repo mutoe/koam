@@ -10,9 +10,10 @@
   },
   "scripts": {
     "postinstall": "simple-git-hooks",
+    "build": "pnpm -r --filter=koam-core build && pnpm -r --filter=\\!koam-core build",
     "test": "pnpm --filter=\"...[origin/main]\" --test-pattern=\"**/*.{test,spec}.*\" test",
     "type-check": "pnpm --filter=\"...[origin/main]\" type-check",
-    "release": "pnpm -r build && lerna publish --conventional-commits"
+    "release": "pnpm build && lerna publish --conventional-commits"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",

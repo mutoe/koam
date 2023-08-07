@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@mutoe/koam-core": "workspace:^",
+    "@mutoe/koam-logger": "workspace:^",
     "@mutoe/koam-router": "workspace:^"
   }
 }

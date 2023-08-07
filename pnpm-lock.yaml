@@ -44,6 +44,9 @@ importers:
       '@mutoe/koam-core':
         specifier: workspace:^
         version: link:../koam-core
+      '@mutoe/koam-logger':
+        specifier: workspace:^
+        version: link:../koam-logger
       '@mutoe/koam-router':
         specifier: workspace:^
         version: link:../koam-router

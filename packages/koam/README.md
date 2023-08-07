@@ -15,6 +15,15 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 - Built-in body parser middleware
 - Built-in response time middleware
 
+## Sub-package
+
+If you're looking for the ultimate in minimal packages and high customization, you can install the following subpackages separately. 
+Of course, they are all included in the main package (`@mutoe/koam`).
+
+- Koam core package [@mutoe/koam-core](https://github.com/mutoe/koam/tree/main/packages/koam-core)
+- Router middleware [@mutoe/koam-router](https://github.com/mutoe/koam/tree/main/packages/koam-router)
+- Logger middleware [@mutoe/koam-logger](https://github.com/mutoe/koam/tree/main/packages/koam-logger)
+
 # Usage
 
 ```ts
@@ -121,10 +130,3 @@ If you want to handle cookies, you can extend the middleware yourself, here is t
        ctx.cookies.get('key')
    })
    ```
-
-
-## Roadmap
-
-[Koam](https://github.com/mutoe/koam/tree/main/packages/koam-core#roadmap)
-
-[Koam Router](https://github.com/mutoe/koam/tree/main/packages/koam-router#roadmap)

@@ -9,11 +9,9 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 
 ```ts
 // entrypoint
-import Koa from '@mutoe/koam-core'
-import {logger} from '@mutoe/koam-logger'
+import Koa, { logger } from '@mutoe/koam'
 
 const app = new Koa()
-const router = new Logger()
 
 app.use(logger({
   moduleName: 'My App',
@@ -46,7 +44,7 @@ app.use(ctx => {
 
 1. Native STDOUT/STDERR output in the console
    ```ts
-   import { Logger } from '@mutoe/koam-logger'
+   import { Logger } from '@mutoe/koam'
    const logger = new Logger({
      drivers: [
         { type: 'console' },
@@ -56,7 +54,7 @@ app.use(ctx => {
    
 2. Write logs to files for logger platform like ELK or Grafana Loki
    ```ts
-   import { Logger } from '@mutoe/koam-logger'
+   import { Logger } from '@mutoe/koam'
    const logger = new Logger({
      drivers: [
         { 
@@ -73,7 +71,7 @@ app.use(ctx => {
 
 3. Timestamp when the log is written
    ```ts
-    import { Logger } from '@mutoe/koam-logger'
+    import { Logger } from '@mutoe/koam'
     const logger = new Logger({
       // your custom timestamp format, default is ISO-8601 format
       datetimeFormat: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
