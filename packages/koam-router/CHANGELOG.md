@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/mutoe/koam/compare/v2.0.2...v2.1.0) (2023-08-08)
+
+
+### Bug Fixes
+
+* **router:** extend type of koa content is not in effect ([03c3084](https://github.com/mutoe/koam/commit/03c3084effa6058e83507684568599f503016374))
+
+
+
+
+
 ## [2.0.2](https://github.com/mutoe/koam/compare/v2.0.1...v2.0.2) (2023-07-25)
 
 

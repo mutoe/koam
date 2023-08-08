@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/mutoe/koam/compare/v2.0.2...v2.1.0) (2023-08-08)
+
+
+### Features
+
+* **logger:** export koam logger to main package ([bb91f0c](https://github.com/mutoe/koam/commit/bb91f0c21ce68a12fb2f30545d7dfd7ffff760e0))
+
+
+
+
+
 ## [2.0.2](https://github.com/mutoe/koam/compare/v2.0.1...v2.0.2) (2023-07-25)
 
 **Note:** Version bump only for package @mutoe/koam

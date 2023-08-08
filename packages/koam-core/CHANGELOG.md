@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/mutoe/koam/compare/v2.0.2...v2.1.0) (2023-08-08)
+
+
+### Bug Fixes
+
+* **core:** fix `ctx.url` have extra trailing question mark when path and querystring is emtpy ([afc7ea5](https://github.com/mutoe/koam/commit/afc7ea581cd3e18d45fb6f2088f7eaaa7e5e1471))
+
+
+
+
+
 ## [2.0.2](https://github.com/mutoe/koam/compare/v2.0.1...v2.0.2) (2023-07-25)
 
 

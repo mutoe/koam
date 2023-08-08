@@ -1,7 +1,7 @@
 {
   "name": "@mutoe/koam-core",
   "author": "mutoe <imutoe@gmail.com>",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Koam core package",
   "keywords": [
     "koa",

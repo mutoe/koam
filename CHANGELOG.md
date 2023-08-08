@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/mutoe/koam/compare/v2.0.2...v2.1.0) (2023-08-08)
+
+
+### Bug Fixes
+
+* **core:** fix `ctx.url` have extra trailing question mark when path and querystring is emtpy ([afc7ea5](https://github.com/mutoe/koam/commit/afc7ea581cd3e18d45fb6f2088f7eaaa7e5e1471))
+* **router:** extend type of koa content is not in effect ([03c3084](https://github.com/mutoe/koam/commit/03c3084effa6058e83507684568599f503016374))
+
+
+### Features
+
+* implement logger util ([f87f734](https://github.com/mutoe/koam/commit/f87f7342695cc5e62d341a519648542ab6bf8363))
+* **logger:** export koam logger to main package ([bb91f0c](https://github.com/mutoe/koam/commit/bb91f0c21ce68a12fb2f30545d7dfd7ffff760e0))
+* **logger:** implement logger middleware ([840c765](https://github.com/mutoe/koam/commit/840c765a59708c24296b391d2b99c3f1b68e870f))
+
+
+
+
+
 ## [2.0.2](https://github.com/mutoe/koam/compare/v2.0.1...v2.0.2) (2023-07-25)
 
 
