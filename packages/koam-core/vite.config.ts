@@ -29,7 +29,7 @@ export default defineConfig({
     setupFiles: [resolve(__dirname, '../../test-utils/setup-test.ts')],
     mockReset: true,
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['json', 'html', 'lcov'],
     },
   },
