@@ -1,7 +1,7 @@
 import { parseQuery, stringifyQuery } from '../query-string'
 
 describe('# query string', () => {
-  const testcases: {qs: string, qo: any}[] = [
+  const testcases: { qs: string, qo: any }[] = [
     { qs: '', qo: {} },
     { qs: 'foo=bar', qo: { foo: 'bar' } },
     { qs: 'foo=1&bar=false', qo: { foo: 1, bar: false } },

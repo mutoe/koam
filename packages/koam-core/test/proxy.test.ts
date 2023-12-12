@@ -1,4 +1,5 @@
-import Koa, { Context } from '../src'
+import type { Context } from '../src'
+import Koa from '../src'
 
 describe('# proxy server is available', () => {
   let app: InstanceType<typeof Koa>

@@ -1,7 +1,8 @@
-export function safeDecodeURIComponent (s: string): string {
+export function safeDecodeURIComponent(s: string): string {
   try {
     return decodeURIComponent(s)
-  } catch {
+  }
+  catch {
     return s
   }
 }

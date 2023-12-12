@@ -1,4 +1,4 @@
-import Koa from '@mutoe/koam-core'
+import type Koa from '@mutoe/koam-core'
 import Router from '../router'
 
 describe('# Router', () => {
@@ -23,7 +23,7 @@ describe('# Router', () => {
     })
   })
 
-  describe('Named routes', () => {
+  describe('named routes', () => {
     it('should match correct route when call url method', () => {
       router.get('user', '/users/:id')
       expect(router.url('user', { id: 3 })).toEqual('/users/3')

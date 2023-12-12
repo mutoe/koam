@@ -37,8 +37,9 @@
  *  - `x` - Unix timestamp in milliseconds. e.g. 1410715640000
  *  - `'any string'` - Raw string
  */
-export function dateFormat (date: Date | string, pattern: string): string {
-  if (typeof date === 'string') date = new Date(date)
+export function dateFormat(date: Date | string, pattern: string): string {
+  if (typeof date === 'string')
+    date = new Date(date)
 
   let placeholderCount = 0
   const placeholders: string[] = []
@@ -50,8 +51,7 @@ export function dateFormat (date: Date | string, pattern: string): string {
     return placeholder
   })
 
-  // eslint-disable-next-line complexity
-  pattern = pattern.replaceAll(/([YMDdWwHhmsSAaXxZ])\1*/g, (match) => {
+  pattern = pattern.replaceAll(/([YMDdWwHhmsSAaXxZ])\1*/g, match => {
     assert(date instanceof Date)
     switch (match) {
       case 'YYYY': return date.getFullYear().toString()

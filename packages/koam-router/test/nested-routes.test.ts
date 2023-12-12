@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-describe('Nested routes', () => {
+describe('nested routes', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
@@ -111,7 +111,7 @@ describe('Nested routes', () => {
 
     it('should support array as path passed in use method', async () => {
       router.get('/foo', (ctx, next) => { ctx.body = 'foo'; return next() })
-      router.use(['/foo', '/bar'], (ctx) => { ctx.body = 'bar' })
+      router.use(['/foo', '/bar'], ctx => { ctx.body = 'bar' })
       testAddress = app.use(router.routes())
         .listen(0).address()
 

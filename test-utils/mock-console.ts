@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import type { Mock } from 'vitest'
 
 interface MockedConsole {
@@ -9,7 +11,7 @@ interface MockedConsole {
   log: typeof console.log
 }
 
-export const mockConsole = async (fn: (console: MockedConsole) => any): Promise<void> => {
+export async function mockConsole(fn: (console: MockedConsole) => any): Promise<void> {
   const { error, info, debug, warn, log } = console
   const consoleError = console.error = vi.fn()
   const consoleWarn = console.warn = vi.fn()

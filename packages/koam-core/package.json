@@ -1,39 +1,39 @@
 {
   "name": "@mutoe/koam-core",
-  "author": "mutoe <imutoe@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "2.1.0",
   "description": "Koam core package",
+  "license": "MIT",
+  "author": "mutoe <imutoe@gmail.com>",
   "keywords": [
     "koa",
     "koam",
     "http-server"
   ],
   "homepage": "https://github.com/mutoe/koam/tree/main/packages/koam-core",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "engines": {
     "node": ">= 14"
   },
   "type": "module",
-  "types": "./build/index.d.ts",
-  "files": [
-    "build"
-  ],
   "exports": {
     ".": {
       "import": "./build/index.js",
       "require": "./build/index.cjs"
     }
   },
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
-    "test": "vitest run --coverage",
     "build": "vite build && tsc -p tsconfig.build.json",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run --coverage"
   }
 }

@@ -1,7 +1,7 @@
 import Koa from '@mutoe/koam-core'
 import Router from 'src'
 
-describe('Multiple routes', () => {
+describe('multiple routes', () => {
   let app = new Koa()
   let testAddress: any = {}
   const cb = vi.fn()

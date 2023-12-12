@@ -1,8 +1,11 @@
-import * as http from 'node:http'
-import { HttpMethod, HttpStatus } from './enums'
+import type * as http from 'node:http'
+import type { HttpMethod } from './enums'
+import { HttpStatus } from './enums'
 import Request from './request'
 import Response from './response'
-import Koa, { AppError, Application } from './index'
+import type { Application } from './index'
+import type Koa from './index'
+import { AppError } from './index'
 
 // noinspection JSConstantReassignment
 export default class Context {
@@ -18,7 +21,7 @@ export default class Context {
   /** Custom properties */
   state: Koa.State = {}
 
-  constructor (app: Application, req: http.IncomingMessage, res: http.ServerResponse) {
+  constructor(app: Application, req: http.IncomingMessage, res: http.ServerResponse) {
     this.app = app
     this.req = req
     this.res = res
@@ -36,45 +39,45 @@ export default class Context {
     this.res.statusCode = HttpStatus.NotFound
   }
 
-  get socket () { return this.request.socket }
-  get ip () { return this.request.ip }
-  get ips () { return this.request.ips }
+  get socket() { return this.request.socket }
+  get ip() { return this.request.ip }
+  get ips() { return this.request.ips }
 
-  get method () { return this.request.method }
-  set method (val: HttpMethod) { this.request.method = val }
+  get method() { return this.request.method }
+  set method(val: HttpMethod) { this.request.method = val }
 
-  get host () { return this.request.host }
-  get protocol () { return this.request.protocol }
-  get origin () { return this.request.origin }
-  get url () { return this.request.url }
-  get originalUrl () { return this.request.originalUrl }
+  get host() { return this.request.host }
+  get protocol() { return this.request.protocol }
+  get origin() { return this.request.origin }
+  get url() { return this.request.url }
+  get originalUrl() { return this.request.originalUrl }
 
-  get path () { return this.request.path }
-  set path (val: string) { this.request.path = val }
+  get path() { return this.request.path }
+  set path(val: string) { this.request.path = val }
 
-  get query () { return this.request.query }
-  set query (val: QueryObject) { this.request.query = val }
+  get query() { return this.request.query }
+  set query(val: QueryObject) { this.request.query = val }
 
-  get querystring () { return this.request.querystring }
-  set querystring (val: string) { this.request.querystring = val }
+  get querystring() { return this.request.querystring }
+  set querystring(val: string) { this.request.querystring = val }
 
-  get body () { return this.response.body }
-  set body (value: any) { this.response.body = value }
+  get body() { return this.response.body }
+  set body(value: any) { this.response.body = value }
 
-  get status () { return this.response.status }
-  set status (val: HttpStatus) { this.response.status = val }
+  get status() { return this.response.status }
+  set status(val: HttpStatus) { this.response.status = val }
 
-  get message () { return this.response.message }
-  set message (val: string) { this.response.message = val }
+  get message() { return this.response.message }
+  set message(val: string) { this.response.message = val }
 
-  get type () { return this.response.type }
-  set type (val: string) { this.response.type = val }
+  get type() { return this.response.type }
+  set type(val: string) { this.response.type = val }
 
-  get length () { return this.response.length }
-  set length (length: number | undefined) { this.response.length = length }
+  get length() { return this.response.length }
+  set length(length: number | undefined) { this.response.length = length }
 
-  get headers () { return this.request.headers }
-  get headerSent () { return this.response.headerSent }
+  get headers() { return this.request.headers }
+  get headerSent() { return this.response.headerSent }
   flushHeaders = () => this.res.flushHeaders()
 
   /** Get special request header. */
@@ -97,33 +100,36 @@ export default class Context {
     return this
   }
 
-  redirect (action: 'back', referer?: string): void
-  redirect (url: string): void
-  redirect (url: 'back' | string, alt?: string): void {
+  redirect(action: 'back', referer?: string): void
+  redirect(url: string): void
+  redirect(url: 'back' | string, alt?: string): void {
     this.response.redirect(url as any, alt)
   }
 
-  throw (): never
-  throw (appError: AppError): never
-  throw (status?: HttpStatus, message?: string, detail?: JsonValue): never
-  throw (status?: HttpStatus, detail?: JsonValue): never
-  throw (message?: string, detail?: JsonValue): never
-  throw (detail?: JsonValue): never
-  throw (...args: any[]): never {
-    if (args.length === 0) throw new AppError()
-    if (args[0] instanceof AppError) throw args[0]
+  throw(): never
+  throw(appError: AppError): never
+  throw(status?: HttpStatus, message?: string, detail?: JsonValue): never
+  throw(status?: HttpStatus, detail?: JsonValue): never
+  throw(message?: string, detail?: JsonValue): never
+  throw(detail?: JsonValue): never
+  throw(...args: any[]): never {
+    if (args.length === 0)
+      throw new AppError()
+    if (args[0] instanceof AppError)
+      throw args[0]
     const { message, detail, status } = AppError.handleArguments(args)
     throw new AppError(status, message, detail)
   }
 
-  assert (value: any): asserts value
-  assert (value: any, appError: AppError): asserts value
-  assert (value: any, status?: HttpStatus, message?: string, detail?: JsonValue): asserts value
-  assert (value: any, status?: HttpStatus, detail?: JsonValue): asserts value
-  assert (value: any, message?: string, detail?: JsonValue): asserts value
-  assert (value: any, detail?: JsonValue): asserts value
-  assert (value: any, ...args: any[]): asserts value {
-    if (!value) this.throw(...args)
+  assert(value: any): asserts value
+  assert(value: any, appError: AppError): asserts value
+  assert(value: any, status?: HttpStatus, message?: string, detail?: JsonValue): asserts value
+  assert(value: any, status?: HttpStatus, detail?: JsonValue): asserts value
+  assert(value: any, message?: string, detail?: JsonValue): asserts value
+  assert(value: any, detail?: JsonValue): asserts value
+  assert(value: any, ...args: any[]): asserts value {
+    if (!value)
+      this.throw(...args)
   }
 
   toJSON = (): JsonValue => {
@@ -135,7 +141,7 @@ export default class Context {
     }
   }
 
-  attachment (filename?: string): this {
+  attachment(filename?: string): this {
     this.response.attachment(filename)
     return this
   }

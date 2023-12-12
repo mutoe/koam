@@ -1,8 +1,8 @@
-import * as http from 'node:http'
-import Application from './application'
-import { HttpMethod } from './enums'
+import type * as http from 'node:http'
+import type Application from './application'
+import type { HttpMethod } from './enums'
 import { parseQuery, stringifyQuery } from './utils'
-import { Context, Response } from './index'
+import type { Context, Response } from './index'
 
 export default class Request {
   readonly app!: Application
@@ -17,7 +17,7 @@ export default class Request {
   #req: http.IncomingMessage
   #querystring: string = ''
 
-  constructor (req: http.IncomingMessage) {
+  constructor(req: http.IncomingMessage) {
     this.#req = req
     const [path, queryString] = req.url?.split('?') ?? []
     this.path = path
@@ -31,60 +31,63 @@ export default class Request {
     }
   }
 
-  get socket (): http.IncomingMessage['socket'] { return this.#req.socket }
+  get socket(): http.IncomingMessage['socket'] { return this.#req.socket }
 
-  get method (): HttpMethod { return this.#req.method as HttpMethod || '' }
-  set method (val: HttpMethod) { this.#req.method = val }
+  get method(): HttpMethod { return this.#req.method as HttpMethod || '' }
+  set method(val: HttpMethod) { this.#req.method = val }
 
-  get originalUrl (): string | undefined { return this.#req.url }
-  get url (): string { return [this.path, this.querystring].join('?').replace(/\?$/, '') }
+  get originalUrl(): string | undefined { return this.#req.url }
+  get url(): string { return [this.path, this.querystring].join('?').replace(/\?$/, '') }
 
-  get protocol (): string {
-    if ((this.#req.socket as any).encrypted) return 'https'
-    if (!this.app.proxy) return 'http'
+  get protocol(): string {
+    if ((this.#req.socket as any).encrypted)
+      return 'https'
+    if (!this.app.proxy)
+      return 'http'
     const proto = this.get('x-forwarded-proto') as string | undefined
     return proto?.split(/\s*,\s*/, 1).at(0) || 'http'
   }
 
-  get host (): string {
+  get host(): string {
     let host: string | undefined
-    if (this.app.proxy) {
+    if (this.app.proxy)
       host = this.get('x-forwarded-host') as string
-    }
-    if (!host) {
+
+    if (!host)
       host = this.get('host')
-    }
+
     return host?.split(/\s*,\s*/, 1).at(0) || ''
   }
 
-  get origin (): string { return `${this.protocol}://${this.host}` }
+  get origin(): string { return `${this.protocol}://${this.host}` }
 
-  get ips (): string[] {
-    if (!this.app.proxy) return []
+  get ips(): string[] {
+    if (!this.app.proxy)
+      return []
     let ips = (this.get(this.app.proxyIpHeader) as string | undefined)
       ?.split(/\s*,\s*/) ?? []
-    if (this.app.maxIpsCount > 0) {
+    if (this.app.maxIpsCount > 0)
       ips = ips.slice(-this.app.maxIpsCount)
-    }
+
     return ips
   }
 
-  get ip (): string { return this.ips.at(0) || this.socket.remoteAddress || '' }
+  get ip(): string { return this.ips.at(0) || this.socket.remoteAddress || '' }
 
   /** Get search string. */
-  get querystring (): string { return this.#querystring }
-  set querystring (val: string | undefined) { this.#querystring = val?.replace(/^\?/, '') ?? '' }
+  get querystring(): string { return this.#querystring }
+  set querystring(val: string | undefined) { this.#querystring = val?.replace(/^\?/, '') ?? '' }
 
-  get query (): QueryObject { return parseQuery(this.#querystring) }
-  set query (val: QueryObject) { this.#querystring = stringifyQuery(val) }
+  get query(): QueryObject { return parseQuery(this.#querystring) }
+  set query(val: QueryObject) { this.#querystring = stringifyQuery(val) }
 
-  get headers (): http.IncomingHttpHeaders { return this.#req.headers }
+  get headers(): http.IncomingHttpHeaders { return this.#req.headers }
 
   get<T extends string>(key: T): T extends keyof http.IncomingHttpHeaders ? http.IncomingHttpHeaders[T] : (string | string[] | undefined) {
     return this.headers[key] as any
   }
 
-  get length (): number | undefined { return this.get('content-length') ? Number(this.get('content-length')) : undefined }
+  get length(): number | undefined { return this.get('content-length') ? Number(this.get('content-length')) : undefined }
 
   toJSON = (): JsonValue => {
     return {

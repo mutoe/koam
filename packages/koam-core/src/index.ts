@@ -1,6 +1,6 @@
-import * as http from 'node:http'
+import type * as http from 'node:http'
 import Application from './application'
-import Context from './context'
+import type Context from './context'
 
 export * from './enums'
 export * from './middlewares'
@@ -13,7 +13,7 @@ export { default as Request } from './request'
 export { default as Response } from './response'
 
 declare global {
-  type JsonObject = {[x: string]: JsonValue}
+  interface JsonObject { [x: string]: JsonValue }
   type JsonArray = JsonValue[]
   type JsonValue =
     | string | number | boolean | null

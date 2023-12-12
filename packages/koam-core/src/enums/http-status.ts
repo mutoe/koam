@@ -38,27 +38,27 @@ export enum HttpStatus {
   GatewayTimeout = 504,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace HttpStatus {
   export type Redirect =
-      | HttpStatus.MultipleChoices | HttpStatus.SeeOther
-      | HttpStatus.Found | HttpStatus.MovedPermanently
-      | HttpStatus.TemporaryRedirect | HttpStatus.PermanentRedirect
+    | HttpStatus.MultipleChoices | HttpStatus.SeeOther
+    | HttpStatus.Found | HttpStatus.MovedPermanently
+    | HttpStatus.TemporaryRedirect | HttpStatus.PermanentRedirect
 
-  export function is2xxSuccess (status: HttpStatus): boolean {
+  export function is2xxSuccess(status: HttpStatus): boolean {
     return status >= 200 && status < 300
   }
-  export function is4xxError (status: HttpStatus): boolean {
+  export function is4xxError(status: HttpStatus): boolean {
     return status >= 400 && status < 500
   }
-  export function is5xxError (status: HttpStatus): boolean {
+  export function is5xxError(status: HttpStatus): boolean {
     return status >= 500 && status < 600
   }
-  export function isError (status?: HttpStatus): status is HttpStatus {
-    if (!status) return false
+  export function isError(status?: HttpStatus): status is HttpStatus {
+    if (!status)
+      return false
     return status >= 400 && status < 600
   }
-  export function getMessage (status: HttpStatus): string {
-    return HttpStatus[status].replace(/[A-Z]/g, c => ` ${c}`).trimStart()
+  export function getMessage(status: HttpStatus): string {
+    return HttpStatus[status].replaceAll(/[A-Z]/g, c => ` ${c}`).trimStart()
   }
 }

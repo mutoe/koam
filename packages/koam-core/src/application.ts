@@ -1,13 +1,14 @@
 import * as assert from 'node:assert'
+import { Buffer } from 'node:buffer'
 import * as http from 'node:http'
-import type { ListenOptions } from 'node:net'
-import * as net from 'node:net'
+import type * as net from 'node:net'
+import * as process from 'node:process'
 import { Stream } from 'node:stream'
 import Context from './context'
 import { HttpStatus } from './enums'
 import { bodyParser, responseTime } from './middlewares'
 import { compose } from './utils'
-import Koa, { AppError, noop } from './index'
+import { AppError, noop } from './index'
 
 export type HttpServer = http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>
 
@@ -46,7 +47,7 @@ export default class Application implements Koa.Config {
   private httpServer?: HttpServer
   private middlewares: Koa.Middleware[] = []
 
-  constructor (config: Partial<Koa.Config> = {}) {
+  constructor(config: Partial<Koa.Config> = {}) {
     const { env, onError, silent, proxy, proxyIpHeader, maxIpsCount } = config
     this.env = env || process.env.NODE_ENV || 'development'
     this.onError = onError ?? defaultErrorHandler
@@ -61,8 +62,8 @@ export default class Application implements Koa.Config {
     )
   }
 
-  get isDevelopment (): boolean { return this.env === 'development' }
-  get isProduction (): boolean { return this.env === 'production' }
+  get isDevelopment(): boolean { return this.env === 'development' }
+  get isProduction(): boolean { return this.env === 'production' }
 
   /**
    * Get server listen address
@@ -70,47 +71,48 @@ export default class Application implements Koa.Config {
    * @example `192.168.1.1:8080`
    * @example `[::1]:8080`
    */
-  get address (): string {
+  get address(): string {
     let address = this.httpServer?.address() ?? ''
-    if (typeof address !== 'string') {
+    if (typeof address !== 'string')
       address = address.address
-    }
+
     return address
   }
 
-  get port (): number | null {
+  get port(): number | null {
     try {
       return (this.httpServer?.address() as net.AddressInfo).port
-    } catch {
+    }
+    catch {
       return null
     }
   }
 
-  use (middleware: Koa.Middleware): this {
+  use(middleware: Koa.Middleware): this {
     this.middlewares.push(middleware)
     return this
   }
 
-  listen (port?: number, hostname?: string, backlog?: number, listeningListener?: () => void): HttpServer
-  listen (port?: number, hostname?: string, listeningListener?: () => void): HttpServer
-  listen (port?: number, backlog?: number, listeningListener?: () => void): HttpServer
-  listen (port?: number, listeningListener?: () => void): HttpServer
-  listen (path: string, backlog?: number, listeningListener?: () => void): HttpServer
-  listen (path: string, listeningListener?: () => void): HttpServer
-  listen (options: ListenOptions, listeningListener?: () => void): HttpServer
-  listen (handle: any, backlog?: number, listeningListener?: () => void): HttpServer
-  listen (handle: any, listeningListener?: () => void): HttpServer
-  listen (...args: any[]): HttpServer {
+  listen(port?: number, hostname?: string, backlog?: number, listeningListener?: () => void): HttpServer
+  listen(port?: number, hostname?: string, listeningListener?: () => void): HttpServer
+  listen(port?: number, backlog?: number, listeningListener?: () => void): HttpServer
+  listen(port?: number, listeningListener?: () => void): HttpServer
+  listen(path: string, backlog?: number, listeningListener?: () => void): HttpServer
+  listen(path: string, listeningListener?: () => void): HttpServer
+  listen(options: net.ListenOptions, listeningListener?: () => void): HttpServer
+  listen(handle: any, backlog?: number, listeningListener?: () => void): HttpServer
+  listen(handle: any, listeningListener?: () => void): HttpServer
+  listen(...args: any[]): HttpServer {
     this.httpServer = http.createServer(this.callback())
     return this.httpServer.listen(...args)
   }
 
-  close (callback?: (error?: Error) => void): HttpServer | undefined {
+  close(callback?: (error?: Error) => void): HttpServer | undefined {
     this.middlewares = null!
     return this.httpServer?.close(callback)
   }
 
-  callback (): http.RequestListener {
+  callback(): http.RequestListener {
     const middleware = compose(this.middlewares)
 
     return async (req, res) => {
@@ -118,14 +120,15 @@ export default class Application implements Koa.Config {
 
       try {
         await middleware(context, noop)
-      } catch (error) {
+      }
+      catch (error) {
         await Promise.resolve(this.handleError(context, error)).catch(console.error)
       }
       this.respond(context)
     }
   }
 
-  toJSON (): JsonValue {
+  toJSON(): JsonValue {
     return {
       env: this.env,
       silent: this.silent,
@@ -135,34 +138,42 @@ export default class Application implements Koa.Config {
     }
   }
 
-  private handleError (context: Context, error: unknown): void | Promise<void> {
+  private handleError(context: Context, error: unknown): void | Promise<void> {
     if (error instanceof AppError) {
       context.status = error.status
       context.body = error.expose ? error.detail : null
-    } else if (!(error instanceof Error)) {
+    }
+    else if (!(error instanceof Error)) {
       error = new Error(error?.toString())
     }
-    if (!HttpStatus.isError(context.status) || context?.status === HttpStatus.NotFound) {
+    if (!HttpStatus.isError(context.status) || context?.status === HttpStatus.NotFound)
       context.status = HttpStatus.InternalServerError
-    }
+
     assert.ok(error instanceof Error)
-    if (!error.message) error.message = HttpStatus.getMessage(context.status)
+    if (!error.message)
+      error.message = HttpStatus.getMessage(context.status)
     context.message = error.message
     this.onError(error, context)
   }
 
-  private respond (context: Context): void {
+  private respond(context: Context): void {
     context.message ||= HttpStatus.getMessage(context.status)
     const { body, type, res } = context
 
-    if (body === undefined || body === null) return void res.end()
-    if (typeof body === 'string') return void res.end(body)
-    if (Buffer.isBuffer(body)) return void res.end(body)
-    if (body instanceof Stream) return void body.pipe(res)
+    if (body === undefined || body === null)
+      return void res.end()
+    if (typeof body === 'string')
+      return void res.end(body)
+    if (Buffer.isBuffer(body))
+      return void res.end(body)
+    if (body instanceof Stream)
+      return void body.pipe(res)
     if (body instanceof Object) {
-      if (!type) context.type = 'application/json'
+      if (!type)
+        context.type = 'application/json'
       const jsonBody = JSON.stringify(context.body)
-      if (!res.headersSent) context.response.length = Buffer.byteLength(jsonBody)
+      if (!res.headersSent)
+        context.response.length = Buffer.byteLength(jsonBody)
       context.res.end(jsonBody)
       return
     }
@@ -170,11 +181,14 @@ export default class Application implements Koa.Config {
   }
 }
 
-const defaultErrorHandler = (error: unknown, context: Context): void => {
-  if (context.app.silent) return
-  if (error instanceof AppError && error.expose) return
+function defaultErrorHandler(error: unknown, context: Context): void {
+  if (context.app.silent)
+    return
+  if (error instanceof AppError && error.expose)
+    return
   assert.ok(error instanceof Error)
 
+  // eslint-disable-next-line no-console
   console.debug(context.toJSON())
   console.error(error)
 }

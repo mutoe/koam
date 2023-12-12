@@ -1,36 +1,36 @@
 {
   "name": "@mutoe/koam",
-  "author": "mutoe <imutoe@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "2.1.0",
   "description": "Simple version Koa-like http-server",
+  "license": "MIT",
+  "author": "mutoe <imutoe@gmail.com>",
   "keywords": [
     "koa",
     "koam",
     "http-server"
   ],
   "homepage": "https://github.com/mutoe/koam",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mutoe/koam.git"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "engines": {
     "node": ">= 14"
   },
   "type": "module",
-  "types": "./index.d.ts",
-  "files": [
-    "*"
-  ],
   "exports": {
     ".": {
       "import": "./index.js",
       "require": "./index.cjs"
     }
   },
+  "types": "./index.d.ts",
+  "files": [
+    "*"
+  ],
   "dependencies": {
     "@mutoe/koam-core": "workspace:^",
     "@mutoe/koam-logger": "workspace:^",

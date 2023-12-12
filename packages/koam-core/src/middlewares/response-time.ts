@@ -1,4 +1,4 @@
-import Koa from '../index'
+import * as process from 'node:process'
 
 declare global {
   namespace Koa {
@@ -28,12 +28,12 @@ export const responseTime: Koa.MiddlewareGenerator = () => async (ctx, next) => 
   ctx.state.requestDateTime ??= new Date().toISOString()
   try {
     await next()
-  } finally {
+  }
+  finally {
     const [outSecond, outNano] = process.hrtime()
     const ms = (outSecond * 1e3 + outNano / 1e6) - (inSecond * 1e3 + inNano / 1e6)
     ctx.state.respondTime ??= Number.parseFloat(ms.toFixed(3))
-    if (ctx.state.addResponseTimeHeader ?? !ctx.app.isProduction) {
+    if (ctx.state.addResponseTimeHeader ?? !ctx.app.isProduction)
       ctx.set('X-Response-Time', `${ms.toFixed(0)}ms`)
-    }
   }
 }

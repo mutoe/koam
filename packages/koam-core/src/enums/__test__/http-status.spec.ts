@@ -54,7 +54,7 @@ describe('# HttpStatus', () => {
   })
 
   describe('call getMessage', () => {
-    const testcases: {status: HttpStatus, expected: string}[] = [
+    const testcases: { status: HttpStatus, expected: string }[] = [
       { status: HttpStatus.Ok, expected: 'Ok' },
       { status: HttpStatus.NotFound, expected: 'Not Found' },
       { status: HttpStatus.InternalServerError, expected: 'Internal Server Error' },

@@ -41,8 +41,9 @@ describe('# application', () => {
 
   describe('default status', () => {
     it('should get NotFound when no body set', async () => {
+      const fn = vi.fn()
       testAddress = app
-        .use(ctx => console.log(ctx.body))
+        .use(ctx => fn(ctx.body))
         .listen().address()
 
       const res = await fetch(baseUrl())
@@ -231,7 +232,8 @@ describe('# application', () => {
       testAddress = app
         .use(async ctx => {
           const timeout = Number(ctx.query.timeout) || 0
-          if (timeout) await new Promise(resolve => setTimeout(resolve, timeout))
+          if (timeout)
+            await new Promise(resolve => setTimeout(resolve, timeout))
           ctx.body = `T ${timeout}`
         })
         .listen()

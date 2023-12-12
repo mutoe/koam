@@ -1,7 +1,8 @@
 import { spawn } from 'node:child_process'
 import { Stream } from 'node:stream'
 import { mockConsole } from '../../../test-utils/mock-console'
-import Koa, { AppError, Context, HttpStatus, noop } from '../src'
+import type { Context } from '../src'
+import Koa, { AppError, HttpStatus, noop } from '../src'
 
 declare global {
   namespace Koa {
@@ -227,7 +228,8 @@ describe('# context', () => {
       const reader = response.body!.getReader()
       while (true) {
         const { done, value } = await reader.read()
-        if (done) break
+        if (done)
+          break
         fn(new TextDecoder('utf-8').decode(value))
       }
       expect(fn).toHaveBeenCalledTimes(3)

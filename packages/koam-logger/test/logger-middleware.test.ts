@@ -2,7 +2,7 @@ import { existsSync, readFileSync, rmSync } from 'node:fs'
 import Koa, { HttpStatus } from '@mutoe/koam-core'
 import { logger } from '../src'
 
-describe('Koam logger basic feature', () => {
+describe('koam logger basic feature', () => {
   let app = new Koa()
   let testAddress: any = {}
   const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
@@ -15,7 +15,8 @@ describe('Koam logger basic feature', () => {
 
   it('should get correctly response given request url is match', async () => {
     const logDir = '/tmp/koam-logger-middleware-test'
-    if (existsSync(logDir)) rmSync(logDir, { recursive: true })
+    if (existsSync(logDir))
+      rmSync(logDir, { recursive: true })
 
     app.use(logger({
       level: 'debug',

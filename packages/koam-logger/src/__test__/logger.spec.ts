@@ -132,7 +132,8 @@ describe('# Logger', () => {
 
   it('should write file when drive set to file', async () => {
     const dir = '/tmp/koam-logger-unit-test'
-    if (existsSync(dir)) rmSync(dir, { recursive: true })
+    if (existsSync(dir))
+      rmSync(dir, { recursive: true })
     vi.useFakeTimers({ now: new Date('2023-08-05T01:22:15.123+0800'), toFake: ['Date'] })
 
     const logger = new Logger('Koam Logger Test', {

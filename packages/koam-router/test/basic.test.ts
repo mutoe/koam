@@ -1,13 +1,17 @@
 import Koa, { HttpStatus } from '@mutoe/koam-core'
 import Router from 'src'
 
-describe('Koam router basic feature', () => {
+describe('koam router basic feature', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}
   const baseUrl = (path: string = '') => `http://localhost:${testAddress.port || 33_000}${path}`
 
-  beforeEach(() => { testAddress = {}; app = new Koa(); router = new Router() })
+  beforeEach(() => {
+    testAddress = {}
+    app = new Koa()
+    router = new Router()
+  })
   afterEach(() => void app.close())
 
   it('should get correctly response given request url is match', async () => {
@@ -22,7 +26,7 @@ describe('Koam router basic feature', () => {
     await expect(result.text()).resolves.toEqual('world!')
   })
 
-  describe('Context parameters', () => {
+  describe('context parameters', () => {
     it('should return correct context parameters', async () => {
       const cb = vi.fn()
       router.get('/:category/:title', ctx => { cb(ctx.params); ctx.body = null })
@@ -72,7 +76,7 @@ describe('Koam router basic feature', () => {
     })
   })
 
-  describe('Allowed methods', () => {
+  describe('allowed methods', () => {
     it('should return 404 when method not matched', async () => {
       router.post('/hello', ctx => { ctx.body = 'world!' })
       testAddress = app.use(router.routes())

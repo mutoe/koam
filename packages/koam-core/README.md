@@ -2,7 +2,7 @@
 
 Implement a simple Koa-like http server with zero dependencies from scratch.
 
-THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !  
+THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !
 许多功能未经严格测试，请勿用于生产目的！
 
 ## Advantage

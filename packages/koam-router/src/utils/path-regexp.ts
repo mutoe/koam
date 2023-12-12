@@ -7,7 +7,7 @@ export class PathRegexp extends RegExp {
   path?: string
   paramNames: string[]
 
-  constructor (path: string | RegExp) {
+  constructor(path: string | RegExp) {
     const paramNames: string[] = []
     if (path instanceof RegExp) {
       super(path)
@@ -31,8 +31,9 @@ export class PathRegexp extends RegExp {
     this.path = path
   }
 
-  toPath (params: RouterParams | (string | number)[]): string {
-    if (!this.path) throw new Error('Route path not have initial value')
+  toPath(params: RouterParams | (string | number)[]): string {
+    if (!this.path)
+      throw new Error('Route path not have initial value')
     if (Array.isArray(params)) {
       let result = this.path
       while (params.length) {
@@ -44,10 +45,12 @@ export class PathRegexp extends RegExp {
     return this.path
       .split('/')
       .map(subpath => {
-        subpath = subpath.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
+        subpath = subpath.replaceAll(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
           const value = params[name]
-          if (!(name in params) || value === undefined) return substring
-          if (customPattern && !RegExp(customPattern).test(String(value))) return substring
+          if (!(name in params) || value === undefined)
+            return substring
+          if (customPattern && !RegExp(customPattern).test(String(value)))
+            return substring
           return String(value) + modifier
         })
         subpath = prefixSlash(subpath)
@@ -58,24 +61,31 @@ export class PathRegexp extends RegExp {
   }
 }
 
-function replaceKeyword (s: string): string {
+function replaceKeyword(s: string): string {
   // Replace `.` to `\.` but do not replace `\.` twice
   return s.replace(/\.(?!\\)/, '\\.')
 }
 
-function extractNamedParams (s: string, paramNames: string[] = []): string {
-  return s.replace(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
+function extractNamedParams(s: string, paramNames: string[] = []): string {
+  return s.replaceAll(/:([\w-]+?)(?:\((.+?)\))?(\W|\(.+\)|$)/g, (substring, name, customPattern, modifier) => {
     paramNames.push(name)
     return `(?<${name}>${customPattern ? `(?:${customPattern})` : '[^/#?]+?'})${modifier}`
   })
 }
-function prefixSlash (s: string): string {
-  if (s === '*') return '.*'
-  if (s === '+') return '.+'
-  if (s.endsWith('?')) return `(?:/${s.slice(0, -1)})?`
-  if (s.endsWith('+') && !s.startsWith('(')) return s.replace(/^(.*?)\+$/, '(?:/$1)+')
-  if (s.endsWith('+')) return `/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)}`
-  if (s.endsWith('*') && !s.startsWith('(')) return s.replace(/^(.*?)\*$/, '(?:/$1)*')
-  if (s.endsWith('*')) return `(?:/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)})?`
+function prefixSlash(s: string): string {
+  if (s === '*')
+    return '.*'
+  if (s === '+')
+    return '.+'
+  if (s.endsWith('?'))
+    return `(?:/${s.slice(0, -1)})?`
+  if (s.endsWith('+') && !s.startsWith('('))
+    return s.replace(/^(.*?)\+$/, '(?:/$1)+')
+  if (s.endsWith('+'))
+    return `/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)}`
+  if (s.endsWith('*') && !s.startsWith('('))
+    return s.replace(/^(.*?)\*$/, '(?:/$1)*')
+  if (s.endsWith('*'))
+    return `(?:/${s.replace(/\[\^\/#\?]/, '[^#?]').slice(0, -1)})?`
   return `/${s}`
 }

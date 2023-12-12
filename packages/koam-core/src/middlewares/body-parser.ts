@@ -1,4 +1,4 @@
-import Koa from '../index'
+import { Buffer } from 'node:buffer'
 
 /**
  * Koa body parser
@@ -12,16 +12,21 @@ export const bodyParser: Koa.MiddlewareGenerator = () => async (ctx, next) => {
     const chunks: Uint8Array[] = []
     ctx.req.on('readable', () => {
       let chunk: Uint8Array
-      while ((chunk = ctx.req.read()) !== null) chunks.push(chunk)
+      while ((chunk = ctx.req.read()) !== null)
+        chunks.push(chunk)
     })
     ctx.req.on('end', () => {
-      if (chunks.length === 0) return resolve()
+      if (chunks.length === 0)
+        return resolve()
       try {
         ctx.request.body = JSON.parse(Buffer.concat(chunks).toString())
-      } catch {
+      }
+      catch {
         // TODO; replace to ctx.log method
+        // eslint-disable-next-line no-console
         console.info('parse request body failed')
-      } finally {
+      }
+      finally {
         resolve()
       }
     })

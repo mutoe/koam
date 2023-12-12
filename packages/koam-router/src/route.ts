@@ -1,4 +1,4 @@
-import { HttpMethod } from '@mutoe/koam-core'
+import type { HttpMethod } from '@mutoe/koam-core'
 import { PathRegexp } from './utils/path-regexp'
 import { safeDecodeURIComponent } from './utils/safe-decode-uri-component'
 
@@ -16,9 +16,9 @@ export default class Route {
   options: RouteOptions
   paramNames: string[] = []
 
-  constructor (path: string, methods: HttpMethod[], middleware: Koa.Middleware, options?: RouteOptions)
-  constructor (path: string, methods: HttpMethod[], middlewares: Koa.Middleware[], options?: RouteOptions)
-  constructor (path: string, methods: HttpMethod[], middlewares: Koa.Middleware | Koa.Middleware[], options?: RouteOptions) {
+  constructor(path: string, methods: HttpMethod[], middleware: Koa.Middleware, options?: RouteOptions)
+  constructor(path: string, methods: HttpMethod[], middlewares: Koa.Middleware[], options?: RouteOptions)
+  constructor(path: string, methods: HttpMethod[], middlewares: Koa.Middleware | Koa.Middleware[], options?: RouteOptions) {
     this.options = options || { prefix: '' }
     this.path = path
     this.name = this.options.name
@@ -29,31 +29,29 @@ export default class Route {
     this.options.prefix && this.setPrefix(this.options.prefix)
   }
 
-  match (path: string): boolean {
+  match(path: string): boolean {
     return this.pathRegexp.test(path)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  captures (path: string, captures: string[] = []): string[] {
+  captures(path: string, _captures: string[] = []): string[] {
     // TODO: captures is useless ?
     return path.match(this.pathRegexp)?.slice(1) || []
   }
 
-  params (path: string, captures: string[] = [], params: Record<string, string> = {}): Record<string, string> {
+  params(_path: string, captures: string[] = [], params: Record<string, string> = {}): Record<string, string> {
     for (let len = captures.length, i = 0; i < len; i++) {
       const paramName = this.paramNames[i]
       if (paramName) {
         const c = captures[i]
-        if (c && c.length > 0) {
+        if (c && c.length > 0)
           params[paramName] = c ? safeDecodeURIComponent(c) : c
-        }
       }
     }
 
     return params
   }
 
-  param (paramName: string, fn: Koa.Middleware): this {
+  param(paramName: string, fn: Koa.Middleware): this {
     const middleware: Koa.Middleware = (ctx, next) => fn.call(this, ctx, next)
     middleware.param = paramName
     const x = this.paramNames.indexOf(paramName)
@@ -69,7 +67,7 @@ export default class Route {
     return this
   }
 
-  setPrefix (prefix: string): this {
+  setPrefix(prefix: string): this {
     if (this.path) {
       this.path = this.path === '/' ? prefix : `${prefix}${this.path}`
       this.pathRegexp = new PathRegexp(this.path)

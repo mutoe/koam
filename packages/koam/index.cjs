@@ -1,4 +1,5 @@
 const Koa = require('@mutoe/koam-core')
+
 module.exports = Koa
 
 module.exports.Router = require('@mutoe/koam-router').default

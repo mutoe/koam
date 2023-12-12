@@ -5,7 +5,7 @@
 
 Implement a simple Koa-like http server with zero dependencies from scratch.
 
-THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !  
+THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION !
 许多功能未经严格测试，请勿用于生产目的！
 
 ## Advantage
@@ -17,7 +17,7 @@ THIS FRAMEWORK HAVE NOT BEEN STRICTLY TESTED, PLEASE DO NOT USE IT IN PRODUCTION
 
 ## Sub-package
 
-If you're looking for the ultimate in minimal packages and high customization, you can install the following subpackages separately. 
+If you're looking for the ultimate in minimal packages and high customization, you can install the following subpackages separately.
 Of course, they are all included in the main package (`@mutoe/koam`).
 
 - Koam core package [@mutoe/koam-core](https://github.com/mutoe/koam/tree/main/packages/koam-core)
@@ -56,21 +56,21 @@ app.use(async (ctx: Context, next) => {
   //          ^^^ now val is number type
 })
 ```
-   
+
 ### 2. Extend type
 
 If you want to extend some property or method on the context or it's state, you can write the following code to extend it
 
-```ts 
+```ts
 // extend.d.ts
 import User from './src/user'
 declare global {
-   namespace Koa {
-      export interface State {
-         user?: User
-      }
-   }
-} 
+  namespace Koa {
+    export interface State {
+      user?: User
+    }
+  }
+}
 export {}
 
 // your-code.ts
@@ -88,30 +88,30 @@ In order to reduce the package size, I don't have built-in cookie-related handli
 If you want to handle cookies, you can extend the middleware yourself, here is the [cookies](https://www.npmjs.com/package/cookies) example steps:
 
 1. install the `cookies` and `@types/cookies` npm package
-2. add `koam.d.ts` in your app 
+2. add `koam.d.ts` in your app
 
     ```ts koam.d.ts
     import '@mutoe/koam'
     import type Cookies from 'cookies'
 
     declare module '@mutoe/koam' {
-       interface Context {
-          cookies: Cookies
-       }
+      interface Context {
+        cookies: Cookies
+      }
     }
 
     declare global {
-       namespace Koa {
-          // Others if you want extend
-          interface State {
-             user?: {id: number, email: string}
-          }
-       }
+      namespace Koa {
+        // Others if you want extend
+        interface State {
+          user?: { id: number, email: string }
+        }
+      }
 
     }
 
     // Don't forgot this line
-    export {} 
+    export {}
     ```
 
 3. register the cookies in your app
@@ -120,13 +120,13 @@ If you want to handle cookies, you can extend the middleware yourself, here is t
    const app = new Koa()
    // init cookies before your middleware
    app.use((ctx, next) => {
-       ctx.cookies = new Cookies(ctx.req, ctx.res, { secure: true })
-       return next()
+     ctx.cookies = new Cookies(ctx.req, ctx.res, { secure: true })
+     return next()
    })
-   
+
    // your middlewares
    app.use(ctx => {
-       ctx.cookies.set('key', 'value')
-       ctx.cookies.get('key')
+     ctx.cookies.set('key', 'value')
+     ctx.cookies.get('key')
    })
    ```

@@ -1,7 +1,7 @@
 import '@mutoe/koam-core'
 
 import type Route from './route'
-import Router from './router'
+import type Router from './router'
 
 declare module '@mutoe/koam-core' {
   interface Context {

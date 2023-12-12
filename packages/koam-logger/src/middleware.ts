@@ -1,25 +1,25 @@
-import { Context } from '@mutoe/koam-core'
+import type { Context } from '@mutoe/koam-core'
 import { type LogLevel, Logger, type LoggerOptions } from './logger'
 
 interface ContextLoggerOptions extends LoggerOptions {
   /**
-     * Custom Request Logger
-     *
-     * A function that logs the request details of a context object.
-     *
-     * It should be noted that the content of the context depends on when you call the log method.
-     * For example, if you haven't got a response when you call the log, then the response won't fetch the content.
-     *
-     * @param context - The context object of the Koa request model
-     * @returns The response of the request.
-     * @defaults ```
-     * ctx => ({
-     *   method: ctx.method,
-     *   url: ctx.url,
-     *   status: ctx.status
-     * })
-     * ```
-     */
+   * Custom Request Logger
+   *
+   * A function that logs the request details of a context object.
+   *
+   * It should be noted that the content of the context depends on when you call the log method.
+   * For example, if you haven't got a response when you call the log, then the response won't fetch the content.
+   *
+   * @param context - The context object of the Koa request model
+   * @returns The response of the request.
+   * @defaults ```
+   * ctx => ({
+   *   method: ctx.method,
+   *   url: ctx.url,
+   *   status: ctx.status
+   * })
+   * ```
+   */
   customRequestLogger?: (context: Context) => JsonValue
 }
 
@@ -41,11 +41,12 @@ export const logger = ((args: ContextLoggerOptions = {}) => {
     })
   }
 
-  function logCaller (level: LogLevel, ctx: Context, ...args: any[]): void {
-    if (level === 'silent') return
-    if (customRequestLogger) {
+  function logCaller(level: LogLevel, ctx: Context, ...args: any[]): void {
+    if (level === 'silent')
+      return
+    if (customRequestLogger)
       args.push(JSON.stringify(customRequestLogger(ctx)))
-    }
+
     logger[level](...args)
   }
 

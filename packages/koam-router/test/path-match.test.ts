@@ -2,7 +2,7 @@ import Koa, { HttpStatus } from '@mutoe/koam-core'
 import Router from 'src'
 import { beforeEach, describe } from 'vitest'
 
-describe('Path match', () => {
+describe('path match', () => {
   let app = new Koa()
   let router = new Router()
   let testAddress: any = {}

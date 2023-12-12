@@ -1,4 +1,5 @@
-import Koa, { Context, HttpStatus } from '@mutoe/koam-core'
+import type { Context } from '@mutoe/koam-core'
+import Koa, { HttpStatus } from '@mutoe/koam-core'
 import Router from 'src'
 
 declare global {
@@ -22,7 +23,8 @@ describe('router.param', () => {
   it('could load param value in context', async () => {
     router.param('user', (ctx, next) => {
       const userId = ctx.params?.user
-      if (!userId || userId === 'admin') return ctx.throw(HttpStatus.BadRequest)
+      if (!userId || userId === 'admin')
+        return ctx.throw(HttpStatus.BadRequest)
       ctx.state.user = { id: userId }
       return next()
     })

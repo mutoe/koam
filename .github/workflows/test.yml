@@ -18,8 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 18, 20 ]
-        package: ['koam-core', 'koam-router']
+        node-version: [18, 20]
+        package: [koam-core, koam-router]
         include:
           - node-version: 18
             codecov: true
@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install
