@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/mutoe/koam/compare/v2.1.0...v2.2.0) (2024-01-15)
+
+
+### Features
+
+* support custom body parser ([f3a759c](https://github.com/mutoe/koam/commit/f3a759c226beb90a5c98f0b50ac14297e2adaad9))
+
+
+
+
+
 # [2.1.0](https://github.com/mutoe/koam/compare/v2.0.2...v2.1.0) (2023-08-08)
 
 
