@@ -64,6 +64,12 @@ declare global {
        * @default 0 (unlimited)
        */
       maxIpsCount: number
+
+      /**
+       * @description using custom body parser and disable built-in body parser
+       * @default false
+       */
+      customBodyParser?: boolean
     }
 
     export type HeaderKey = keyof http.IncomingHttpHeaders | string

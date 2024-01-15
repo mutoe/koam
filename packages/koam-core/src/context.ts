@@ -64,6 +64,8 @@ export default class Context {
   get body() { return this.response.body }
   set body(value: any) { this.response.body = value }
 
+  get files() { return this.request.files }
+
   get status() { return this.response.status }
   set status(val: HttpStatus) { this.response.status = val }
 

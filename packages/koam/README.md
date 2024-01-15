@@ -130,3 +130,57 @@ If you want to handle cookies, you can extend the middleware yourself, here is t
      ctx.cookies.get('key')
    })
    ```
+
+### 4. Body Parser
+
+The json body parser middleware is built-in, you can get the parsed body directly from `ctx.request.body`.
+
+But if you want to parse other types of body (like multipart/form-data), you can close built-in body parser and use the another middleware like `formidable`
+
+1. install the `formidable` and `@types/formidable` npm package
+2. add `koam.d.ts` in your app
+
+    ```ts koam.d.ts
+    import '@mutoe/koam'
+    import type Cookies from 'cookies'
+
+    declare module '@mutoe/koam' {
+      interface Context {
+        body?: any
+        files?: formidable.File[]
+      }
+      interface Request {
+        body?: any
+        files?: formidable.File[]
+      }
+    }
+
+    // Don't forgot this line
+    export {}
+    ```
+
+3. register the formidable in your app
+
+   ```ts
+   import { Fields, Files, formidable } from 'formidable'
+   const app = new Koa({
+     customBodyParser: false, // this is not nessary, but it's better for performance
+   })
+   app.use(async (ctx, next) => {
+     const form = formidable()
+     try {
+       const [fields, files] = await form.parse(ctx.req)
+       ctx.request.body = fields
+       ctx.request.files = files
+     }
+     catch (error) {
+       console.error('Cannot parse the request body', { error })
+     }
+     await next()
+   })
+
+   app.use(ctx => {
+     console.log(ctx.request.body as Fields)
+     console.log(ctx.files as Files)
+   })
+   ```

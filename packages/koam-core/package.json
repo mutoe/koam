@@ -35,5 +35,9 @@
     "build": "vite build && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "test": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/formidable": "^3.4.5",
+    "formidable": "^3.5.1"
   }
 }

@@ -13,6 +13,7 @@ export default class Request {
   readonly charset: string | undefined
   path: string
   body?: any
+  files?: any
 
   #req: http.IncomingMessage
   #querystring: string = ''

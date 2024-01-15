@@ -1,3 +1,4 @@
+import { formidable } from 'formidable'
 import { mockConsole } from '../../../test-utils/mock-console'
 import type { ConnectMiddleware, Context } from '../src'
 import Koa, { HttpStatus, connect } from '../src'
@@ -39,8 +40,8 @@ describe('# middleware', () => {
   })
 
   describe('body parser', () => {
-    it('should set to request body when receive body', async () => {
-      testAddress = app.use(ctx => cb(ctx.request.body))
+    it('should set to request body when received text/plain but it content is json string', async () => {
+      testAddress = app.use(ctx => cb(ctx))
         .listen().address()
 
       await fetch(baseUrl(), {
@@ -48,7 +49,47 @@ describe('# middleware', () => {
         body: JSON.stringify({ foo: 'bar' }),
       })
 
-      expect(cb).toHaveBeenCalledWith({ foo: 'bar' })
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(ctx.request.body).toEqual({ foo: 'bar' })
+    })
+
+    it('should set to request body when received application/json', async () => {
+      testAddress = app.use(ctx => cb(ctx))
+        .listen().address()
+
+      await fetch(baseUrl(), {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ foo: 'bar' }),
+      })
+
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(ctx.request.body).toEqual({ foo: 'bar' })
+    })
+
+    it('should set to request body when self handle body', async () => {
+      testAddress = app
+        .use(async (ctx, next) => {
+          const form = formidable()
+          const [fields, files] = await form.parse(ctx.req)
+          ctx.request.body = fields
+          ctx.request.files = files
+          await next()
+        })
+        .use(ctx => cb(ctx))
+        .listen().address()
+
+      const formData = new FormData()
+      formData.append('foo', 'bar')
+      formData.append('file', new Blob(['file content']), 'file.txt')
+      await fetch(baseUrl(), {
+        method: 'PATCH',
+        body: formData,
+      })
+
+      const ctx = cb.mock.calls[0][0] as Context
+      expect(ctx.request.body).toEqual({ foo: ['bar'] })
+      expect(ctx.request.files).toHaveProperty('file')
     })
   })
 

@@ -48,7 +48,7 @@ export default class Application implements Koa.Config {
   private middlewares: Koa.Middleware[] = []
 
   constructor(config: Partial<Koa.Config> = {}) {
-    const { env, onError, silent, proxy, proxyIpHeader, maxIpsCount } = config
+    const { env, onError, silent, proxy, proxyIpHeader, maxIpsCount, customBodyParser = false } = config
     this.env = env || process.env.NODE_ENV || 'development'
     this.onError = onError ?? defaultErrorHandler
     this.silent = silent ?? false
@@ -56,10 +56,9 @@ export default class Application implements Koa.Config {
     this.proxyIpHeader = proxyIpHeader || 'x-forwarded-for'
     this.maxIpsCount = maxIpsCount || 0
 
-    this.middlewares.push(
-      responseTime(),
-      bodyParser(),
-    )
+    this.middlewares.push(responseTime())
+    if (!customBodyParser)
+      this.middlewares.push(bodyParser())
   }
 
   get isDevelopment(): boolean { return this.env === 'development' }
