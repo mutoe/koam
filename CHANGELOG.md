@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/mutoe/koam/compare/v2.3.0...v2.3.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* **core:** allow the DELETE method to pass the body ([649f52d](https://github.com/mutoe/koam/commit/649f52d3d34ced12ae0091baed464937a1adfa67))
+* **core:** body parser cannot support mixed content type string ([591582e](https://github.com/mutoe/koam/commit/591582e1fac81064697fa278b996c3b4623db452))
+
+
+
+
+
 # [2.2.0](https://github.com/mutoe/koam/compare/v2.1.0...v2.2.0) (2024-01-15)
 
 
