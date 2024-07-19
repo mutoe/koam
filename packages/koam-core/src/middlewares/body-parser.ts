@@ -7,7 +7,7 @@ import { HttpMethod } from '../enums'
  * @description Currently only support json format request body
  */
 export const bodyParser: Koa.MiddlewareGenerator = () => async (ctx, next) => {
-  if ([HttpMethod.GET, HttpMethod.HEAD, HttpMethod.DELETE].includes(ctx.request.method))
+  if ([HttpMethod.GET, HttpMethod.HEAD].includes(ctx.request.method))
     return await next()
 
   if (!['application/json', 'text/plain'].includes(ctx.request.type ?? ''))
