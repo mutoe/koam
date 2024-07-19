@@ -46,6 +46,9 @@ describe('# middleware', () => {
 
       await fetch(baseUrl(), {
         method: 'PATCH',
+        headers: {
+          contentType: 'text/plain;charset=UTF-8',
+        },
         body: JSON.stringify({ foo: 'bar' }),
       })
 
