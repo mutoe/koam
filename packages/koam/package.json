@@ -31,9 +31,7 @@
   "files": [
     "index.cjs",
     "index.d.ts",
-    "index.js",
-    "CHANGELOG.md",
-    "README.md"
+    "index.js"
   ],
   "dependencies": {
     "@mutoe/koam-core": "workspace:^",
