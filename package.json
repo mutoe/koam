@@ -11,7 +11,8 @@
   "type": "module",
   "scripts": {
     "prepare": "simple-git-hooks",
-    "release": "pnpm build && lerna version --conventional-commits && pnpm publish",
+    "prerelease": "pnpm build && pnpm type-check && pnpm lint && pnpm test",
+    "release": "pnpm prerelease && lerna version --conventional-commits && pnpm -r publish",
     "build": "pnpm -r --filter=koam-core build && pnpm -r --filter=\\!koam-core build",
     "type-check": "pnpm --filter=\"...[origin/main]\" type-check",
     "lint": "eslint --fix .",
