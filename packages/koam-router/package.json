@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "2.2.0",
+  "version": "2.3.1",
   "description": "A lightweight router for Koam.",
   "license": "MIT",
   "author": "mutoe <imutoe@gmail.com>",
