@@ -45,14 +45,16 @@ export function dateFormat(date: Date | string, pattern: string): string {
   const placeholders: string[] = []
 
   // Extract raw string (quoted strings) and replace them with placeholders.
-  pattern = pattern.replaceAll(/(['"])([^\1]*)\1/g, (_, __, match) => {
-    const placeholder = `%p${placeholderCount++}%`
-    placeholders.push(match)
-    return placeholder
-  })
+  pattern = pattern
+    .replaceAll(/['"]{2}/g, '')
+    // @ts-expect-error TS1536 distort
+    .replaceAll(/(['"])([^\1]*)\1/g, (_, _quote, match) => {
+      const placeholder = `%p${placeholderCount++}%`
+      placeholders.push(match)
+      return placeholder
+    })
 
   pattern = pattern.replaceAll(/([YMDdWwHhmsSAaXxZ])\1*/g, match => {
-    assert(date instanceof Date)
     switch (match) {
       case 'YYYY': return date.getFullYear().toString()
       case 'M': return (date.getMonth() + 1).toString()

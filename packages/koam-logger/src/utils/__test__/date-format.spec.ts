@@ -43,6 +43,7 @@ describe('# Date format', () => {
     ['"week of year: "w ww', 'week of year: 22 22'],
     ['\'unix timestamp: \'X', 'unix timestamp: 1686110466'],
     ['\'unix timestamp in milliseconds: \'x', 'unix timestamp in milliseconds: 1686110466789'],
+    ['\'\'YYYY\'""\'\'', '2023\''],
   ])('%s', (pattern, expected) => {
     const date = new Date('2023-06-07T12:01:06.789+08:00')
     expect(dateFormat(date, pattern)).toBe(expected)
