@@ -5,6 +5,7 @@ import { Stream } from 'node:stream'
 import type Application from './application'
 import type Context from './context'
 import { HttpStatus } from './enums'
+import { vary } from './utils/vary'
 import type { Request } from './index'
 import type Koa from './index'
 
@@ -138,5 +139,11 @@ export default class Response {
     if (filename)
       strings.push(`filename="${filename}"`)
     this.set('content-disposition', strings.join('; '))
+  }
+
+  vary(field: string | string[]): void {
+    if (this.headerSent)
+      return
+    vary(this, field)
   }
 }

@@ -133,4 +133,4 @@ Context response
 - [x] `response.attachment([filename])` `ctx.attachment([filename])`
 - [ ] `response.lastModified=` `ctx.lastModified=`
 - [ ] `response.etag=` `ctx.etag=`
-- [ ] `response.vary(field)`
+- [x] `response.vary(fields)` `ctx.vary(fields)`

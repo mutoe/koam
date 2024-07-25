@@ -147,4 +147,9 @@ export default class Context {
     this.response.attachment(filename)
     return this
   }
+
+  vary(field: string | string[]): this {
+    this.response.vary(field)
+    return this
+  }
 }

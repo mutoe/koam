@@ -1,5 +1,6 @@
 import * as http from 'node:http'
 import { mockConsole } from '../../../test-utils/mock-console'
+import type { Context } from '../src'
 import Koa, { HttpStatus } from '../src'
 
 describe('# application', () => {
@@ -99,8 +100,9 @@ describe('# application', () => {
         await fetch(baseUrl())
 
         expect(onError).toHaveBeenCalledWith(error, expect.any(Object))
-        expect(onError.mock.calls[0][1].response.status).toEqual(HttpStatus.InternalServerError)
-        expect(onError.mock.calls[0][1].response.message).toEqual(errorMessage)
+        const callElement = onError.mock.calls[0][1] as Context
+        expect(callElement.response.status).toEqual(HttpStatus.InternalServerError)
+        expect(callElement.response.message).toEqual(errorMessage)
         expect(consoleError).toHaveBeenCalledTimes(0)
 
         app.close()
@@ -227,7 +229,7 @@ describe('# application', () => {
   })
 
   describe('concurrently', () => {
-    it('should can process multiple request at the same time', async () => {
+    it.sequential('should can process multiple request at the same time', async () => {
       vi.useFakeTimers()
       testAddress = app
         .use(async ctx => {
