@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/mutoe/koam/compare/v2.3.1...v2.4.0) (2024-07-25)
+
+
+### Features
+
+* support set response vary ([a452daa](https://github.com/mutoe/koam/commit/a452daaece58336e832dafc8ce28e9fd696b56a6))
+
+
+
+
+
 ## [2.3.1](https://github.com/mutoe/koam/compare/v2.3.0...v2.3.1) (2024-07-19)
 
 
