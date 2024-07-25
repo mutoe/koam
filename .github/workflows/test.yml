@@ -18,10 +18,10 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [18, 20, 22]
         package: [koam-core, koam-router]
         include:
-          - node-version: 18
+          - node-version: 22
             codecov: true
 
     steps:
